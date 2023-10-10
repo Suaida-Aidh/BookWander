@@ -57,6 +57,8 @@
             ab ipsum nisi dolorem modi. Quos?
           </p>
         </div>
+
+       
   
         <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
           <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
@@ -64,70 +66,125 @@
   
           <div class="card bg-glass">
             <div class="card-body px-4 py-5 px-md-5">
-              <form>
+              <form action="{% url 'Register' %}" method="POST">
+                {% csrf_token %}
+
+                <!-- {{ form.as_p }} -->
                 <!-- 2 column grid layout with text inputs for the first and last names -->
+
+                <!-- First Name -->
                 <div class="row">
-
-                      <!-- Username input -->
-                <div class="form-outline md-6">
-                    <input type="text" id="form3Example1" class="form-control" />
-                    <label class="form-label" for="form3Example3">Username</label>
-                  </div>
-
-
-                  <div class="col-md-6 mb-4">
+                    <div class="col-md-6 mb-4">
                     <div class="form-outline">
-                      <input type="text" id="form3Example2" class="form-control" />
-                      <label class="form-label" for="form3Example1">First name</label>
+                     <label>First name</label>
+                    {{ form.first_name}}
                     </div>
                   </div>
-                  <div class="col-md-6 mb-4">
+
+                  <!-- Last name -->
+                <div class="col-md-6 mb-4">
                     <div class="form-outline">
-                      <input type="text" id="form3Example3" class="form-control" />
-                      <label class="form-label" for="form3Example2">Last name</label>
+                    <label>Last name</label>
+                    {{ form.last_name}}
                     </div>
                   </div>
-                </div>
+                <!-- </div> -->
+
+                <!-- username -->
+                <!-- <div class="form-outline mb-4">
+                  <label >Username</label>
+                  {{ form.username}}
+                </div> -->
+                
   
                 <!-- Email input -->
-                <div class="form-outline mb-4">
-                  <input type="email" id="form3Example4" class="form-control" />
-                  <label class="form-label" for="form3Example3">Email address</label>
+                <div class="col-md-6 mb-4">
+                  <label >Email</label>
+                  {{ form.email }}
+                  
                 </div>
+
+
   
-                <!-- Password input -->
-                <div class="form-outline mb-4">
-                  <input type="password" id="form3Example5" class="form-control" />
-                  <label class="form-label" for="form3Example4">Password</label>
+                <!-- Phone number -->
+                <div class="col-md-6 mb-4">
+                  <label>Phone number</label>
+                  {{ form.phone_number }}
                 </div>
+
+
+                <!--create password -->
+                <div class="col-md-6 mb-4">
+                    <label>Create Password</label>
+                    {{ form.password }}
+                    
+                </div>
+
+
+                <!--confirm password -->
+                <div class="col-md-6 mb-4">
+                    
+                    <label>Confirm password</label>
+                    {{ form.confirm_password}}
+                    
+                </div>
+            </div>
+                
+
   
                 <!-- Checkbox -->
-                <div class="form-check d-flex justify-content-center mb-4">
+                <!-- <div class="form-check d-flex justify-content-center mb-4">
                   <input class="form-check-input me-2" type="checkbox" value="" id="form2Example33" checked />
                   <label class="form-check-label" for="form2Example33">
                     Subscribe to our newsletter
                   </label>
                 </div>
+ -->
+
   
                 <!-- Submit button -->
                 <button type="submit" class="btn btn-primary btn-block mb-4">
                   Sign up
                 </button>
+                <ul class="error-messages">
+                    {% for error in form.email.errors %}
+                        <li>{{ error|striptags }}</li>
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error|striptags }}</li>
+                    {% endfor %}
+                </ul>
+                
+
+                <style>
+                    .error-messages {
+                        color:red;
+                        list-style: none;
+                        padding: 0;
+                    }
+                </style>
+
+
+
   
                 <!-- Register buttons -->
-                <div class="text-center">
-                  <p>or sign up with:</p>
-                  <button type="button" class="btn btn-link btn-floating mx-1">
-                    <i class="fab fa-facebook-f"></i>
-                  </button>
+                <div class="text-center mt-4">
+                  <p >Have an accounr?<a href=""> Login</a></p>
+                 
+
+
   
                   <button type="button" class="btn btn-link btn-floating mx-1">
                     <i class="fab fa-google"></i>
                   </button>
+
+
   
                   <button type="button" class="btn btn-link btn-floating mx-1">
                     <i class="fab fa-twitter"></i>
                   </button>
+
+
   
                   <button type="button" class="btn btn-link btn-floating mx-1">
                     <i class="fab fa-github"></i>
