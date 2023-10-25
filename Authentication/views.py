@@ -1,5 +1,7 @@
-from django.shortcuts import render,HttpResponse
-from .forms import RegistrationalForm
+from django.shortcuts import render,redirect
+from django.contrib import messages
+from .forms import RegistrationalForm,LoginForm
+from django.contrib.auth import authenticate, login
 from .models import Account
 # Create your views here.
 
@@ -8,7 +10,24 @@ def Home(request):
 
 
 def Login(request):
-    return render (request,'Authentication/login.html')
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = authenticate(request, email=email, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'Login successful.')
+                return redirect('Home')
+            else:
+                messages.error(request, 'Invalid login credentials.')
+    else:
+        form = LoginForm()
+    context = {
+        'form': form
+    }
+    return render(request, 'Authentication/login.html', context)
 
 def Register(request):
     if request.method == 'POST':
@@ -19,18 +38,14 @@ def Register(request):
             phone_number=form.cleaned_data['phone_number']
             email=form.cleaned_data['email']
             password=form.cleaned_data['password']
-            username=email.split("@")[0]
-
-            user = Account.objects.create_user(first_name=first_name, last_name=last_name, email=email, username=username, password=password)
+            user = Account.objects.create_user(first_name=first_name, last_name=last_name, email=email,  password=password)
             user.phone_number = phone_number
             user.save()
+            messages.success(request, 'Registration successful. You can now log in.')
+            return redirect('Login')
     else:
         form = RegistrationalForm()
     context={
-        'form':form,
-
+        'form':form
     }
-
-    
-
     return render (request,'Authentication/register.html',context)

@@ -15,9 +15,6 @@ class RegistrationalForm(forms.ModelForm):
     }
     ))
 
-
-
-    
     class Meta:
         model = Account
         fields = ['first_name','last_name','phone_number','email','password']
@@ -43,3 +40,13 @@ class RegistrationalForm(forms.ModelForm):
                 'password does not match!'
             )
 
+
+class LoginForm(forms.Form):
+    email = forms.EmailField(widget=forms.TextInput(attrs={
+        'placeholder': 'Enter Email',
+        'class': 'form-control',
+    }))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'placeholder': 'Enter Password',
+        'class': 'form-control',
+    }))
