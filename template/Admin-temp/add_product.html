@@ -1,0 +1,84 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+{% block content %}
+  {% include 'include/admin_navbar.html' %}
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Side Navbar (Assuming you have a class like 'side-navbar' for styling) -->
+      <div class="col-md-3 side-navbar">
+        <!-- Add content for your side navbar here -->
+      </div>
+
+      <!-- Main Content Area -->
+      <div class="col-md-9">
+        <div class="container mt-5 mb-5">
+          <div class="row d-flex justify-content-center">
+            <div class="col-8">
+              {% for message in messages %}
+              <div>
+                <p class="my-5 alert alert-{{ message.tags }}">{{ message }}</p>
+              </div>
+              {% endfor %}
+              <h2 class="text-center font-weight-bold my-5">Add Products</h2>
+
+              <form action="{% url 'add_product' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="id_name">Product Name</label>
+                    {{ form.product_name }}
+                    {{ form.product_name.errors }}
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="product_price">Product Price</label>
+                    {{ form.price }}
+                    {{ form.price.errors }}
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="product_image">Product Image</label>
+                    {{ form.images }}
+                    {{ form.images.errors }}
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="product_stock">Product Stock</label>
+                    {{ form.stock }}
+                    {{ form.stock.errors }}
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="product_category">Category</label>
+                    {{ form.category }}
+                    {{ form.category.errors }}
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="product_category">Author</label>
+                    {{ form.author }}
+                    {{ form.author.errors }}
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="id_is_available">Available</label>
+                    {{ form.is_available }}
+                  </div>
+
+                </div>
+
+                <div class="form-group">
+                  <label for="product_description">Product Description</label>
+                  {{ form.description }}
+                </div>
+                <div class="text-center">
+                  <button type="submit" class="btn btn-dark">Save</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Include your footer -->
+  
+{% endblock %}

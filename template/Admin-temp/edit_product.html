@@ -1,0 +1,72 @@
+{% extends 'admin_base.html' %}
+{% load static%}
+{% block content %}
+
+<section class="section-content padding-y bg mt-5 mb-5 "  >
+    <div class="container mt-5 mb-5">
+  
+      <div class="row d-flex justify-content-center" style="margin-top:100px ;">
+        {% for message in messages %}
+        <div>
+          <p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
+        </div>
+        {% endfor %}
+        <div class="col-8 card p-5">
+            <h2 class="text-center font-weight-bold  my-5">View Products</h2>
+            <div class="d-flex justify-content-center">
+          <img src="{{product.images.url}}" alt="Profile Picture" width="400" style="border-radius: 10px;" class="my-4  ">
+            </div>
+          <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-row ">
+              <div class="form-group col-md-6 ">
+                <label for="id_product_name ">Product Name</label>
+                {{ form.product_name }}
+              </div>
+              
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="product_price">Product Price</label>
+                {{ form.price }}
+              </div>
+              <div class="form-group col-md-6">
+                <label for="product_image">Product Image</label>
+                {{ form.images }}
+              </div>
+              <div class="form-group col-md-6">
+                <label for="product_stock">Product Stock</label>
+                {{ form.stock }}
+              </div>
+              <div class="form-group col-md-6">
+                <label for="product_stock">Author</label>
+                {{ form.author }}
+              </div>
+              <div class="form-group col-md-6">
+                <label for="product_category">Category</label>
+                {{ form.category }}
+              </div>
+              <div class="form-group col-md-6">
+                <label for="id_is_available">Available</label>
+                {{ form.is_available }}
+              </div>
+  
+            </div>
+  
+            <div class="form-group">
+              <label for="product_description">Product Description</label>
+              {{ form.description }}
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+              <div class="text-end">
+                <a href="{% url 'delete_product' product.id %}" class="btn btn-danger">Delete </a>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+   
+ {% endblock %}

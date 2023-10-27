@@ -1,0 +1,98 @@
+{% extends 'admin_base.html' %} 
+{% load static %}
+{% block content %}
+
+<div class="container-fluid" style="background-color: #5d6760; margin-top: 100px;">
+    <div class="row">
+      {% include 'include/admin_navbar.html' %}
+        <!-- Side Navbar Column -->
+        <div class="col-md-3 side-navbar">
+            
+            <!-- Add content for your side navbar here -->
+        </div>
+
+        <!-- Category Content Column -->
+        <main class="col-md-8">
+            {% for message in messages %}
+            <div>
+                <p class="my-5 alert alert-{{message.tags}}">{{message}}</p>
+            </div>
+            {% endfor %}
+            <div class="col-md-12">
+                <h3 class="text-center text-white my-5"><b>CATEGORY MANAGEMENT</b></h3>
+            </div>
+
+            <div class="col-12 d-flex justify-content-end">
+                <form action="" class="search" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <input type="text" id="form1" class="form-control" placeholder="search" name="key" />
+                            <button class="btn btn-dark" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <a href="{% url 'add_category' %}" class="btn btn-success m-3 col-3 mt-5">Add Category</a>
+
+            <div class="">
+                <table class="table bg-white">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Category Name</th>
+                            <th scope="col">Category Slug</th>
+                            <th scope="col">Update</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for category in categories %}
+                        <tr>
+                            <th scope="row">{{ category.id }}</th>
+                            <td>{{ category.category_name }}</td>
+                            <td>{{ category.slug }}</td>
+                            <td>
+                                <a href="{% url 'edit_category' category.id %}" class="btn btn-success">Update</a>
+                            </td>
+                            <td>
+                                <a href="{% url 'delete_category' category.id %}" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="container">
+                    <nav class="mt-4" aria-label="Page navigation sample">
+                        {% if users.has_other_pages %}
+                        <ul class="pagination">
+                            {% if users.has_previous %}
+                            <li class="page-item"><a class="page-link text-dark"
+                                    href="?page={{ users.previous_page_number }}">Previous</a></li>
+                            {% else %}
+                            <li class="page-item disabled"><a class="page-link text-dark" href="#">Previous</a></li>
+                            {% endif %}
+                            {% for page_number in users.paginator.page_range %}
+                            {% if users.number == page_number %}
+                            <li class="page-item active"><a class="page-link text-dark" href="#">{{ page_number }}</a></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link text-dark" href="?page={{ page_number }}">{{ page_number }}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                            {% if users.has_next %}
+                            <li class="page-item"><a class="page-link text-dark"
+                                    href="?page={{ users.next_page_number }}">Next</a></li>
+                            {% else %}
+                            <li class="page-item disabled"><a class="page-link text-dark" href="#">Next</a></li>
+                            {% endif %}
+                        </ul>
+                        {% endif %}
+                    </nav>
+                </div>
+            </div>
+        </main>
+    </div> <!-- row.// -->
+</div>
+{% endblock %}
