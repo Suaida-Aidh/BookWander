@@ -22,6 +22,9 @@ urlpatterns = [
     path('edit_category/<int:category_id>/', views.edit_category, name="edit_category"),
     path('delete_category/<int:category_id>/',views.delete_category,name='delete_category'),
 
+    #ORDER MANAGEMENT
+    path('order_management/', views.order_management, name="order_management"),
+
    
 
 

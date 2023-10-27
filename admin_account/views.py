@@ -8,6 +8,7 @@ from .form import ProductForm
 from django.contrib import messages
 from Authentication.models import Account
 from store.models import Category_list
+from order.models import Order
 
 
 
@@ -200,6 +201,27 @@ def delete_category(request, category_id):
     print(categories)
     categories.delete()
     return redirect('category_management')
+
+
+
+#ORDER MANAGEMENT
+def order_management(request):
+  if request.user.is_superadmin:
+    if request.method == 'POST':
+        key = request.POST['key']
+        order = Order.objects.filter( Q(tracking_no_startswith=key) | Q(useremailstartswith=key) | Q(first_name_startswith=key)).order_by('-id')
+    else:
+        order = Order.objects.all().order_by('-id') 
+    paginator = Paginator(order, 10)
+    page = request.GET.get('page')
+    paged_order = paginator.get_page(page)
+
+    context = {
+        'order': paged_order
+        }
+    return render(request, 'Admin-temp/order_management.html',context)
+  else:
+    return redirect('Home')  
 
 
 

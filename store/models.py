@@ -1,6 +1,7 @@
 
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 # from django.contrib.auth.models import User
 # Create your models here.
 
@@ -55,6 +56,10 @@ class Product(models.Model):
     def is_outofstock(self):
         return self. stock <=0
     
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.product_name)
+        super(Product, self).save(*args, **kwargs)
+    
     def get_url(self):
         return reverse('product_details',args = [self.slug])
 
@@ -71,6 +76,8 @@ class Product(models.Model):
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     image = models.ImageField(upload_to = 'product')
+
+
 
 
 # class ProductReview(models.Model):

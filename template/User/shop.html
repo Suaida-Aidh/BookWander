@@ -1,107 +1,119 @@
-{% extends 'base.html' %} {% load static %} {% block content %}  {% include 'include/navbar.html' %} 
-	
-	<!-- breadcrumb-section -->
-	<div class="breadcrumb-section ">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-8 offset-lg-2 text-center">
-					<div class="breadcrumb-text">
-						<p>Content</p>
-						<h1>Shop</h1>
+{% extends 'base.html' %} {% load static %} {% block content %} {% include 'include/navbar.html' %}
+
+<!-- breadcrumb-section -->
+<div class="breadcrumb-section ">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 offset-lg-2 text-center">
+				<div class="breadcrumb-text">
+					<p>Content</p>
+					<h1>Shop</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end breadcrumb section -->
+
+<!-- products -->
+<div class="product-section mt-150 mb-150">
+	<div class="container">
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="product-filters">
+					<ul>
+						<a href="{% url "shop" %}">
+							<li data-filter="*">All</li>
+						</a>
+
+						{% for cat in categories %}
+						<a href="{% url "shop-by-category" cat.id %}">
+							<li>{{ cat.category_name }}</li>
+							{% endfor %}
+						</a>
+						<!-- <li data-filter=".berry">Novel</li>
+						<li data-filter=".lemon">Poem</li> -->
+					</ul>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row product-lists">
+			{% for product in products %}
+			<div class="col-lg-4 col-md-6 text-center strawberry">
+				<div class="single-product-item" data-category="{{ product.category }}">
+					<div class="product-image">
+						<a href="{% url "single_product" product.slug %}">
+							<img src="{{ product.images.url }}" alt="" width="400" height="300">
+						</a>
+					</div>
+					<h3>{{ product.product_name }}</h3>
+					<p class="product-price"><span></span>$ {{ product.price }}</p>
+					<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+
+
+
+
+
+
+
+		<div class="row">
+			<div class="col-lg-12 text-center">
+				<div class="pagination-wrap">
+					<ul>
+						<li><a href="#">Prev</a></li>
+						<li><a href="#">1</a></li>
+						<li><a class="active" href="#">2</a></li>
+						<li><a href="#">3</a></li>
+						<li><a href="#">Next</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end products -->
+
+<!-- logo carousel -->
+<div class="logo-carousel-section">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="logo-carousel-inner">
+					<div class="single-logo-item">
+						<img src="assets/img/company-logos/1.png" alt="">
+					</div>
+					<div class="single-logo-item">
+						<img src="assets/img/company-logos/2.png" alt="">
+					</div>
+					<div class="single-logo-item">
+						<img src="assets/img/company-logos/3.png" alt="">
+					</div>
+					<div class="single-logo-item">
+						<img src="assets/img/company-logos/4.png" alt="">
+					</div>
+					<div class="single-logo-item">
+						<img src="assets/img/company-logos/5.png" alt="">
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- end breadcrumb section -->
+</div>
 
-	<!-- products -->
-	<div class="product-section mt-150 mb-150">
-		<div class="container">
-
-			<div class="row">
-                <div class="col-md-12">
-                    <div class="product-filters">
-                        <ul>
-                            <li class="active" data-filter="*">All</li>
-                            <li data-filter=".strawberry">Fiction</li>
-                            <li data-filter=".berry">Novel</li>
-                            <li data-filter=".lemon">Poem</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+<!-- JavaScript code -->
 
 
-			<div class="row product-lists">
-                {% for product in current_page %}
-                <div class="col-lg-4 col-md-6 text-center strawberry">
-                    <div class="single-product-item">
-                        <div class="product-image">
-                            <a href="single-product.html">
-                                <img src="{{ product.images.url }}" alt="" width="400" height="300">
-                            </a>
-                        </div>
-                        <h3>{{ product.product_name }}</h3>
-                        <p class="product-price"><span></span>$ {{ product.price }}</p>
-                        <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-            
-				
-				
-				
-				
-				
 
-			<div class="row">
-				<div class="col-lg-12 text-center">
-					<div class="pagination-wrap">
-						<ul>
-							<li><a href="#">Prev</a></li>
-							<li><a href="#">1</a></li>
-							<li><a class="active" href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">Next</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end products -->
+<!-- end logo carousel -->
 
-	<!-- logo carousel -->
-	<div class="logo-carousel-section">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="logo-carousel-inner">
-						<div class="single-logo-item">
-							<img src="assets/img/company-logos/1.png" alt="">
-						</div>
-						<div class="single-logo-item">
-							<img src="assets/img/company-logos/2.png" alt="">
-						</div>
-						<div class="single-logo-item">
-							<img src="assets/img/company-logos/3.png" alt="">
-						</div>
-						<div class="single-logo-item">
-							<img src="assets/img/company-logos/4.png" alt="">
-						</div>
-						<div class="single-logo-item">
-							<img src="assets/img/company-logos/5.png" alt="">
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end logo carousel -->
-
-	{% include 'include/footer.html' %}
+{% include 'include/footer.html' %}
 
 
 
