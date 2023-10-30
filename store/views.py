@@ -5,6 +5,7 @@ from .models import ProductImage
 from order.models import OrderItem
 from cart.models import CartItem,WishlistItem
 from cart.views import _cart_id
+from django.db.models import Q
 
 # Create your views here.
 
@@ -79,8 +80,27 @@ def product_detail(request,product_slug):
         'in_cart'        : in_cart,
         'multiple_images': multiple_images,
         'orderitem'      : orderitem,
-        
         'wishlist'       : wishlist
         }           
     return render (request,'User/single_product.html',context)
+
+
+#Search function
+def search(request,products=0,products_count=0):
+    if 'keyword' in request.GET:
+        keyword =request.GET['keyword']
+        if keyword:
+            products=Product.objects.order_by('-created_date').filter(Q(description__icontains=keyword) | Q(product_name__icontains=keyword ))
+            products_count= products.count()
+        else:
+            products=Product.objects.order_by('-created_date').filter(Q(description__icontains=keyword) | Q(product_name__icontains=keyword ))
+            products_count= products.count()         
+    
+    context={
+        'products':products,
+        'products_count':products_count,
+
+    }
+    
+    return render(request, 'store/store.html',context) 
 

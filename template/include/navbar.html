@@ -19,7 +19,7 @@
 						<!-- logo -->
 						<div class="site-logo">
 							<a href="index.html">
-								<img src="{% static 'img/logo.png' %}" alt="">
+								<img src="{% static 'user/img/logo.png' %}" alt="">
 							</a>
 						</div>
 						<!-- logo -->
@@ -27,7 +27,7 @@
 						<!-- menu start -->
 						<nav class="main-menu">
 							<ul>
-								<li ><a href="#">Home</a>
+								<li ><a href="{% url 'Home' %}">Home</a>
 									
 								</li>
 								<li><a href="about.html">About</a></li>
@@ -57,7 +57,7 @@
                                 
 								<li>
 									<div class="header-icons">
-										<a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+										<a class="shopping-cart" href="{% url 'cart' %}"><i class="fas fa-shopping-cart"></i></a>
 										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
 									</div>
 								</li>
@@ -65,6 +65,7 @@
 						</nav>
 						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
 						<div class="mobile-menu"></div>
+						
 						<!-- menu end -->
 					</div>
 				</div>

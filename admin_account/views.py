@@ -161,7 +161,7 @@ def add_category(request):
 
             categories = Category_list(
                 category_name=category_name,
-                description=category_description
+                category_description=category_description
             )
 
             categories.save()
@@ -182,7 +182,7 @@ def edit_category(request, category_id):
             category_name = request.POST['category_name']
             category_description = request.POST['category_description']
             categories.category_name = category_name
-            categories.description = category_description
+            categories.category_description = category_description
 
             categories.save()
             return redirect('category_management')

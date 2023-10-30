@@ -4,17 +4,27 @@
 
 
 	<!-- hero area -->
-	<div class="hero-area hero-bg">
+	<div class="hero-area ">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-9 offset-lg-2 text-center">
 					<div class="hero-text">
 						<div class="hero-text-tablecell">
-							<p class="subtitle">Fresh & Organic</p>
-							<h1>Delicious Seasonal Fruits</h1>
+							<p class="subtitle">CONTENT</p>
+							<h1>Quote</h1>
 							<div class="hero-btns">
+								{% if user.is_authenticated %}
+								<a href="{% url 'signout' %}" class="boxed-btn">Signout</a>
+								{% else %}
 								<a href="login\" class="boxed-btn">Login</a>
 								<a href="register\" class="bordered-btn">Sign up</a>
+
+								{% endif %}
+								{%if user.is_superadmin %}
+
+								<a href="{% url 'admin_dashboard' %}" class="bordered-btn">Admin Panel</a>
+								{% endif %}
+
 							</div>
 						</div>
 					</div>

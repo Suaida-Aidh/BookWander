@@ -81,47 +81,19 @@
               <!-- First Name -->
               <div class="row">
                 
-
-                
-
-                
-
-
                 <!-- Email input -->
                 <div class="col-md-12 mb-4">
                   <label>Email</label>
                   {{ form.email }}
 
                 </div>
-
-
-
-                
-
-
                 <!--password -->
                 <div class="col-md-12 mb-4">
                   <label>Create Password</label>
                   {{ form.password }}
 
                 </div>
-
-
-                
               </div>
-
-
-
-              <!-- Checkbox -->
-              <!-- <div class="form-check d-flex justify-content-center mb-4">
-                  <input class="form-check-input me-2" type="checkbox" value="" id="form2Example33" checked />
-                  <label class="form-check-label" for="form2Example33">
-                    Subscribe to our newsletter
-                  </label>
-                </div>
- -->
-
-
               <!-- Submit button -->
               <button type="submit" class="btn btn-primary btn-block mb-4">
                 Sign up
@@ -143,13 +115,10 @@
                   padding: 0;
                 }
               </style>
-
-
-
-
+              
               <!-- Register buttons -->
               <div class="text-center mt-4">
-                <p>Have an account?<a href="login"> Login</a></p>
+                <p>Don't have an account?<a href="{% url 'Register' %}"> Register</a></p>
 
               </div>
             </form>
