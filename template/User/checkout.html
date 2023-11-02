@@ -22,13 +22,21 @@
 <!-- check out section -->
 <div class="checkout-section mt-150 mb-150">
     <div class="container">
+        <form action="{% url 'place_order' %}" method="POST">
+            {% csrf_token %}
         <div class="row">
+            
             <div class="col-lg-8">
                 <div class="checkout-accordion-wrap">
                     <div class="accordion" id="accordionExample">
+
                         <div class="card single-accordion">
                             <div class="card-header" id="headingOne">
+
+
                                 <h5 class="mb-0">
+
+
                                     <button class="btn btn-link" type="button" data-toggle="collapse"
                                         data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                         Billing Address
@@ -40,14 +48,43 @@
                                 data-parent="#accordionExample">
                                 <div class="card-body">
                                     <div class="billing-address-form">
-                                        <form action="index.html">
-                                            <p><input type="text" placeholder="Name"></p>
-                                            <p><input type="email" placeholder="Email"></p>
-                                            <p><input type="text" placeholder="Address"></p>
-                                            <p><input type="tel" placeholder="Phone"></p>
-                                            <p><textarea name="bill" id="bill" cols="30" rows="10"
-                                                    placeholder="Say Something"></textarea></p>
-                                        </form>
+
+                                        <p><input type="text" name="first_name" placeholder="First Name"
+                                                class="form-control" required value="{{ request.user.first_name }}">
+                                        </p>
+
+                                        <p><input type="text" name="last_name" placeholder="Last Name"
+                                                class="form-control" required value="{{ request.user.last_name }}">
+                                        </p>
+
+                                        <p><input type="email" name="email" placeholder="Email" class="form-control"
+                                                required value="{{ request.user.email }}"></p>
+
+                                        <p><input type="text" name="phone number" placeholder="Phone Number"
+                                                class="form-control" required value="{{ request.user.phone_number }}">
+                                        </p>
+
+
+                                        <p><input type="text" name="Address" placeholder="Address" class="form-control"
+                                                required value="{{ userprofile.address }}"></p>
+
+                                        <p><input type="text" name="City" placeholder="City" class="form-control"
+                                                required value="{{ userprofile.city }}"></p>
+
+                                        <p><input type="text" name="State" placeholder="State" class="form-control"
+                                                required value="{{ userprofile.state }}"></p>
+
+                                        <p><input type="text" name="Country" placeholder="Country" class="form-control"
+                                                required value="{{ userprofile.country }}"></p>
+
+                                        <p><input type="text" name="pincode" placeholder="Pincode" class="form-control"
+                                                required value="{{ userprofile.pincode }}"></p>
+
+                                        <p><textarea name="bill" id="bill" cols="30" rows="10"
+                                                placeholder="Say Something"></textarea></p>
+
+                                        <a href="" type="submit" class="boxed-btn">Add another address</a>
+
                                     </div>
                                 </div>
                             </div>
@@ -61,6 +98,7 @@
                                     </button>
                                 </h5>
                             </div>
+
                             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
                                 data-parent="#accordionExample">
                                 <div class="card-body">
@@ -94,7 +132,7 @@
                 </div>
             </div>
 
-            
+
             <div class="col-lg-4">
                 <div class="order-details-wrap">
                     <table class="order-details">
@@ -104,13 +142,15 @@
                                 <th>Price</th>
                             </tr>
                         </thead>
+                        {% for cart_item in cart_items %}
                         <tbody class="order-details-body">
-                           
+
+
                             <tr>
                                 <td>Product</td>
                                 <td>Total</td>
                             </tr>
-                            {% for cart_item in cart_items %}
+
                             <tr>
                                 <td>{{ cart_item.product.product_name }}</td>
                                 <td>₹{{ cart_item.product.price}}</td>
@@ -129,13 +169,19 @@
                                 <td>Total</td>
                                 <td>₹{{ grand_total }}</td>
                             </tr>
-                            {% endfor %}
+
                         </tbody>
+                        {% endfor %}
                     </table>
-                    <a href="#" class="boxed-btn">Place Order</a>
+                    <input type="hidden" value="COD" name="payment_mode">
+                    
+                    <button  type="submit" class="boxed-btn"> COD | Place Order</button>
                 </div>
             </div>
+            
         </div>
+    </form>
+        
     </div>
 </div>
 <!-- end check out section -->

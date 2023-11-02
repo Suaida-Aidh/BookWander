@@ -9,7 +9,7 @@ class Order(models.Model):
     first_name = models.CharField(max_length=150, null=False)
     last_name = models.CharField(max_length=150,null=False)
     email = models.EmailField(max_length=150,null=False)
-    phone = models.CharField(max_length=15,null=False)
+    phone = models.CharField(max_length=15, null=True, blank=True)
     address= models.TextField(max_length=150,null=False)
     city = models.CharField(max_length=150,null=False)
     state = models.CharField(max_length=150,null=False)
@@ -55,7 +55,7 @@ class OrderItem(models.Model):
 
 class Profile(models.Model):
     user = models.ForeignKey(Account,on_delete=models.CASCADE)
-    phone = models.CharField(max_length=15,null=False)
+    phone = models.CharField(max_length=15, null=True, blank=True)
     address= models.TextField(max_length=150,null=False)
     city = models.CharField(max_length=150,null=False)
     state = models.CharField(max_length=150,null=False)
@@ -64,4 +64,4 @@ class Profile(models.Model):
     created_at =models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user.username
+        return self.user.email

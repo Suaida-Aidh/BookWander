@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% include 'include/navbar.html' %}
+
+<!-- breadcrumb-section -->
+<div class="breadcrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 text-center">
+                <div class="breadcrumb-text">
+                    <p>Content</p>
+                    <h1>Edit Profile</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end breadcrumb section -->
+
+<div class="checkout-section mt-150 mb-150">
+    <div class="container">
+        <div class="row justify-content-center"> <!-- Center the content -->
+            <div class="col-lg-8">
+                <div class="checkout-accordion-wrap">
+                    <div class="accordion" id="accordionExample">
+                        <div class="card single-accordion">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+
+
+
+
+                                    <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Edit Address
+                                    </button>
+
+
+                                </h5>
+                            </div>
+
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                data-parent="#accordionExample">
+
+                                <div class="card-body">
+                                    <main class="col-md-9 ">
+                                        {% for message in messages %}
+                                        <div>
+                                            <p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
+                                        </div>
+                                        {% endfor %}
+
+                                        <div class="text-center my-5 ">
+                                            {% if userprofile.profile_picture %}
+                                            <img src="{{userprofile.profile_picture.url}}" alt="Profile Picture"
+                                                width="100" style="border-radius: 50%;">
+                                            {% else %}
+                                            <img src="{% static 'images/icons/logo3.jpg' %}" alt="IMG-LOGO" width="100"
+                                                style="border-radius: 50%;">
+                                            {% endif %}
+                                        </div>
+                                        <div class="billing-address-form">
+                                            <form action="{% url 'edit_profile' %}" method="POST"
+                                                enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <!-- Your form fields here... -->
+
+                                                <div class="form-row">
+
+                                                    <div class="form-group col-md-6">
+                                                        <label> First Name </label>
+                                                        {{user_form.first_name}}
+
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label> Last Name </label>
+                                                        {{user_form.last_name}}
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <label> Mobile Number </label>
+                                                        {{user_form.phone_number}}
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label> Profile Picture </label>
+                                                        {{profile_form.profile_picture}}
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group ">
+                                                    <label> Address Line 1 </label>
+                                                    {{profile_form.address_line_1 }}
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label> Address Line 2 </label>
+                                                    {{profile_form.address_line_2 }}
+                                                </div>
+
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-4">
+                                                        <label> City </label>
+                                                        {{profile_form.city }}
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label> State </label>
+                                                        {{profile_form.state }}
+
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label> Country </label>
+                                                        {{profile_form.country }}
+
+                                                    </div>
+                                                </div>
+
+                                                <button type="submit" class="boxed-btn">Save</button>
+                                            </form>
+                                        </div>
+                                    </main>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'include/footer.html' %}
+
+{% endblock %}

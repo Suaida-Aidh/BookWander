@@ -43,7 +43,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Total Orders</h5>
                             <h4>{{orders_count }}</h4>
-                            <a href="#">View order</a>
+                            <a href="{% url 'my_order' %}">View order</a>
                         </div>
                     </div>
                 </div>
@@ -56,6 +56,9 @@
                             <p>{{user.first_name}} {{user.last_name}}</p>
                             <p class="mb-0">{{user.email}}</p>
                             <p>{{user.phone_number}}</p>
+                            <a href="{% url 'edit_profile' %}">
+                                <i class="fas fa-edit"></i> Edit Profile
+                            </a>
                         </div>
                     </div>
                 </div>
