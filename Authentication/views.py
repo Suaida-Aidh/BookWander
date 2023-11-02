@@ -18,6 +18,9 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage 
 
 
+from . models import UserProfile 
+from order.models import Order
+
 
 # Create your views here.
 
@@ -83,8 +86,9 @@ def Register(request):
                 to_email = email
                 send_email = EmailMessage(mail_subject, message, to=[to_email])
                 send_email.send()
+                messages.success(request, 'Registeration successful Please check your given gmail for activation')
                 
-                return redirect('/authentication/signin/?command=verification&email=' + email)
+                return redirect('Login')
         else:
             form = RegistrationalForm()
         context = {
@@ -114,8 +118,28 @@ def activate (request,uidb64,token):
         user.is_active = True
         user.save()
         messages.success(request,'Congratulations Your account is activated ')
-        return redirect('signin')
+        return redirect('Login')
     else:
         messages.error(request,'Invalid activation link')
-        return redirect('register') 
+        return redirect('Register') 
 
+
+
+
+
+# USER PROFILE
+
+# MYACCOUNT CONDITION (DASH BOARD)
+@login_required(login_url='signin')
+def user_profile(request):
+    order=Order.objects.filter(id=request.user.id).order_by('-created_at')
+    orders_count=order.count()
+    userprofile = UserProfile.objects.filter(user_id=request.user.id)
+    context = {
+    'orders_count':orders_count,
+    'userprofile':userprofile
+    
+     }
+
+
+    return render(request, 'User/user_profile.html',context)
