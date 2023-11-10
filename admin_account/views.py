@@ -8,7 +8,8 @@ from .form import ProductForm
 from django.contrib import messages
 from Authentication.models import Account
 from store.models import Category_list
-from order.models import Order
+from order.models import Order, OrderItem
+
 
 
 
@@ -222,6 +223,51 @@ def order_management(request):
     return render(request, 'Admin-temp/order_management.html',context)
   else:
     return redirect('Home')  
+  
+#VIEW MANAGEMENT ORDER
+def manager_vieworder(request,tracking_no):
+  if request.user.is_superadmin:
+    order = Order.objects.filter(tracking_no=tracking_no).first()
+    orderitems = OrderItem.objects.filter(order=order)
+    context={
+        'order': order,
+        'orderitems':orderitems,
+    }
+    return render(request,'Admin-temp/order_view.html',context)
+  else:
+    return redirect('Home') 
+  
+
+#ACCEPT ORDER
+def manager_accept_order(request, tracking_no):
+    order = Order.objects.get(tracking_no=tracking_no)
+    order.status = 'Out For Shipping'
+    order.save()
+    return redirect('order_management')  
+
+#SHIP ORDER    
+def manager_ship_order(request, tracking_no):
+    order = Order.objects.get(tracking_no=tracking_no)
+    order.status = 'Shipped'
+    order.save()
+    return redirect('order_management')
+
+#DELIVERED ORDER
+def manager_delivered_order(request, tracking_no):
+    order = Order.objects.get(tracking_no=tracking_no)
+    order.status = 'Delivered'
+    order.save()
+    return redirect('order_management')          
+
+#CANCEL ORDER
+def manager_cancel_order(request,tracking_no):
+    order = Order.objects.get(tracking_no=tracking_no)
+    order.status = 'Cancelled'
+    order.save()
+    return redirect('order_management')
+
+  
+
 
 
 

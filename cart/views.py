@@ -3,7 +3,9 @@ from store.models import Product
 from cart.models import CartItem, Cart
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, JsonResponse
 
+from .models import WishlistItem
 def _cart_id(request):
     cart = request.session.session_key
     if not cart:
@@ -86,7 +88,7 @@ def remove_cart(request,product_id,cart_item_id):
 
 
 #CHECK OUT CONDITONS 
-@login_required(login_url='signin')
+@login_required(login_url='Login')
 def checkout(request,total=0, quantity=0, cart_items=None):
     shipping = 0
     grand_total = 0
@@ -116,3 +118,34 @@ def checkout(request,total=0, quantity=0, cart_items=None):
     }
 
     return render(request,'User/checkout.html',context)  
+
+
+
+# WISHLIST 
+@login_required(login_url='Login')
+def add_to_wishlist(request, product_id):
+    user = request.user
+
+    product = get_object_or_404(Product, id=product_id)
+
+    existing_item = WishlistItem.objects.filter(user=user, product=product, is_active=True).first()
+
+    if existing_item:
+        pass
+    else:
+        new_wishlist_item = WishlistItem(user=user, product=product)
+        new_wishlist_item.save()
+
+    return redirect('single_product', product_slug=product.slug)
+
+
+@login_required(login_url='Login')
+def wishlist(request):
+    products = WishlistItem.objects.filter(user=request.user, is_active=True)
+    print(products,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+
+    return render(request, 'User/wishlist.html', {'products':products})
+
+
+
+

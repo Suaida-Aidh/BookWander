@@ -24,6 +24,12 @@ urlpatterns = [
 
     #ORDER MANAGEMENT
     path('order_management/', views.order_management, name="order_management"),
+    path('manager_vieworder/<str:tracking_no>/', views.manager_vieworder, name='manager_vieworder'),
+    path('manager_accept_order/<str:tracking_no>/', views.manager_accept_order, name='manager_accept_order'),
+    path('manager_ship_order/<str:tracking_no>/', views.manager_ship_order, name='manager_ship_order'),
+    path('manager_delivered_order/<str:tracking_no>/', views.manager_delivered_order, name='manager_delivered_order'),
+    path('manager_cancel_order/<str:tracking_no>/', views.manager_cancel_order, name='manager_cancel_order'),
+
 
    
 

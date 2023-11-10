@@ -107,3 +107,28 @@
 	{% include 'include/footer.html' %}
 
 {% endblock content %}
+
+
+
+<!-- Add this script to the end of your HTML body or in a separate JavaScript file -->
+<script>
+    $(document).ready(function () {
+        $('.remove_cart').on('click', function (e) {
+            e.preventDefault();
+            var removeUrl = $(this).attr('href');
+            // You can use AJAX to send a request to the remove URL
+            $.ajax({
+                url: removeUrl,
+                method: 'GET',  // Adjust the HTTP method if needed
+                success: function (data) {
+                    // Handle success, e.g., remove the corresponding row from the table
+                    // or update the page as needed
+                    console.log('Item removed successfully');
+                },
+                error: function (error) {
+                    console.log('Error removing item:', error);
+                }
+            });
+        });
+    });
+</script>

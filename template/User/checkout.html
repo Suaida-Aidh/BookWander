@@ -142,25 +142,23 @@
                                 <th>Price</th>
                             </tr>
                         </thead>
-                        {% for cart_item in cart_items %}
                         <tbody class="order-details-body">
-
-
+                            
+                            
                             <tr>
                                 <td>Product</td>
                                 <td>Total</td>
                             </tr>
-
+                            
+                            {% for cart_item in cart_items %}
                             <tr>
                                 <td>{{ cart_item.product.product_name }}</td>
                                 <td>₹{{ cart_item.product.price}}</td>
                             </tr>
+                            {% endfor %}    
                         </tbody>
                         <tbody class="checkout-details">
-                            <tr>
-                                <td>Subtotal</td>
-                                <td>₹{{cart_item.sub_total }}</td>
-                            </tr>
+                            
                             <tr>
                                 <td>Shipping</td>
                                 <td>{{ shipping }}</td>
@@ -171,7 +169,6 @@
                             </tr>
 
                         </tbody>
-                        {% endfor %}
                     </table>
                     <input type="hidden" value="COD" name="payment_mode">
                     

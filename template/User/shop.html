@@ -51,7 +51,7 @@
 					</div>
 					<h3>{{ product.product_name }}</h3>
 					<p class="product-price"><span></span>$ {{ product.price }}</p>
-					<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+					<a href="{% url "single_product" product.slug %}" class="cart-btn"> View </a>
 				</div>
 			</div>
 			{% endfor %}
@@ -63,19 +63,34 @@
 
 
 
+		<!-- Pagination -->
 		<div class="row">
 			<div class="col-lg-12 text-center">
 				<div class="pagination-wrap">
 					<ul>
-						<li><a href="#">Prev</a></li>
-						<li><a href="#">1</a></li>
-						<li><a class="active" href="#">2</a></li>
-						<li><a href="#">3</a></li>
-						<li><a href="#">Next</a></li>
+						{% if products.has_previous %}
+						<li><a href="?page=1">First</a></li>
+						<li><a href="?page={{ products.previous_page_number }}">Prev</a></li>
+						{% endif %}
+
+						{% for i in products.paginator.page_range %}
+						{% if products.number == i %}
+						<li><a class="active" href="?page={{ i }}">{{ i }}</a></li>
+						{% else %}
+						<li><a href="?page={{ i }}">{{ i }}</a></li>
+						{% endif %}
+						{% endfor %}
+
+						{% if products.has_next %}
+						<li><a href="?page={{ products.next_page_number }}">Next</a></li>
+						<li><a href="?page={{ products.paginator.num_pages }}">Last</a></li>
+						{% endif %}
 					</ul>
 				</div>
 			</div>
 		</div>
+		<!-- End Pagination -->
+
 	</div>
 </div>
 <!-- end products -->

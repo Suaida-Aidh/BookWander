@@ -1,17 +1,17 @@
 {% extends 'base.html' %} {% load static %} {% block content %} {% include 'include/navbar.html' %}
 
 <!-- breadcrumb-section -->
-<div class="breadcrumb-section breadcrumb-bg">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-8 offset-lg-2 text-center">
-				<div class="breadcrumb-text">
-					<p>See more Details</p>
-					<h1>Single Product</h1>
-				</div>
-			</div>
-		</div>
-	</div>
+<div class="breadcrumb-section ">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 text-center">
+                <div class="breadcrumb-text">
+                    <p>See more Details</p>
+                    <h1>Single Product</h1>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- end breadcrumb section -->
 <!-- single product -->
@@ -21,7 +21,8 @@
             <div class="col-md-5">
                 <div class="card shadow" style="max-width: 400px;">
                     <div class="card-body">
-                        <img src="{{ single_product.images.url }}" class="img-fluid rounded" alt="Product Image" style="max-width: 100%; height: auto;">
+                        <img src="{{ single_product.images.url }}" class="img-fluid rounded" alt="Product Image"
+                            style="max-width: 100%; height: auto;">
                         <a href="{{ single_product.images.url }}">
                             <i class="fa fa-expand"></i>
                         </a>
@@ -32,8 +33,10 @@
             {% for i in multiple_images %}
             <div class="item-slick3" data-thumb="{{ i.image.url }}">
                 <div class="wrap-pic-w pos-relative">
-                    <img src="{{ i.image.url }}" class="img-fluid rounded" alt="IMG-PRODUCT" style="max-width: 100%; height: auto;">
-                    <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="{{ i.image.url }}">
+                    <img src="{{ i.image.url }}" class="img-fluid rounded" alt="IMG-PRODUCT"
+                        style="max-width: 100%; height: auto;">
+                    <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
+                        href="{{ i.image.url }}">
                         <i class="fa fa-expand"></i>
                     </a>
                 </div>
@@ -45,26 +48,78 @@
                     <p class="single-product-pricing"><span>Price</span> ${{ single_product.price }}</p>
                     <p>{{ single_product.description }}</p>
                     <div class="single-product-form">
-                        <form action="index.html">
-                            <input type="number" placeholder="0">
-                        </form>
-                        <a href="{% url 'add_cart' single_product.id %}" class="btn btn-primary" ><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                        <p><strong>Category: </strong>{{ single_product.category.category_name }}</p>
+                        <form action="{% url 'add_cart' single_product.id %}" id="addToCartForm">
+                            <input type="number" id="productQuantity" placeholder="0" value="0">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </form>  
+                            <div class="size-204 flex-w flex-m respon6-next d-flex justify-content-between ">
+                                {% if user.is_authenticated %}
+                                {% if wishlist %}
+                                <!-- If the product is in the wishlist -->
+                                <a href="{% url 'add_to_wishlist' single_product.id %}" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 delete-wish" data-item="{{ single_product.id }}">
+                                    <i class="fas fa-heart text-black" style="color: black;"></i> Added to Wishlist
+                                </a>
+                                {% else %}
+                                <!-- If the product is not in the wishlist -->
+                                <a href="{% url 'add_to_wishlist' single_product.id %}" id="addtowishlist" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 my-1">
+                                    <i class="far fa-heart" style="color: black;"></i> Add to Wishlist
+                                </a>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                            
+                        
                     </div>
+                    <!-- <a href="{% url 'add_cart' single_product.id %}?quantity=" id="addToCartBtn" class="btn btn-primary">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </a> -->
+                    <p>Cart Quantity: <span id="cartQuantityDisplay">0</span></p>
+
+                    <p><strong>Category: </strong>{{ single_product.category.category_name }}</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+</div>
 <!-- end single product -->
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var quantityInput = document.getElementById('productQuantity');
+        var addToCartForm = document.getElementById('addToCartForm');
 
+        // Retrieve the product quantity from the cookie when the page loads
+        var storedQuantity = getCookie('productQuantity');
+        if (storedQuantity) {
+            quantityInput.value = storedQuantity;
+        }
 
+        quantityInput.addEventListener('input', function () {
+            updateProductCount();
+        });
 
+        addToCartForm.addEventListener('submit', function () {
+            // Store the product quantity in a cookie when the form is submitted
+            document.cookie = 'productQuantity=' + quantityInput.value;
+        });
 
+        function updateProductCount() {
+            // Update the quantity in the cookie as the user types
+            document.cookie = 'productQuantity=' + quantityInput.value;
+        }
+
+        // Helper function to retrieve a cookie value by name
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length == 2) return parts.pop().split(";").shift();
+        }
+    });
+</script>
 
 {% include 'include/footer.html' %}
-
-
 
 {% endblock content %}

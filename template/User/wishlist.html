@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% include 'include/navbar.html' %}
+
+
+
+<!-- breadcrumb-section -->
+<div class="breadcrumb-section " class="container">
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2 text-center">
+            <div class="breadcrumb-text">
+                <p>Content</p>
+                <h1>wishlist</h1>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- end breadcrumb section -->
+
+<div class="container my-5"> <!-- Add "my-5" for increased vertical margin -->
+    <!-- ============================ COMPONENT 1 ================================= -->
+    <div class="row">
+        <aside class="col-lg-12">
+            {% if products %}
+            <div class="card">
+
+                <table class="table table-borderless table-shopping-cart">
+                    <thead class="text-muted">
+                        <tr class="small text-uppercase">
+                            <th scope="col">Product</th>
+                            <th scope="col" width="120">Price</th>
+                            <th scope="col" width="120"></th>
+                            <th scope="col" width="120"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td>
+                                <figure class="itemside align-items-center">
+                                    <div class="how-itemcart1">
+                                        <img src="{{ product.product.images.url }}" alt="IMG" />
+                                    </div>
+                                    <figcaption class="info">
+                                        <a href=""
+                                            class="title text-dark">{{product.product.product_name}}</a>
+                                    </figcaption>
+                                </figure>
+                            </td>
+                            <td>
+                                <div class="price-wrap my-3 align-items-center">
+                                    <var class="price ">${{product.product.price}}</var><br />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="price-wrap my-3">
+                                    <a href=""><button class="btn btn-dark">View
+                                            product</button></a>
+                                </div>
+                            </td>
+                            <!-- <td class="cart__close " ><button class="delete-wish" data-item="{{ product.product.id }}"><i class="fa fa-close"></i></button></td> -->
+                            <td class="">
+                                <a href="" class=" btn btn-danger delete-wish my-3 "
+                                    data-item="{{ product.product.id }}">X</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <!-- card.// -->
+        </aside>
+        {% else %}
+        <h2 class="text-center fw-bold  " style="margin:100px ;">Your wishlist is Empty</h2>
+        {% endif %}
+    </div>
+</div>
+</div>
+
+
+{% endblock content%}
