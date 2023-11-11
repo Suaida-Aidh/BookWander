@@ -127,6 +127,7 @@ def add_to_wishlist(request, product_id):
     user = request.user
 
     product = get_object_or_404(Product, id=product_id)
+    
 
     existing_item = WishlistItem.objects.filter(user=user, product=product, is_active=True).first()
 
@@ -142,9 +143,26 @@ def add_to_wishlist(request, product_id):
 @login_required(login_url='Login')
 def wishlist(request):
     products = WishlistItem.objects.filter(user=request.user, is_active=True)
-    print(products,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+    print(products, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
 
-    return render(request, 'User/wishlist.html', {'products':products})
+    return render(request, 'User/wishlist.html', {'products': products})
+
+def delete_from_wishlist(request, product_id):
+    # Ensure that the user is authenticated
+    if not request.user.is_authenticated:
+        return redirect('Login')
+
+    product = get_object_or_404(Product, id=product_id)
+    
+   
+    wishlist_item = WishlistItem.objects.filter(user=request.user, product=product, is_active=True).first()
+
+    if wishlist_item:
+        wishlist_item.is_active = False  
+        wishlist_item.save()
+
+    return redirect('wishlist')
+
 
 
 

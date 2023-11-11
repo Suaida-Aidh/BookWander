@@ -5,6 +5,7 @@ from store.models import Product
 from django.core.paginator import Paginator
 from django.db.models import Q
 from .form import ProductForm
+from store.models import MultipleImages
 from django.contrib import messages
 from Authentication.models import Account
 from store.models import Category_list
@@ -266,6 +267,23 @@ def manager_cancel_order(request,tracking_no):
     order.save()
     return redirect('order_management')
 
+
+
+
+
+#MULTIPLE IMAGES MANAGEMENT
+@never_cache
+@login_required(login_url='signin')
+def multiple_image_management(request):
+  multipleimages = MultipleImages.objects.all().order_by('id')
+  paginator = Paginator(multipleimages, 10)
+  page = request.GET.get('page')
+  multipleimages = paginator.get_page(page)
+
+  context = {
+    'multipleimages': multipleimages
+  }
+  return render(request, 'manager/multiple_image_management.html', context)
   
 
 

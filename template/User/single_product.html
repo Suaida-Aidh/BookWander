@@ -30,18 +30,7 @@
                 </div>
             </div>
             <!-- multiple_images -->
-            {% for i in multiple_images %}
-            <div class="item-slick3" data-thumb="{{ i.image.url }}">
-                <div class="wrap-pic-w pos-relative">
-                    <img src="{{ i.image.url }}" class="img-fluid rounded" alt="IMG-PRODUCT"
-                        style="max-width: 100%; height: auto;">
-                    <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
-                        href="{{ i.image.url }}">
-                        <i class="fa fa-expand"></i>
-                    </a>
-                </div>
-            </div>
-            {% endfor %}
+           
             <div class="col-md-5">
                 <div class="single-product-content">
                     <h3>{{ single_product.product_name }}</h3>

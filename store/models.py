@@ -2,6 +2,7 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+from autoslug import AutoSlugField  
 # from django.contrib.auth.models import User
 # Create your models here.
 
@@ -40,42 +41,43 @@ class Authors(models.Model):
 
 class Product(models.Model):
     product_name = models.CharField(max_length=255, unique=True)
-    slug = models.SlugField(max_length=100, unique=True)
+    slug = AutoSlugField(max_length=200, unique=True, populate_from='product_name')  # Specify the source field
     product_description = models.TextField(max_length=300, blank=True)
     price = models.IntegerField()
     stock = models.IntegerField()
-    images = models.ImageField(default=True, upload_to='photos/products')
+    images = models.ImageField( upload_to='photos/products')
     is_available = models.BooleanField(default=True)
     category = models.ForeignKey(Category_list, on_delete=models.CASCADE)
     author = models.ForeignKey(Authors, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
-    # offer = models.ForeignKey(Offer, on_delete=models.SET_NULL, null=True, blank=True)
 
-    
     def is_outofstock(self):
-        return self. stock <=0
-    
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.product_name)
-        super(Product, self).save(*args, **kwargs)
-    
+        return self.stock <= 0
+
     def get_url(self):
-        return reverse('product_details',args = [self.slug])
+        return reverse('product_detail', args=[self.category.slug, self.slug])
 
     def __str__(self):
         return self.product_name
 
-    def get_offer_price(self):
-        return int((self.price) - (self.price * self.offer.off_percent / 100))
+    # def get_offer_price(self):
+    #     return int((self.price) - (self.price * self.offer.off_percent / 100))
     
-    def get_offer_price_by_category(self):
-        return int((self.price) - (self.price * self.category.offer.off_percent / 100))
+    # def get_offer_price_by_category(self):
+    #     return int((self.price) - (self.price * self.category.offer.off_percent / 100))
 
  
-class ProductImage(models.Model):
+# class ProductImage(models.Model):
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+#     image = models.ImageField(upload_to = 'product')
+
+
+#multiple images
+class MultipleImages(models.Model):
+    image = models.ImageField(upload_to='media/product')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to = 'product')
+
 
 
 

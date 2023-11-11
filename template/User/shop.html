@@ -45,13 +45,13 @@
 			<div class="col-lg-4 col-md-6 text-center strawberry">
 				<div class="single-product-item" data-category="{{ product.category }}">
 					<div class="product-image">
-						<a href="{% url "single_product" product.slug %}">
+						<a href="{% url 'single_product' product.slug %}">
 							<img src="{{ product.images.url }}" alt="" width="400" height="300">
 						</a>
 					</div>
 					<h3>{{ product.product_name }}</h3>
 					<p class="product-price"><span></span>$ {{ product.price }}</p>
-					<a href="{% url "single_product" product.slug %}" class="cart-btn"> View </a>
+					<a href="{% url 'single_product' product.slug %}" class="cart-btn"> View </a>
 				</div>
 			</div>
 			{% endfor %}

@@ -1,11 +1,13 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from .models import Category_list, Product, Authors
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import ProductImage
+from .models import MultipleImages
 from order.models import OrderItem
 from cart.models import CartItem,WishlistItem
 from cart.views import _cart_id
 from django.db.models import Q
+from django.http import Http404
+
 
 # Create your views here.
 
@@ -54,35 +56,34 @@ def category_filter(request, id):
     
 
 
-def product_detail(request,product_slug):
+def product_detail(request, product_slug):
     try:
         single_product = Product.objects.get(slug=product_slug)
-        multiple_images = ProductImage.objects.filter(product=single_product)
-        in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request),product=single_product).exists()
-    except Exception as e:
-        raise e
-    try:
-        orderitem=None
-        if request.user.is_authenticated:
-         orderitem =  OrderItem.objects.filter(user=request.user,product_id=single_product.id).exists()  # type: ignore
-    except OrderItem.DoesNotExist:
-        orderitem = None 
-
-    #showing the old reviews
+        multiple_images = MultipleImages.objects.filter(product=single_product)
+        in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request), product=single_product).exists()
+    except Product.DoesNotExist:
+        raise Http404("Product does not exist")
     
-    wishlist=None
+    orderitem = None
     if request.user.is_authenticated:
-        wishlist= WishlistItem.objects.filter(product=single_product)
-    
+        orderitem = OrderItem.objects.filter(user=request.user, product_id=single_product.id).exists()
+
+    # Showing the old reviews
+
+    wishlist = None
+    if request.user.is_authenticated:
+        # Check if the product is in the user's wishlist
+        wishlist = WishlistItem.objects.filter(user=request.user, product=single_product).exists()
 
     context = {
-        'single_product' : single_product,
-        'in_cart'        : in_cart,
+        'single_product': single_product,
+        'in_cart': in_cart,
         'multiple_images': multiple_images,
-        'orderitem'      : orderitem,
-        'wishlist'       : wishlist
-        }           
-    return render (request,'User/single_product.html',context)
+        'orderitem': orderitem,
+        'wishlist': wishlist,
+    }
+
+    return render(request, 'User/single_product.html', context)
 
 
 #Search function

@@ -31,6 +31,10 @@ urlpatterns = [
     path('manager_cancel_order/<str:tracking_no>/', views.manager_cancel_order, name='manager_cancel_order'),
 
 
+    #MULTIPLE IMAGE MANAGEMENTS
+    path('multiple_image_management/',views.multiple_image_management,name='multiple_image_management'),
+
+
    
 
 
