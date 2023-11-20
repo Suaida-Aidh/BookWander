@@ -4,12 +4,13 @@ from django.views.decorators.cache import never_cache
 from store.models import Product
 from django.core.paginator import Paginator
 from django.db.models import Q
-from .form import ProductForm
+from .form import ProductForm,MultipleImagesForm
 from store.models import MultipleImages
 from django.contrib import messages
 from Authentication.models import Account
 from store.models import Category_list
 from order.models import Order, OrderItem
+from django.shortcuts import render, get_object_or_404
 
 
 
@@ -139,6 +140,24 @@ def unblock_user(request,user_id):
     user.is_active = True
     user.save()
     return redirect ('user_management') 
+
+from django.shortcuts import render
+
+@never_cache
+@login_required(login_url='signin')
+def user_view(request, user_id=None):
+    # If user_id is not provided, get details of the currently logged-in user
+    if user_id is None:
+        user_id = request.user.id
+
+    if request.user.is_superadmin:
+        user = get_object_or_404(Account, id=user_id)
+        context = {
+            'user': user
+        }
+        return render(request, 'Admin-temp/user_view.html', context)
+    else:
+        return redirect('Login')
 
 
 #CATOGERY MANAGEMENT
@@ -283,7 +302,61 @@ def multiple_image_management(request):
   context = {
     'multipleimages': multipleimages
   }
-  return render(request, 'manager/multiple_image_management.html', context)
+  return render(request, 'Admin-temp/multiple_image_management.html', context)
+
+
+
+
+#ADD MULTIPLE IMAGES
+@never_cache
+@login_required(login_url='signin')
+def add_multiple_images(request):  # type: ignore
+  if request.method == 'POST':
+    form = MultipleImagesForm(request.POST, request.FILES)
+    if form.is_valid():
+      form.save()
+      messages.error(request,'')
+      return redirect('multiple_image_management')
+    else:
+      print(form.errors)
+      messages.error(request,'Invalid form') 
+      return redirect('add_multiple_images') 
+  else:
+    form = MultipleImagesForm()
+
+  context = {
+    'form': form
+  }
+  return render(request,'Admin-temp/add_multiple_images.html',context)
+
+# UPDATE MULTIPLE IMAGE
+@never_cache
+@login_required(login_url='signin')
+def update_multiple_images(request,multi_id):
+  multipleimages = MultipleImages.objects.get(id=multi_id)
+  form = MultipleImagesForm(instance = multipleimages)
+  if request.method == 'POST':
+    form = MultipleImagesForm(request.POST, request.FILES, instance = multipleimages)
+    if form.is_valid():
+      form.save()
+      messages.success(request,'Added Succefully')
+      return redirect('multiple_image_management')
+    else:
+      messages.error(request,'Invalid form') 
+      return redirect('update_multiple_images')   
+  context = {
+    'form':form
+  }
+  return render(request, 'Admin-temp/update_multiple_images.html', context)
+
+
+# DELETE MULTIPLEIMAGES
+@never_cache
+@login_required(login_url='signin')
+def delete_multiple_images(request, multi_id):
+  multipleimages = MultipleImages.objects.get(id = multi_id)
+  multipleimages.delete()
+  return redirect('multiple_image_management')
   
 
 

@@ -17,6 +17,7 @@ def placeorder(request):
 
         # cart check
         cart_items = CartItem.objects.filter(user=request.user.id)
+        print(request.POST,'aaaaaaaaaaaaaaaaaaaaaaaaaaaa')
         if not cart_items:
             return redirect('shop')
         print('second')
@@ -30,25 +31,27 @@ def placeorder(request):
             userprofile = Profile()
             userprofile.user = request.user
             userprofile.phone = request.POST.get('phone')
-            userprofile.address = request.POST.get('address')
-            userprofile.city = request.POST.get('city')
-            userprofile.state = request.POST.get('state')
-            userprofile.country = request.POST.get('country')
+            userprofile.address = request.POST.get('Address')
+            userprofile.city = request.POST.get('City')
+            userprofile.state = request.POST.get('State')
+            userprofile.country = request.POST.get('Country')
             userprofile.pincode = request.POST.get('pincode')
+            print('nottt')
             userprofile.save()
+            print('savee')
 
         newOrder = Order()
         newOrder.user = request.user
         newOrder.first_name = request.POST.get('first_name')
         newOrder.last_name = request.POST.get('last_name')
         newOrder.email = request.POST.get('email')
-        newOrder.phone = request.POST.get('phone', '')  # Provide an empty string as default
+        newOrder.phone = request.POST.get('phone')
 
-        newOrder.address = request.POST.get('address', '')  # Provide an empty string as default
+        newOrder.address = request.POST.get('Address')  
 
-        newOrder.city = request.POST.get('city','')
-        newOrder.state = request.POST.get('state','')
-        newOrder.country = request.POST.get('country','')
+        newOrder.city = request.POST.get('City')
+        newOrder.state = request.POST.get('State')
+        newOrder.country = request.POST.get('Country')
         newOrder.pincode = request.POST.get('pincode')
         newOrder.payment_mode = request.POST.get('payment_mode')
         newOrder.payment_id = request.POST.get('payment_id')

@@ -103,7 +103,7 @@ def search(request,products=0,products_count=0):
 
     }
     
-    return render(request, 'store/store.html',context) 
+    return render(request, 'User/shop.html',context) 
 
 
 

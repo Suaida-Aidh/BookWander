@@ -2,37 +2,71 @@
 {% load static%}
 {% block content %}
 {% include 'include/admin_navbar.html' %}
-<section class="section-content padding-y bg" style= background-color:#1f1d29;margin-top:100px ; >
-    <div class="container mt-5 mb-5">
-  
-      <div class="row d-flex justify-content-center">
-        <div class="col-8">
-            {% for message in messages %}
-          <div>
-            <p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
-          </div>
-          {% endfor %}
-            <h2 class="text-center font-weight-bold text-white my-5">Add Multiple Images</h2>
+<section class="section-content padding-y bg" style="background-color:#5d6760; margin-top:100px;">
+  <div class="container mt-5 mb-5 mx-auto" style="width: 60%;">
 
-          <form action="{% url 'add_multiple_images' %}" method="POST" enctype="multipart/form-data" >
-            {% csrf_token %}
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="id_name">Product Name</label>
-                {{ form.product }}
-              </div>
-              <div class="form-group col-md-6">
-                <label for="product_slug">Add Images</label>
-                {{ form.image }}
-              </div>
-            </div>
-            <div class="text-center">
-              <button type="submit" class="btn btn-light my-5" >Save</button>
-            </div>
-          </form>
+
+
+    <div class="row shopping__cart__table m-4">
+      <h2 class="text-center font-weight-bold text-white my-5">Add Multiple Images</h2>
+      <table class="table bg-white">
+
+
+
+
+        <div class="row d-flex flex-row-reverse">
+          <a href="{% url 'add_multiple_images' %}" class="btn btn-dark m-3 col-2 ">Add New</a>
         </div>
-      </div>
+        <!-- <a href="" class="btn" scope="col">Update</a>
+            <a href="" class="btn" scope="col">Delete </a> -->
+        <table class="table bg-white">
+          <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">Image</th>
+              <th scope="col">Product Name</th>
+              <th scope="col">Update</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for multipleimages in multipleimages %}
+            <tr>
+              <th scope="row">{{ multipleimages.id }}</th>
+              <td><img src="{{ multipleimages.image.url }}" width="100" height="100" alt=""></td>
+              <td>{{ multipleimages.product.product_name }}</td>
+              <td><a href="{% url 'update_multiple_images' multipleimages.id %}" class="btn btn-warning my-5">Update</a>
+              </td>
+              <td><a href="{% url 'delete_multiple_images' multipleimages.id %}" class="btn btn-dark my-5">Delete</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+
+        <div class="row d-flex flex-row-reverse">
+          <a>Add New</a>
+        </div>
+
+
+
+        <!-- <tbody>
+          {% for multipleimages in multipleimages %}
+          <tr>
+            <th scope="row">{{ multipleimages.id }}</th>
+            <td><img src="" width="250" height="250" alt=""></td>
+            <td>{{ multipleimages.product.product_name }}</td>
+            <td><a href="" class="btn btn-warning my-5">Update</a></td>
+            <td><a href="" class="btn btn-dark my-5">Delete</a></td>
+          </tr>
+          {% endfor %}
+        </tbody> -->
+      </table>
+
     </div>
-  </section>
- 
-  {% endblock %}
+  </div>
+  </div>
+</section>
+
+{% endblock %}

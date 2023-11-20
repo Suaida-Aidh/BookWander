@@ -1,41 +1,23 @@
-{% load static%}
+{% extends 'admin_base.html' %}
+
 {% block content %}
+  <div class="container mt-3 d-flex justify-content-center">
+    <div class="card shadow rounded">
+      <div class="card-body text-center">
+        <h2 class="card-title">User Details</h2>
+        <hr>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>User Details</title>
-    <style>
-        body {
-            background-color: #f5fcf5; /* Green background color */
-            color: hsl(162, 66%, 83%); /* White text color */
-        }
-        .user-details-container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff; /* White background color for content */
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            color: #333; /* Text color for content */
-        }
-        .user-details-container h1 {
-            color: #2f3530; /* Green text color for headings */
-        }
-        .user-details-container p {
-            margin: 10px 0;
-        }
-    </style>
-</head>
-<body>
-    <div class="user-details-container">
-        <h1>User Details</h1>
-        <p><strong>Username:</strong> {{ user.username }}</p>
-        <p><strong>Full Name:</strong> {{ user.get_full_name }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        <!-- Add more user details as needed -->
+        <div>
+          <p><strong>ID:</strong> {{ user.id }}</p>
+          <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+          <p><strong>Email:</strong> {{ user.email }}</p>
+          <p><strong>Last Login:</strong> {{ user.last_login }}</p>
+          <p><strong>Status:</strong> {% if user.is_active %}Active{% else %}Blocked{% endif %}</p>
+          <!-- Add more details you want to display -->
+        </div>
+
+        <a class="btn btn-success mt-3" href="{% url 'user_management' %}">Back to User List</a>
+      </div>
     </div>
-</body>
-</html>
-
-{% endblock content %}
+  </div>
+{% endblock %}

@@ -15,6 +15,7 @@ urlpatterns = [
     path('user_managemnet/',views.user_management,name="user_management"),
     path('block_user/<int:user_id>/',views.block_user,name="block_user"),
     path('unblock_user/<int:user_id>/',views.unblock_user,name="unblock_user"),
+    path('user_view/<int:user_id>/',views.user_view, name="user_view"),
 
     #CATEGORY MANAGEMENT
     path('category_management/', views.category_management, name="category_management"),
@@ -32,7 +33,10 @@ urlpatterns = [
 
 
     #MULTIPLE IMAGE MANAGEMENTS
-    path('multiple_image_management/',views.multiple_image_management,name='multiple_image_management'),
+    path('multiple_image_management/',views.multiple_image_management, name='multiple_image_management'),
+    path('delete_multiple_images/<int:multi_id>/',views.delete_multiple_images,name='delete_multiple_images'),
+    path('update_multiple_images/<int:multi_id>/',views.update_multiple_images,name='update_multiple_images'),
+    path('add_multiple_images/',views.add_multiple_images,name='add_multiple_images'),
 
 
    

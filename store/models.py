@@ -8,7 +8,8 @@ from autoslug import AutoSlugField
 
 class Category_list(models.Model):
     category_name = models.CharField(unique=True, max_length=255)
-    slug = models.SlugField(max_length=100, unique=True, blank= True)
+    slug = AutoSlugField(max_length=200, unique=True, populate_from='category_name')  # Specify the source field
+
     category_description = models.TextField()
     is_available = models.BooleanField(default=False)
     # offer = models.ForeignKey(Offer, on_delete=models.SET_NULL, null=True, blank=True)

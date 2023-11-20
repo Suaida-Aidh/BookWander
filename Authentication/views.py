@@ -30,6 +30,20 @@ def Home(request):
     
     return render (request,'User/home.html')
 
+#ABOUT PAGE
+def about(request):
+    
+    return render (request,'User/about.html')
+
+#CONTACT PAGE
+def contact(request):
+    print('aaaaaaaaaaaaaaaaaaaa')
+    return render(request, 'User/contact.html')
+
+
+
+
+
 # LOGIN PAGE
 def Login(request):
     if request.user.is_authenticated:
@@ -133,17 +147,17 @@ def activate (request,uidb64,token):
 # MYACCOUNT CONDITION (DASH BOARD)
 @login_required(login_url='signin')
 def user_profile(request):
-    order=Order.objects.filter(id=request.user.id).order_by('-created_at')
-    orders_count=order.count()
-    userprofile = UserProfile.objects.filter(user_id=request.user.id)
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    orders_count = orders.count()
+    userprofile = UserProfile.objects.filter(user=request.user)
+
     context = {
-    'orders_count':orders_count,
-    'userprofile':userprofile
-    
-     }
+        'orders_count': orders_count,
+        'userprofile': userprofile
+    }
 
+    return render(request, 'User/user_profile.html', context)
 
-    return render(request, 'User/user_profile.html',context)
 
 
 
