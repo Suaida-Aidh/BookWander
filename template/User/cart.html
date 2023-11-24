@@ -3,108 +3,123 @@
 
 
 
-	
-	
-	<!-- breadcrumb-section -->
-	<div class="breadcrumb-section ">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-8 offset-lg-2 text-center">
-					<div class="breadcrumb-text">
-						<p>Content</p>
-						<h1>Cart</h1>
-					</div>
+
+
+<!-- breadcrumb-section -->
+<div class="breadcrumb-section ">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 offset-lg-2 text-center">
+				<div class="breadcrumb-text">
+					<p>Content</p>
+					<h1>Cart</h1>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- end breadcrumb section -->
+</div>
+<!-- end breadcrumb section -->
 
-	<!-- cart -->
-	<div class="cart-section mt-150 mb-150">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-8 col-md-12">
-					<div class="cart-table-wrap">
-						<table class="cart-table">
-							<thead class="cart-table-head">
-								<tr class="table-head-row">
-									<th class="product-remove"></th>
-									<th class="product-image">Product Image</th>
-									<th class="product-name">Name</th>
-									<th class="product-price">Price</th>
-									<th class="product-quantity">Quantity</th>
-									<th class="product-total">Total</th>
-								</tr>
-							</thead>
-							<tbody>
-								
-                                {% for cart_item in cart_items %}
-								<tr class="table-body-row">
-									<td class="product-remove"><a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}"><i class="far remove_cart"></i></a>Remove</td>
-									<td class="product-image"><img src="{{ cart_item.product.images.url }}" alt="IMG"></td>
-									<td class="product-name">{{ cart_item.product.product_name }}</td>
-                                     
-									<td class="product-price">{{ cart_item.product.price }}</td>
-                                   
-                                    <td class="product-quantity">
-                                        <input type="number" placeholder="0" value="{{ cart_item.quantity }}" name="quantity">
-                                    </td>
-                                    <td class="product-total">${{ cart_item.sub_total }}</td>
-								</tr>
-                                {% endfor %} 
-							</tbody>
-						</table>
+<!-- cart -->
+<div class="cart-section mt-150 mb-150">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 col-md-12">
+				<div class="cart-table-wrap">
+					<table class="cart-table">
+						<thead class="cart-table-head">
+							<tr class="table-head-row">
+								<th class="product-remove"></th>
+								<th class="product-image">Product Image</th>
+								<th class="product-name">Name</th>
+								<th class="product-price">Price</th>
+								<th class="product-quantity">Quantity</th>
+								<th class="product-total">Total</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							{% for cart_item in cart_items %}
+							<tr class="table-body-row">
+								<td class="product-remove"><a
+										href="{% url 'remove_cart' cart_item.product.id cart_item.id %}"><i
+											class="far remove_cart"></i></a>Remove</td>
+								<td class="product-image"><img src="{{ cart_item.product.images.url }}" alt="IMG"></td>
+								<td class="product-name">{{ cart_item.product.product_name }}</td>
+
+								<td class="product-price">{{ cart_item.product.price }}</td>
+
+								<td class="product-quantity">
+									<input type="number" placeholder="0" value="{{ cart_item.quantity }}"
+										name="quantity">
+								</td>
+								<td class="product-total">${{ cart_item.sub_total }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="col-lg-4">
+				<div class="total-section">
+					<table class="total-table">
+						<thead class="total-table-head">
+							<tr class="table-total-row">
+								<th>Total</th>
+								<th>Price</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="total-data">
+								<td><strong>Subtotal: </strong></td>
+								<td>₹{{total}}</td>
+							</tr>
+							<tr class="total-data">
+								<td><strong>Shipping: </strong></td>
+								<td>₹{{ shipping }}</td>
+							</tr>
+							<tr class="total-data">
+								<td><strong>Total: </strong></td>
+								<td>₹{{ grand_total }}</td>
+							</tr>
+
+						</tbody>
+					</table>
+					<div class="cart-buttons">
+
+						<a href="{% url 'checkout' %}" class="boxed-btn black">Check Out</a>
 					</div>
 				</div>
 
-				<div class="col-lg-4">
-					<div class="total-section">
-						<table class="total-table">
-							<thead class="total-table-head">
-								<tr class="table-total-row">
-									<th>Total</th>
-									<th>Price</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr class="total-data">
-									<td><strong>Subtotal: </strong></td>
-									<td>₹{{total}}</td>
-								</tr>
-								<tr class="total-data">
-									<td><strong>Shipping: </strong></td>
-									<td>₹{{ shipping }}</td>
-								</tr>
-								<tr class="total-data">
-									<td><strong>Total: </strong></td>
-									<td>₹{{ grand_total }}</td>
-								</tr>
-                                
-							</tbody>
-						</table>
-						<div class="cart-buttons">
-							
-							<a href="{% url 'checkout' %}" class="boxed-btn black">Check Out</a>
-						</div>
+				<div class="user-actions user-actions__coupon">
+					{% if grand_total > 200 %}
+					<div class="alert alert-warning mb-3" id="coupon_alert" role="alert">
+						<p><i class="fa fa-exclamation-circle"></i> <a class="expand-btn" href="#coupon_info"> You're
+								eligible for a coupon. Click here to see available coupons.</a></p>
 					</div>
-
-					<div class="coupon-section">
-						<h3>Apply Coupon</h3>
-						<div class="coupon-form-wrap">
-							<form action="index.html">
-								<p><input type="text" placeholder="Coupon"></p>
-								<p><input type="submit" value="Apply"></p>
-							</form>
-						</div>
+					<div id="coupon_info" class="user-actions__form hide-in-default">
+						<!-- Display coupon information here -->
+						<h3>Available Coupons:</h3>
+						<ul>
+							{% for coupon in available_coupons %}
+							<li>Coupon Code: {{ coupon.coupon_code }}</li>
+							<li>Discount Amount: {{ coupon.discount }}</li>
+							<br>
+							{% endfor %}
+						</ul>
 					</div>
+					{% else %}
+					<p>You are not eligible for a coupon at this time.</p>
+					{% endif %}
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- end cart -->
+</div>
+<!-- end cart -->
 
-	{% include 'include/footer.html' %}
+{% include 'include/footer.html' %}
 
 {% endblock content %}
 
@@ -112,23 +127,29 @@
 
 <!-- Add this script to the end of your HTML body or in a separate JavaScript file -->
 <script>
-    $(document).ready(function () {
-        $('.remove_cart').on('click', function (e) {
-            e.preventDefault();
-            var removeUrl = $(this).attr('href');
-            // You can use AJAX to send a request to the remove URL
-            $.ajax({
-                url: removeUrl,
-                method: 'GET',  // Adjust the HTTP method if needed
-                success: function (data) {
-                    // Handle success, e.g., remove the corresponding row from the table
-                    // or update the page as needed
-                    console.log('Item removed successfully');
-                },
-                error: function (error) {
-                    console.log('Error removing item:', error);
-                }
-            });
-        });
+	$(document).ready(function () {
+		$('.remove_cart').on('click', function (e) {
+			e.preventDefault();
+			var removeUrl = $(this).attr('href');
+			// You can use AJAX to send a request to the remove URL
+			$.ajax({
+				url: removeUrl,
+				method: 'GET',  // Adjust the HTTP method if needed
+				success: function (data) {
+					// Handle success, e.g., remove the corresponding row from the table
+					// or update the page as needed
+					console.log('Item removed successfully');
+				},
+				error: function (error) {
+					console.log('Error removing item:', error);
+				}
+			});
+		});
+	});
+</script>
+<script>
+    document.getElementById('coupon_alert').addEventListener('click', function () {
+        var couponInfo = document.getElementById('coupon_info');
+        couponInfo.classList.toggle('show-coupon-info');
     });
 </script>

@@ -46,6 +46,9 @@ class OrderItem(models.Model):
     price= models.FloatField(null=False)
     quantity = models.IntegerField(null=False)
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    
+    status = models.CharField(max_length=50, choices=[("Return", "Return"), ("Cancelled", "Cancelled"), ("Delivered", "Delivered")], default='default_value')
+
 
 
     def __str__(self):

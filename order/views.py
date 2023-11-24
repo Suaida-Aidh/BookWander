@@ -8,6 +8,8 @@ from .models import Order,OrderItem
 from store.models import Product
 import random
 from django.contrib import messages
+from cart.models import Cart
+from django.http import JsonResponse
 
 @never_cache
 @login_required(login_url=('signin'))
@@ -130,3 +132,13 @@ def Cancel_order(request,t_no):
     order.status ='Cancelled'
     order.save()
     return redirect('my_order')
+
+
+
+# razorpay
+
+def rezorpaycheck(request):
+    cart = Cart.objects.filter(user = request.user)
+    for item in cart:
+        total_price = item.total_price * item.quantity
+    return JsonResponse({'total_price':total_price})

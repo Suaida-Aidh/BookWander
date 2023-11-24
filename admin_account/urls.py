@@ -38,6 +38,17 @@ urlpatterns = [
     path('update_multiple_images/<int:multi_id>/',views.update_multiple_images,name='update_multiple_images'),
     path('add_multiple_images/',views.add_multiple_images,name='add_multiple_images'),
 
+    path('sales_report',views.sales_report , name='sales_report'),
+
+         
+    path('coupon',views.coupon,name='coupon'),
+    path('add_coupon',views.add_coupon,name='add_coupon'),
+    path('edit_coupon/<int:coupon_id>/',views.edit_coupon,name='edit_coupon'), 
+    path('coupon_delete/<int:coupon_id>/',views.coupon_delete,name='coupon_delete'),
+    path('coupon_undelete/<int:coupon_id>/',views.coupon_undelete,name='coupon_undelete'),
+    
+
+
 
    
 

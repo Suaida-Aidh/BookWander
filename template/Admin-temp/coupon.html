@@ -1,0 +1,156 @@
+{% extends 'admin_base.html' %}
+{% load static%}
+{% block content %}
+
+<html>
+
+<body class="app">
+    {% include 'include/admin_navbar.html' %}
+    <header class="">
+        <div class="app-header-inner">
+            <div class="container-fluid py-2">
+                <div class="app-header-content">
+                    <div class="row justify-content-between align-items-center">
+
+                    </div><!--//row-->
+                </div><!--//app-header-content-->
+            </div><!--//container-fluid-->
+        </div><!--//app-header-inner-->
+        <div id="app-sidepanel" class="app-sidepanel sidepanel-hidden">
+            <div id="sidepanel-drop" class="sidepanel-drop"></div>
+            <div class="sidepanel-inner d-flex flex-column">
+                <a href="#" id="sidepanel-close" class="sidepanel-close d-xl-none">&times;</a>
+                <div class="app-branding">
+                    <a class="app-logo" href="index.html"><img class="logo-icon me-2" src="assets/images/app-logo.svg"
+                            alt="logo"><span class="logo-text">PORTAL</span></a>
+
+                </div><!--//app-branding-->
+
+
+            </div><!--//sidepanel-inner-->
+        </div><!--//app-sidepanel-->
+    </header><!--//app-header-->
+
+    <div class="app-wrapper">
+
+        <div class="app-content pt-3 p-md-3 p-lg-4">
+            <div class="container-xl">
+
+                <div class="row g-3 mb-4 align-items-center justify-content-between">
+                    <div class="col-auto">
+                        <h1 class="app-page-title mb-0">Coupon</h1>
+                    </div>
+                    <div class="col-auto">
+                        <div class="page-utilities">
+                            <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
+                                <div class="col-auto">
+
+
+                                </div><!--//col-->
+                                <div class="col-auto">
+
+
+                                </div>
+                                <div class="col-auto">
+                                    <a class="btn btn-success" href="{% url 'add_coupon' %}">
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus me-1"
+                                            fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd"
+                                                d="M7.5 1a.5.5 0 0 1 .5.5V7h5a.5.5 0 0 1 0 1H8v5a.5.5 0 0 1-1 0V8H1a.5.5 0 0 1 0-1h5V1.5a.5.5 0 0 1 .5-.5z" />
+                                        </svg>
+                                        Add
+                                    </a>
+                                </div>
+
+                            </div><!--//row-->
+                        </div><!--//table-utilities-->
+                    </div><!--//col-auto-->
+                </div><!--//row-->
+
+
+
+
+                <div class="tab-content" id="orders-table-tab-content">
+                    <div class="tab-pane fade show active" id="orders-all" role="tabpanel"
+                        aria-labelledby="orders-all-tab">
+                        <div class="app-card app-card-orders-table shadow-sm mb-5">
+                            <div class="app-card-body">
+                                <div class="table-responsive">
+                                    <table class="table app-table-hover mb-0 text-left">
+                                        <thead>
+                                            <tr>
+                                                <th class="cell">Coupon Code</th>
+                                                <th class="cell">Discount</th>
+                                                <th class="cell">Minimum Price</th>
+                                                <th class="cell">Action</th>
+
+
+                                                <th class="cell"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ul class="messages">
+                                                {% for message in messages %}
+                                                <li {% if message.tags %} class="{{ message.error }}" {% endif %}>{{
+                                                    message }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                            {% for i in coupon %}
+                                            <tr>
+                                                <td>{{ i.coupon_code }}</td>
+                                                <td>{{ i.discount }}</td>
+                                                <td>{{ i.min_price }}</td>
+                                                <td>{{ i.start_date }}</td>
+                                                <td>{{ i.end_date }}</td>
+
+                                                <td>
+                                                    <a href="{% url 'edit_coupon'  i.id %}"class="btn btn-success">Edit</a>
+                                                    {% if not i.is_deleted %}
+                                                        <a href="{% url 'coupon_delete'  i.id %}" class="btn btn-danger">Delete </a>
+                                                    {% else %}
+                                                        <a href="{% url 'coupon_undelete'  i.id %}" class="btn btn-success">Undelete</a>
+                                                    {% endif %}
+                            
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+
+
+                                        </tbody>
+                                    </table>
+                                </div><!--//table-responsive-->
+
+                            </div><!--//app-card-body-->
+                        </div><!--//app-card-->
+
+
+                    </div><!--//tab-pane-->
+
+
+
+
+
+
+
+
+
+                </div><!--//container-fluid-->
+            </div><!--//app-content-->
+
+
+        </div><!--//app-wrapper-->
+
+
+        <!-- Javascript -->
+        <script src="assets/plugins/popper.min.js"></script>
+        <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+
+        <!-- Page Specific JS -->
+        <script src="assets/js/app.js"></script>
+
+</body>
+
+</html>
+
+{% endblock content %}
