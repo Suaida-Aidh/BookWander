@@ -1,112 +1,194 @@
 {% extends 'admin_base.html' %}
 {% load static%}
 {% block content %}
-{% include 'include/admin_navbar.html' %}
+
+<html>
+
+<body class="app">
+    {% include 'include/admin_navbar.html' %}
+    <header class="">
+        <div class="app-header-inner">
+            <div class="container-fluid py-2">
+                <div class="app-header-content">
+                    <div class="row justify-content-between align-items-center">
+
+                    </div><!--//row-->
+                </div><!--//app-header-content-->
+            </div><!--//container-fluid-->
+        </div><!--//app-header-inner-->
+        <div id="app-sidepanel" class="app-sidepanel sidepanel-hidden">
+            <div id="sidepanel-drop" class="sidepanel-drop"></div>
+            <div class="sidepanel-inner d-flex flex-column">
+                <a href="#" id="sidepanel-close" class="sidepanel-close d-xl-none">&times;</a>
+                <div class="app-branding">
+                    <a class="app-logo" href="index.html"><img class="logo-icon me-2" src="assets/images/app-logo.svg"
+                            alt="logo"><span class="logo-text">PORTAL</span></a>
+
+                </div><!--//app-branding-->
 
 
+            </div><!--//sidepanel-inner-->
+        </div><!--//app-sidepanel-->
+    </header><!--//app-header-->
 
+    <div class="app-wrapper">
 
+        <div class="app-content pt-3 p-md-3 p-lg-4">
+            <div class="container-xl">
 
-<section class="section-conten padding-y bg" style="margin-top: 100px; margin-left: 20%; margin-right: 4%;">
-    <div class="container-fluid" style="background-color: #5d6760">
-        <div class="row justify-content-center"> <!-- Center the content -->
-            <main class="col-md-12">
-                {% for message in messages %}
-                <div>
-                    <p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
-                </div>
-                {% endfor %}
-                <h2 class="text-center font-weight-bold text-white  my-5">Order Management</h2>
-
-
-                <article class="card my-5">
-                    <div class="card">
-                        <div class="card-body">
-                            <table class="table table-borderless">
-                                <thead class="text-muted">
-                                    <tr class="small text-uppercase">
-                                        <th scope="col">order date</th>
-                                        <th scope="col">Tracking Number</th>
-                                        <th scope="col">Total Price</th>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Action</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    {% for item in order %}
-                                    <tr>
-                                        <td>{{ item.created_at }}</td>
-                                        <td>{{ item.tracking_no }}</td>
-                                        <td>₹ {{ item.total_price }}</td>
-                                        {% if item.status == 'Cancelled' %}
-                                        <td class="text-danger "><b>{{ item.status }}</b></td>
-                                        {% elif item.status == 'Out For Shipping' %}
-                                        <td class="text-info fw-bold "> <b>{{ item.status }}</b></td>
-                                        {% elif item.status == 'Shipped' %}
-                                        <td class="text-primary fw-bold "> <b>{{ item.status }}</b></td>
-                                        {% elif item.status == 'Delivered' %}
-                                        <td class="text-success fw-bold "> <b>{{ item.status }}</b></td>
-                                        {% elif item.status == 'Pending' %}
-                                        <td class="text-warning fw-bold "> <b>{{ item.status }}</b></td>
-                                        {% endif %}
-
-                                        <td><a href="{% url 'manager_vieworder' item.tracking_no %}"
-                                                class="btn btn-dark">View</a></td>
-
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                            <div class="container d-flex align-items-center justify-content-center">
-                                <nav class="mt-4 d-flex justify-content-center" aria-label="Page navigation sample">
-                                    {% if order.has_other_pages %}
-                                    <ul class="pagination">
-                                        {% if order.has_previous %}
-                                        <li class="page-item">
-                                            <a class="page-link"
-                                                href="?page{{ orders.previous_page_number }}">Previous</a>
-                                        </li>
-                                        {% else %}
-                                        <li class="page-item disabled">
-                                            <a class="page-link" href="#">Previous</a>
-                                        </li>
-                                        {% endif %}
-                                        {% for i in order.paginator.page_range %}
-                                        {% if order.number == i %}
-
-                                        <li class="page-item active">
-                                            <a class="page-link" href="#">{{i}}</a>
-                                        </li>
-                                        {% else %}
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page={{i}}">{{i}}</a>
-                                        </li>
-                                        {% endif %}
-                                        {% endfor %}
-                                        {% if order.has_next %}
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page={{ orders.next_page_number }}">Next</a>
-                                        </li>
-                                        {% else %}
-                                        <li class="page-item disabled "><a class="page-link" href="#">Next</a></li>
-
-                                        {% endif %}
-                                    </ul>
-
-                                    {% endif %}
-                                </nav>
-                            </div>
-                        </div>
+                <div class="row g-3 mb-4 align-items-center justify-content-between">
+                    <div class="col-auto">
+                        <h1 class="app-page-title mb-0">Order Management</h1>
                     </div>
-                </article>
-                <!-- order-group.// -->
-            </main>
-        </div>
-        <!-- row.// -->
-    </div>
-
-</section>
+                    <div class="col-auto">
+                        <div class="page-utilities">
+                            <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
+                                <div class="col-auto">
 
 
-{% endblock %}
+                                </div><!--//col-->
+                                <div class="col-auto">
+
+
+                                </div>
+                               
+
+                            </div><!--//row-->
+                        </div><!--//table-utilities-->
+                    </div><!--//col-auto-->
+                </div><!--//row-->
+
+
+
+
+                <div class="tab-content" id="orders-table-tab-content">
+                    <div class="tab-pane fade show active" id="orders-all" role="tabpanel"
+                        aria-labelledby="orders-all-tab">
+                        <div class="app-card app-card-orders-table shadow-sm mb-5">
+                            <div class="app-card-body">
+                                <div class="table-responsive">
+                                    <table class="table app-table-hover mb-0 text-left">
+                                        <thead>
+                                            <tr>
+                                                <th class="cell">Order Date</th>
+                                                <th class="cell">Tracking Number</th>
+                                                <th class="cell">Total Price</th>
+                                                <th class="cell">Status</th>
+                                                <th class="cell">Action</th>
+
+
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ul class="messages">
+                                                {% for message in messages %}
+                                                <li {% if message.tags %} class="{{ message.error }}" {% endif %}>{{
+                                                    message }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                            {% for item in order %}
+                                            <tr>
+                                                <td>{{ item.created_at }}</td>
+                                                <td>{{ item.tracking_no }}</td>
+                                                <td>{{ item.total_price }}</td>
+                                                {% if item.status == 'Cancelled' %}
+                                                <td class="text-danger">{{ item.status }}</td>
+                                                {% elif item.status == 'Out For Shipping' %}
+                                                <td class="text-info fw-bold">{{ item.status }}</td>
+                                                {% elif item.status == 'Shipped' %}
+                                                <td class="text-primar fw-bold">{{ item.status }}</td>
+                                                {% elif item.status == 'Delivered' %}
+                                                <td class="text-success fw-bold">{{ item.status }}</td>
+                                                {% elif item.status == 'Pending' %}
+                                                <td class="text-warning fw-bold">{{ item.status }}</td>
+                                                {% endif %}
+                                                <!-- <td>{{ i.end_date }}</td> -->
+                                                <td><a href="{% url 'manager_vieworder' item.tracking_no %}" class="btn btn-dark">View</a></td>
+
+
+                                            </tr>
+                                            {% endfor %}
+
+
+                                        </tbody>
+                                    </table>
+                                    <div class="container d-flex align-items-center justify-content-center">
+                                        <nav class="mt-4 d-flex justify-content-center"
+                                            aria-label="Page navigation sample">
+                                            {% if order.has_other_pages %}
+                                            <ul class="pagination">
+                                                {% if order.has_previous %}
+                                                <li class="page-item">
+                                                    <a class="page-link"
+                                                        href="?page{{ orders.previous_page_number }}">Previous</a>
+                                                </li>
+                                                {% else %}
+                                                <li class="page-item disabled">
+                                                    <a class="page-link" href="#">Previous</a>
+                                                </li>
+                                                {% endif %}
+                                                {% for i in order.paginator.page_range %}
+                                                {% if order.number == i %}
+
+                                                <li class="page-item active">
+                                                    <a class="page-link" href="#">{{i}}</a>
+                                                </li>
+                                                {% else %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{i}}">{{i}}</a>
+                                                </li>
+                                                {% endif %}
+                                                {% endfor %}
+                                                {% if order.has_next %}
+                                                <li class="page-item">
+                                                    <a class="page-link"
+                                                        href="?page={{ orders.next_page_number }}">Next</a>
+                                                </li>
+                                                {% else %}
+                                                <li class="page-item disabled "><a class="page-link" href="#">Next</a>
+                                                </li>
+
+                                                {% endif %}
+                                            </ul>
+
+                                            {% endif %}
+                                        </nav>
+                                    </div>
+
+                                </div><!--//table-responsive-->
+
+                            </div><!--//app-card-body-->
+                        </div><!--//app-card-->
+
+
+                    </div><!--//tab-pane-->
+
+
+
+
+
+
+
+
+
+                </div><!--//container-fluid-->
+            </div><!--//app-content-->
+
+
+        </div><!--//app-wrapper-->
+
+
+        <!-- Javascript -->
+        <script src="assets/plugins/popper.min.js"></script>
+        <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+
+        <!-- Page Specific JS -->
+        <script src="assets/js/app.js"></script>
+
+</body>
+
+</html>
+
+{% endblock content %}

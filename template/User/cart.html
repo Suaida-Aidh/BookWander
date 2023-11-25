@@ -41,19 +41,42 @@
 
 							{% for cart_item in cart_items %}
 							<tr class="table-body-row">
-								<td class="product-remove"><a
-										href="{% url 'remove_cart' cart_item.product.id cart_item.id %}"><i
-											class="far remove_cart"></i></a>Remove</td>
+								<td class="product-remove">
+									<form action="{% url 'remove_cart' cart_item.product.id cart_item.id %}" method="POST">
+										{% csrf_token %}
+										<button type="submit" class="remove-cart-button">
+											<i class="far remove-cart-icon">&#10006;</i>
+										</button>
+									</form>
+								</td>
+								
 								<td class="product-image"><img src="{{ cart_item.product.images.url }}" alt="IMG"></td>
 								<td class="product-name">{{ cart_item.product.product_name }}</td>
 
-								<td class="product-price">{{ cart_item.product.price }}</td>
+								<td class="product-price">
+									<span class="product-price-wrapper">
+										{%if cart_item.offer_price%}
+										<span class="money">{{ cart_item.offer_price}}</span>
+										{%else%}
+										<span class="money">{{ cart_item.product.price }}</span>
+										{%endif%}
+									</span>
+								</td>
 
 								<td class="product-quantity">
 									<input type="number" placeholder="0" value="{{ cart_item.quantity }}"
 										name="quantity">
 								</td>
-								<td class="product-total">${{ cart_item.sub_total }}</td>
+								
+								<td class="product-total">
+									<span class="product-price-wrapper">
+										{%if cart_item.offer_price%}
+										<span class="money">{{ cart_item.offer_price}}</span>
+										{%else%}
+										<span class="money">${{ cart_item.sub_total }}</span>
+										{%endif%}
+									</span>
+								</td>
 							</tr>
 							{% endfor %}
 						</tbody>
@@ -148,8 +171,8 @@
 	});
 </script>
 <script>
-    document.getElementById('coupon_alert').addEventListener('click', function () {
-        var couponInfo = document.getElementById('coupon_info');
-        couponInfo.classList.toggle('show-coupon-info');
-    });
+	document.getElementById('coupon_alert').addEventListener('click', function () {
+		var couponInfo = document.getElementById('coupon_info');
+		couponInfo.classList.toggle('show-coupon-info');
+	});
 </script>

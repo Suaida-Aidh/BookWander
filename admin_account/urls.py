@@ -49,6 +49,13 @@ urlpatterns = [
     
 
 
+    path('offer',views.offer,name='offer'),
+    path('add_offer',views.add_offer,name='add_offer'),
+    path('edit_offer/<int:offer_id>/',views.edit_offer,name='edit_offer'), 
+    path('offer_delete/<int:offer_id>/', views.offer_delete, name='offer_delete'),
+    path('offer_undelete/<int:offer_id>/', views.offer_undelete, name='offer_undelete'),
+
+
 
    
 

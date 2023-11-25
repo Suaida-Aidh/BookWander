@@ -103,6 +103,17 @@ class MultipleImages(models.Model):
 
 
 
+class Offer(models.Model):
+    offer_name = models.CharField(max_length=50, null=True)
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=None)
+    start_date = models.DateField(default=datetime.now)  # Use datetime from the imported module
+    end_date = models.DateField(default=datetime.now)  # Use datetime from the imported module
+    is_deleted = models.BooleanField(default=False)
+    def __str__(self):
+            return self.offer_name
+
+
+
 
 
 
