@@ -22,170 +22,221 @@
 <!-- check out section -->
 <div class="checkout-section mt-150 mb-150">
     <div class="container">
-        <form action="{% url 'place_order' %}" method="POST">
+
+        <form id="checkoutForm" action="{% url 'place_order' %}" method="POST">
+
             {% csrf_token %}
-        <div class="row">
-            
-            <div class="col-lg-8">
-                <div class="checkout-accordion-wrap">
-                    <div class="accordion" id="accordionExample">
+            <div class="row">
 
-                        <div class="card single-accordion">
-                            <div class="card-header" id="headingOne">
+                <div class="col-lg-8">
+                    <div class="checkout-accordion-wrap">
+                        <div class="accordion" id="accordionExample">
 
-
-                                <h5 class="mb-0">
+                            <div class="card single-accordion">
+                                <div class="card-header" id="headingOne">
 
 
-                                    <button class="btn btn-link" type="button" data-toggle="collapse"
-                                        data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        Billing Address
-                                    </button>
-                                </h5>
+                                    <h5 class="mb-0">
+
+
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            Billing Address
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                    data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <div class="billing-address-form">
+
+                                            <p><input type="text" name="first_name" placeholder="First Name"
+                                                    class="form-control" required value="{{ request.user.first_name }}">
+                                            </p>
+
+                                            <p><input type="text" name="last_name" placeholder="Last Name"
+                                                    class="form-control" required value="{{ request.user.last_name }}">
+                                            </p>
+
+                                            <p><input type="email" name="email" placeholder="Email" class="form-control"
+                                                    required value="{{ request.user.email }}"></p>
+
+                                            <p><input type="text" name="phone" placeholder="Phone Number"
+                                                    class="form-control" required
+                                                    value="{{ request.user.phone_number }}">
+                                            </p>
+
+
+                                            <p><input type="text" name="address" placeholder="Address"
+                                                    class="form-control" required value="{{ userprofile.address }}"></p>
+
+                                            <p><input type="text" name="city" placeholder="City" class="form-control"
+                                                    required value="{{ userprofile.city }}"></p>
+
+                                            <p><input type="text" name="state" placeholder="State" class="form-control"
+                                                    required value="{{ userprofile.state }}"></p>
+
+                                            <p><input type="text" name="country" placeholder="Country"
+                                                    class="form-control" required value="{{ userprofile.country }}"></p>
+
+                                            <p><input type="text" name="pincode" placeholder="Pincode"
+                                                    class="form-control" required value="{{ userprofile.pincode }}"></p>
+
+                                            <p><textarea name="bill" id="bill" cols="30" rows="10"
+                                                    placeholder="Say Something"></textarea></p>
+
+                                            <a href="" type="submit" class="boxed-btn">Add another address</a>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="card single-accordion">
+                                <div class="card-header" id="headingTwo">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#collapseTwo" aria-expanded="false"
+                                            aria-controls="collapseTwo">
+                                            Shipping Address
+                                        </button>
+                                    </h5>
+                                </div>
 
-                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                data-parent="#accordionExample">
-                                <div class="card-body">
-                                    <div class="billing-address-form">
-
-                                        <p><input type="text" name="first_name" placeholder="First Name"
-                                                class="form-control" required value="{{ request.user.first_name }}">
-                                        </p>
-
-                                        <p><input type="text" name="last_name" placeholder="Last Name"
-                                                class="form-control" required value="{{ request.user.last_name }}">
-                                        </p>
-
-                                        <p><input type="email" name="email" placeholder="Email" class="form-control"
-                                                required value="{{ request.user.email }}"></p>
-
-                                        <p><input type="text" name="phone number" placeholder="Phone Number"
-                                                class="form-control" required value="{{ request.user.phone_number }}">
-                                        </p>
-
-
-                                        <p><input type="text" name="Address" placeholder="Address" class="form-control"
-                                                required value="{{ userprofile.address }}"></p>
-
-                                        <p><input type="text" name="City" placeholder="City" class="form-control"
-                                                required value="{{ userprofile.city }}"></p>
-
-                                        <p><input type="text" name="State" placeholder="State" class="form-control"
-                                                required value="{{ userprofile.state }}"></p>
-
-                                        <p><input type="text" name="Country" placeholder="Country" class="form-control"
-                                                required value="{{ userprofile.country }}"></p>
-
-                                        <p><input type="text" name="pincode" placeholder="Pincode" class="form-control"
-                                                required value="{{ userprofile.pincode }}"></p>
-
-                                        <p><textarea name="bill" id="bill" cols="30" rows="10"
-                                                placeholder="Say Something"></textarea></p>
-
-                                        <a href="" type="submit" class="boxed-btn">Add another address</a>
-
+                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                    data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <div class="shipping-address-form">
+                                            <p>Your shipping address form is here.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card single-accordion">
+                                <div class="card-header" id="headingThree">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#collapseThree" aria-expanded="false"
+                                            aria-controls="collapseThree">
+                                            Card Details
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                                    data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <div class="card-details">
+                                            <p>Your card details goes here.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card single-accordion">
-                            <div class="card-header" id="headingTwo">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                                        data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        Shipping Address
-                                    </button>
-                                </h5>
-                            </div>
 
-                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                                data-parent="#accordionExample">
-                                <div class="card-body">
-                                    <div class="shipping-address-form">
-                                        <p>Your shipping address form is here.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card single-accordion">
-                            <div class="card-header" id="headingThree">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                                        data-target="#collapseThree" aria-expanded="false"
-                                        aria-controls="collapseThree">
-                                        Card Details
-                                    </button>
-                                </h5>
-                            </div>
-                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
-                                data-parent="#accordionExample">
-                                <div class="card-body">
-                                    <div class="card-details">
-                                        <p>Your card details goes here.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-
                 </div>
-            </div>
 
 
-            <div class="col-lg-4">
-                <div class="order-details-wrap">
-                    <table class="order-details">
-                        <thead>
-                            <tr>
-                                <th>Your order Details</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody class="order-details-body">
-                            
-                            
-                            <tr>
-                                <td>Product</td>
-                                <td>Total</td>
-                            </tr>
-                            
-                            {% for cart_item in cart_items %}
-                            <tr>
-                                <td>{{ cart_item.product.product_name }}</td>
-                                <td>₹{{ cart_item.product.price}}</td>
-                            </tr>
-                            {% endfor %}    
-                        </tbody>
-                        <tbody class="checkout-details">
-                            
-                            <tr>
-                                <td>Shipping</td>
-                                <td>{{ shipping }}</td>
-                            </tr>
-                            <tr>
-                                <td>Total</td>
-                                <td>₹{{ grand_total }}</td>
-                            </tr>
 
-                        </tbody>
-                    </table>
-                    <input type="hidden" value="COD" name="payment_mode">
-                    
-                    <button  type="submit" class="boxed-btn"> COD | Place Order</button>
+                <div class="col-lg-4">
+                    <div class="order-details-wrap">
+                        <table class="order-details">
+                            <thead>
+                                <tr>
+                                    <th>Your order Details</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody class="order-details-body">
+
+
+                                <tr>
+                                    <td>Product</td>
+                                    <td>Total</td>
+                                </tr>
+
+                                {% for cart_item in cart_items %}
+                                <tr>
+                                    <td>{{ cart_item.product.product_name }}</td>
+                                    <td>₹{{ cart_item.product.price}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tbody class="checkout-details">
+
+                                <tr>
+                                    <td>Shipping</td>
+                                    <td>{{ shipping }}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Total</td>
+                                    <td>₹{{ grand_total }}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                        <input type="hidden" value="COD" name="payment_mode">
+                        <button type="submit" name="submit" class="btn btn-success btn-block">COD | Place Order</button>
+                        <input type="hidden" value="Razorpay" name="payment_mode">
+                        <button class="btn btn-primary btn-block payWithRazorpay mt-2">Pay with
+                            Razorpay
+                        </button>
+                        <a href="{% url 'shop' %}" class="btn btn-danger btn-block">Continue Shopping</a>
+                        <!-- <h3>Payment</h3>
+                        <div class="payment-group mb--10">
+                            <div class="payment-radio">
+                                <input type="radio" value="razorpay" name="payment_method" id="razorpay">
+                                <label class="payment-label" for="razorpay">Razorpay</label>
+                            </div>
+                            <div class="payment-info" data-method="bank">
+                                <p>Make your payment directly through Razorpay. Your order will not be shipped until the
+                                    payment is confirmed.</p>
+                            </div>
+                        </div>
+
+
+                        <div class="payment-group mb--10">
+                            <div class="payment-radio">
+                                <input type="radio" value="cash" name="payment_method" id="cash">
+                                <label class="payment-label" for="cash">
+                                    CASH ON DELIVERY
+                                </label>
+                            </div>
+                            <div class="payment-info cash hide-in-default" data-method="cash">
+                                <p>Pay with cash upon delivery.</p>
+                            </div>
+
+                        </div>
+                        
+                        <div class="payment-group mt--20">
+                            <input type="hidden" name="product_id" value="{{ product_id }}">
+                            <p class="mb--15">Your personal data will be used to process your order, support your
+                                experience throughout this website, and for other purposes described in our privacy
+                                policy.</p> -->
+                        <!-- <button  type="submit" class="btn btn-success">Place Order</button> -->
+                        <!-- </div> -->
+                        <!-- <button id="rzp-button1" class="pay">Pay with Razorpay</button> -->
+                        <!-- <button type="button" class="btn btn-success" onclick="placeOrder()">Place Order</button> -->
+
+
+
+                    </div>
                 </div>
+
             </div>
-            
-        </div>
-    </form>
-        
+        </form>
+
     </div>
 </div>
-<!-- end check out section -->
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="{% static 'js/checkout.js' %}"></script>
+
 
 {% include 'include/footer.html' %}
 
-
-
-
 {% endblock content %}
+

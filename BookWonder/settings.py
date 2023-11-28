@@ -168,3 +168,6 @@ EMAIL_PORT =587
 EMAIL_HOST_USER = 'bookwander00@gmail.com'
 EMAIL_HOST_PASSWORD = 'vjfmtxfkevfuhpzq'
 EMAIL_USE_TLS = True
+
+RAZOR_KEY_ID = 'rzp_test_89j34e71E4lNyL'
+RAZOR_KEY_SECRET = 'uVory0sa7pbu5vgvy46quUEx'
