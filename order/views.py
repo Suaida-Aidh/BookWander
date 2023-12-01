@@ -145,6 +145,6 @@ def razorpaycheck(request):
 
         total_price += (6 * total_price)/100
 
-        return JsonResponse({'total_price': total_price})
+        return JsonResponse({'total_price': int(total_price)})
     else:
         return redirect('shop')

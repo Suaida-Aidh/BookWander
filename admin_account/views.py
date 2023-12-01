@@ -26,10 +26,10 @@ from itertools import groupby
 
 # Create your views here.
 
-@login_required(login_url='signin')
+@login_required(login_url='Login')
 def dashboard(request):
 
-    orders = Order.objects.order_by('id')[:10:]
+    orders = Order.objects.order_by('id').order_by('-id')[:10:]
     order = Order.objects.all()
 
     sales_data = OrderItem.objects.values('order__created_at__date').annotate(
@@ -53,15 +53,15 @@ def dashboard(request):
 
     try:
         total_earning = 0
-        order_ear = Order.objects.filter(od_status='Delivered')
+        order_ear = Order.objects.filter(status='Delivered')
         for i in order_ear:
             total_earning += i.total_price
     except:
         total_earning = 0
     try:
-        status_delivery = Order.objects.filter(od_status='Delivered').count()
-        status_return = Order.objects.filter(od_status='Return').count()
-        status_cancel = Order.objects.filter(od_status='Cancelled').count()
+        status_delivery = Order.objects.filter(status='Delivered').count()
+        status_return = Order.objects.filter(status='Return').count()
+        status_cancel = Order.objects.filter(status='Cancelled').count()
         total = status_delivery + status_return + status_cancel
         status_delivery = (status_delivery/100)*total
         status_cancel = (status_cancel/100)*total
@@ -71,7 +71,7 @@ def dashboard(request):
         status_cancel = 0
         status_return = 0
 
-    print(orders)
+    print(status_cancel)
     print(total_sale)
     print(total_earning)
     print(status_return)

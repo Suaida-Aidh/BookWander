@@ -30,7 +30,7 @@ $(document).ready(function () {
                 method: "GET",
                 url: "/order/proceed-to-pay/",
                 success: function (response) {
-                    //console.log(response);
+                    console.log(response);
                     var options = {
                         "key": "rzp_test_0Wy5u2AUufd1LA", // Enter the Key ID generated from the Dashboard
                         "amount": response.total_price *100,//response.total_price *100 , // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
