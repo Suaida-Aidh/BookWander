@@ -22,14 +22,27 @@ from django.core.mail import EmailMessage
 
 from . models import UserProfile 
 from order.models import Order
+from store.models import Product
 
 
 # Create your views here.
 
 # HOME PAGE
 def Home(request):
+
+    products=Product.objects.all().filter(is_available=True).order_by('-created_date')
+
+    products_count = products.count()
+
+    context = {
+        'products': products,
+    }
+            
+
+            
+
     
-    return render (request,'User/home.html')
+    return render (request,'User/home.html', context)
 
 #ABOUT PAGE
 def about(request):

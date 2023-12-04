@@ -16,6 +16,7 @@ def shop (request,category_slug=None ):
     categories=Category_list.objects.all()
     products = None
     if category_slug != None:
+        
         categories =get_object_or_404(Category_list,slug=category_slug)
         products= Product.objects.filter(category=categories,is_available =True).order_by('-created_date')
         paginator=Paginator(products,12)
@@ -23,6 +24,7 @@ def shop (request,category_slug=None ):
         paged_products= paginator.get_page(page)
         products_count =products.count()
     else:
+        
         products = Product.objects.all().filter(is_available = True).order_by('-created_date')
         paginator=Paginator(products,12)
         page =request.GET.get('page')

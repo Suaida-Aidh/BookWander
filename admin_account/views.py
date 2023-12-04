@@ -17,7 +17,7 @@ from datetime import datetime
 from datetime import date
 from store.models import Coupon, Offer
 from django.core.exceptions import ValidationError
-import csv 
+import csv
 from django.http import HttpResponse
 from fpdf import FPDF
 from django.db.models import Prefetch
@@ -126,7 +126,7 @@ def add_product(request):
                 form.save()
                 return redirect('product_list')
             else:
-                messages.error(request, 'Invalid form')
+                messages.error(request, 'Already Added product')
                 return redirect('add_product')
         else:
             form = ProductForm()
@@ -257,26 +257,28 @@ def category_management(request):
 
 
 def add_category(request):
-    if request.user.is_superadmin:
-        if request.method == 'POST':
-            try:
-                category_name = request.POST['category_name']
-                category_description = request.POST['category_description']
+    if request.method == 'POST':
+        try:
+            category_name = request.POST['category_name']
+            category_description = request.POST['category_description']
 
-                categories = Category_list(
+            # Check if the category already exists
+            if Category_list.objects.filter(category_name=category_name).exists():
+                messages.error(
+                    request, 'Category with this name already exists.')
+            else:
+                category = Category_list(
                     category_name=category_name,
                     category_description=category_description
                 )
+                category.save()
+                messages.success(request, 'Category added successfully.')
 
-                categories.save()
-                return redirect('category_management')
-            except Exception as e:
-                raise e
+            return redirect('category_management')
+        except Exception as e:
+            messages.error(request, f'Error: {e}')
 
-        return render(request, 'Admin-temp/add_category.html')
-    else:
-        return redirect('Home')
-
+    return render(request, 'Admin-temp/add_category.html')
 # UPDATE CATEGORY
 
 
@@ -739,99 +741,104 @@ def offer_undelete(request, offer_id):
     return redirect('offer')
 
 
-
-
-@login_required(login_url = 'Login')
-def export_csv(request,start_date = None , end_date = None):
+@login_required(login_url='Login')
+def export_csv(request, start_date=None, end_date=None):
     try:
-        response = HttpResponse(content_type = 'text/csv')
+        response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename=Expenses' + \
             str(datetime.now()) + '.csv'
-        
+
         writer = csv.writer(response)
-        # heading for csv 
-        writer.writerow(['user','total_price','payment_mode','tracking number', 'Order at','product_name','product_price','product_quantity'])
+        # heading for csv
+        writer.writerow(['user', 'total_price', 'payment_mode', 'tracking number',
+                        'Order at', 'product_name', 'product_price', 'product_quantity'])
         if start_date and end_date:
-            start_date_obj = datetime.strptime(start_date,'%Y-%m-%d').date()
+            start_date_obj = datetime.strptime(start_date, '%Y-%m-%d').date()
             end_date_obj = datetime.strptime(end_date, '%Y-%m-%d').date()
-            orders = Order.objects.filter(created_at__date__range=(start_date_obj, end_date_obj))
+            orders = Order.objects.filter(
+                created_at__date__range=(start_date_obj, end_date_obj))
         else:
             orders = Order.objects.all()
 
         for order in orders:
-            order_item = OrderItem.objects.filter(order = order).select_related('product')
+            order_item = OrderItem.objects.filter(
+                order=order).select_related('product')
             grouped_order_items = groupby(order_item, key=lambda x: x.order_id)
-            for order_id , items_group in grouped_order_items:
+            for order_id, items_group in grouped_order_items:
                 item_list = list(items_group)
                 for order_item in item_list:
                     writer.writerow([
                         order.user.username if order_item == item_list[0] else " ",
                         order.total_price if order_item == item_list[0] else " ",
                         order.payment_mode if order_item == item_list[0] else " ",
-                        order.tracking_no if order_item == item_list[0] else " ", 
-                        order.created_at if order_item == item_list [0] else " ", 
-                        order_item.product.product_name ,
-                        order_item.product.product_price ,
+                        order.tracking_no if order_item == item_list[0] else " ",
+                        order.created_at if order_item == item_list[0] else " ",
+                        order_item.product.product_name,
+                        order_item.product.product_price,
                         order_item.quantity
                     ])
         return response
     except Exception as e:
         print(e)
         return render(request, 'Admin-temp/sales_report.html')
-    
-@login_required(login_url = 'Login')
-def pdf(request,start_date = None , end_date = None):
+
+
+@login_required(login_url='Login')
+def pdf(request, start_date=None, end_date=None):
     try:
-        response =HttpResponse(content_type = 'application/pdf')
+        response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename=Expenses' + \
             str(datetime.now()) + '.pdf'
-        
+
         w_pt = 8.5 * 40  # 8.5 inches width
-        h_pt = 11 * 20   # 11 inches hieght 
+        h_pt = 11 * 20   # 11 inches hieght
 
         pdf = FPDF(format=(w_pt, h_pt))
         pdf.add_page()
-        pdf.set_auto_page_break(auto=True, margin=15) 
+        pdf.set_auto_page_break(auto=True, margin=15)
 
-        #set the style 
+        # set the style
         pdf.set_font('Arial', 'B', 12)
 
         # Header Information
         pdf.cell(0, 10, 'Order Details Report', 0, 1, 'C')
         pdf.cell(0, 10, str(datetime.now()), 0, 1, 'C')
-        
-        data = [['user','Toatl price','Payement Mode','Tracking Number','Odered_at', 'Product Name','Product Price','Prduct Quantity']]
+
+        data = [['user', 'Toatl price', 'Payement Mode', 'Tracking Number',
+                 'Odered_at', 'Product Name', 'Product Price', 'Prduct Quantity']]
         if start_date and end_date:
-                start_date_obj = datetime.strptime(start_date,'%Y-%m-%d').date()
-                end_date_obj = datetime.strptime(end_date, '%Y-%m-%d').date()
-                orders = Order.objects.filter(created_at__date__range=(start_date_obj, end_date_obj)).prefetch_related(
-                Prefetch('orderitem_set', queryset=OrderItem.objects.select_related('product'))
-                )
+            start_date_obj = datetime.strptime(start_date, '%Y-%m-%d').date()
+            end_date_obj = datetime.strptime(end_date, '%Y-%m-%d').date()
+            orders = Order.objects.filter(created_at__date__range=(start_date_obj, end_date_obj)).prefetch_related(
+                Prefetch('orderitem_set',
+                         queryset=OrderItem.objects.select_related('product'))
+            )
         else:
             orders = Order.objects.all().prefetch_related(
-                Prefetch('orderitem_set', queryset = OrderItem.objects.select_related('product'))
+                Prefetch('orderitem_set',
+                         queryset=OrderItem.objects.select_related('product'))
             )
         for order in orders:
             order_item = order.orderitem_set.all()
-            for index , order_item in enumerate(order_item):
+            for index, order_item in enumerate(order_item):
                 data.append([
                     order.user.username if index == 0 else "",
                     order.total_price if index == 0 else "",
                     order.payment_mode if index == 0 else "",
                     order.tracking_no if index == 0 else "",
                     str(order.created_at.date()) if index == 0 else "",
-                    order_item.product.product_name , 
-                    order_item.product.product_price ,
+                    order_item.product.product_name,
+                    order_item.product.product_price,
                     order_item.quantity,
                 ])
         # Create Table
-        col_width = 40  
+        col_width = 40
         row_height = 10
         for row in data:
             for item in row:
                 pdf.cell(col_width, row_height, str(item), border=1)
             pdf.ln()
-        response.write(pdf.output(dest='S').encode('latin1'))  
+        response.write(pdf.output(dest='S').encode('latin1'))
         return response
     except Exception as e:
         print(e)
