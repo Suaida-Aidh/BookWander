@@ -1,12 +1,13 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import Category_list, Product, Authors
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .models import Category_list, Product
+from django.core.paginator import Paginator
 from .models import MultipleImages
 from order.models import OrderItem
 from cart.models import CartItem,WishlistItem
 from cart.views import _cart_id
 from django.db.models import Q
 from django.http import Http404
+from django.http import HttpResponse
 
 
 # Create your views here.
@@ -89,23 +90,36 @@ def product_detail(request, product_slug):
 
 
 #Search function
-def search(request,products=0,products_count=0):
-    if 'keyword' in request.GET:
-        keyword =request.GET['keyword']
-        if keyword:
-            products=Product.objects.order_by('-created_date').filter(Q(description__icontains=keyword) | Q(product_name__icontains=keyword ))
-            products_count= products.count()
-        else:
-            products=Product.objects.order_by('-created_date').filter(Q(description__icontains=keyword) | Q(product_name__icontains=keyword ))
-            products_count= products.count()         
-    
-    context={
-        'products':products,
-        'products_count':products_count,
+def search(request):
+    query = request.GET.get('q')
+    if  not query:
+        return render(request, 'User/shop.html', {'no_query':True})
+        
+    products = Product.objects.filter(
+        Q(product_name__icontains=query) |  # Searching by product name
+        Q(product_description__icontains=query) |  # Searching by product description
+        Q(category__category_name__icontains=query)   # Searching by category name
+    ).distinct()  # Ensure distinct results
 
-    }
+    products_count = products.count()
+    if products_count == 0:
+        return render(request, 'User/shop.html', {'no_products_found':True})
     
-    return render(request, 'User/shop.html',context) 
+    paginator = Paginator(products, 12)
+    page = request.GET.get('page')
+    paged_products = paginator.get_page(page)
+    products_count = products.count()
+    context = {
+        'products': paged_products,
+        'products_count': products_count,
+        'query': query,  # Pass the query string to the template for display
+    }
+    return render(request, 'User/shop.html', context)
+    # else:
+    #     return redirect('shop')  # Redirect to shop if no query is provided
+
+
+   
 
 
 
