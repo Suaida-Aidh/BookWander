@@ -87,14 +87,25 @@ AUTH_USER_MODEL = 'Authentication.Account'
 
 
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "HOST": 'localhost',
+#         "USER": 'postgres',
+#         "PASSWORD": 'suaida',
+#         "NAME": 'bookwander',
+#         "PORT": '5432',
+#     }
+# }
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST": 'localhost',
-        "USER": 'postgres',
-        "PASSWORD": 'suaida',
-        "NAME": 'bookwander',
-        "PORT": '5432',
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'myproject',
+        'USER': 'myprojectuser',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
