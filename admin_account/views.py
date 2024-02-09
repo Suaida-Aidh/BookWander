@@ -890,9 +890,9 @@ def add_author(request):
 # UPDATE CATEGORY
 
 
-def edit_author(request, author_id):
+def edit_author(request, authors_id):
     try:
-        authors = Authors.objects.get(id=author_id)
+        authors = Authors.objects.get(id=authors_id)
 
         if request.method == 'POST':
             author_name = request.POST['author_name']
@@ -914,8 +914,8 @@ def edit_author(request, author_id):
 # DELETE CATEGORY
 
 
-def delete_author(request, author_id):
-    authors = Authors.objects.get(id=author_id)
+def delete_author(request, authors_id):
+    authors = Authors.objects.get(id=authors_id)
     print(authors)
     authors.delete()
     return redirect('author_management')

@@ -88,15 +88,15 @@
                                             </ul>
                                             {% for authors in authors %}
                                             <tr>
-                                                <th scope="row">{{ author.id }}</th>
+                                                <th scope="row">{{ authors.id }}</th>
                                                 <td>{{ authors.author_name }}</td>
                                                 <td>{{ authors.slug }}</td>
                                                 <td>
-                                                    <a href="{% url 'edit_author' author.id %}"
+                                                    <a href="{% url 'edit_author' authors.id %}"
                                                         class="btn btn-success">Update</a>
                                                 </td>
                                                 <td>
-                                                    <a href="{% url 'delete_author' author.id %}"
+                                                    <a href="{% url 'delete_author' authors.id %}"
                                                         class="btn btn-danger">Delete</a>
                                                 </td>
                                             </tr>
