@@ -1,0 +1,43 @@
+
+{% extends 'admin_base.html' %} 
+{% load static%}
+{% block content %}
+
+
+<section class="section-content padding-y bg">
+    <div class="container mt-5 mb-5">
+      <div class="row d-flex justify-content-center">
+        <div class="col-6 card p-5">
+          {% for message in messages %}
+          <div>
+            <p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
+          </div>
+          {% endfor %}
+          <h1 class="text-center h2 mb-4">Update Author</h1>
+          <form action="{% url 'edit_author' author.id %}" method="POST">
+            {% csrf_token %}
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="author_name">Author Name</label>
+                <input type="text" class="form-control" id="author_name" name="author_name" value="{{ authors.author_name }}" required />
+              </div>
+              <!-- <div class="form-group col-md-6">
+                <label for="author_slug">author Slug</label>
+                <input type="text" class="form-control" id="author_slug" name="author_slug" aria-describedby="author_slug" value="{{ author.slug }}" required />
+                <small id="author_slug" class="form-text text-muted">Format :- name: T Shirt, slug: t-shirt</small>
+              </div> -->
+            </div>
+            <div class="form-group">
+              <label for="author_description">Author Description</label>
+              <textarea class="form-control" id="author_description" name="author_description" row="100">{{ authors.description }}</textarea>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  {% endblock %}
