@@ -9,7 +9,7 @@ from .form import ProductForm, MultipleImagesForm
 from store.models import MultipleImages
 from django.contrib import messages
 from Authentication.models import Account
-from store.models import Category_list
+from store.models import Category_list,Authors
 from order.models import Order, OrderItem
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Sum
@@ -537,116 +537,116 @@ def sales_report(request):
 
 
 # Coupon
-@login_required(login_url='signin')
-def coupon(request):
-    coupon = Coupon.objects.all()
-    context = {
-        'coupon': coupon
-    }
-    return render(request, 'Admin-temp/coupon.html', context)
+# @login_required(login_url='signin')
+# def coupon(request):
+#     coupon = Coupon.objects.all()
+#     context = {
+#         'coupon': coupon
+#     }
+#     return render(request, 'Admin-temp/coupon.html', context)
 
 
-@login_required(login_url='signin')
-def add_coupon(request):
-    if request.method == 'POST':
-        coupon_code = request.POST.get('coupon_code')
-        discount = request.POST.get('discount')
-        min_price = request.POST.get('min_price')
-        start_date_str = request.POST.get('start_date')
-        end_date_str = request.POST.get('end_date')
+# @login_required(login_url='signin')
+# def add_coupon(request):
+#     if request.method == 'POST':
+#         coupon_code = request.POST.get('coupon_code')
+#         discount = request.POST.get('discount')
+#         min_price = request.POST.get('min_price')
+#         start_date_str = request.POST.get('start_date')
+#         end_date_str = request.POST.get('end_date')
 
-        # Validate coupon_code, discount, min_price, start_date, and end_date here
-        if not coupon_code or not discount or not min_price or not start_date_str or not end_date_str:
-            messages.error(request, 'All fields are required.')
-        elif not discount.isdigit() or not min_price.isdigit():
-            messages.error(
-                request, 'Discount and minimum price should be numeric.')
-        else:
-            try:
-                discount = int(discount)
-                min_price = int(min_price)
-                start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
-                end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
+#         # Validate coupon_code, discount, min_price, start_date, and end_date here
+#         if not coupon_code or not discount or not min_price or not start_date_str or not end_date_str:
+#             messages.error(request, 'All fields are required.')
+#         elif not discount.isdigit() or not min_price.isdigit():
+#             messages.error(
+#                 request, 'Discount and minimum price should be numeric.')
+#         else:
+#             try:
+#                 discount = int(discount)
+#                 min_price = int(min_price)
+#                 start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
+#                 end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
 
-                if discount < 0 or min_price < 0:
-                    messages.error(
-                        request, 'Discount and minimum price should be non-negative.')
-                elif start_date >= end_date:
-                    messages.error(
-                        request, 'End date must be after start date.')
-                elif min_price <= discount:
-                    messages.error(
-                        request, 'Minimum price should be greater than the discount amount.')
-                else:
-                    new_coupon = Coupon(
-                        coupon_code=coupon_code,
-                        discount=discount,
-                        min_price=min_price,
-                        start_date=start_date,
-                        end_date=end_date
-                    )
+#                 if discount < 0 or min_price < 0:
+#                     messages.error(
+#                         request, 'Discount and minimum price should be non-negative.')
+#                 elif start_date >= end_date:
+#                     messages.error(
+#                         request, 'End date must be after start date.')
+#                 elif min_price <= discount:
+#                     messages.error(
+#                         request, 'Minimum price should be greater than the discount amount.')
+#                 else:
+#                     new_coupon = Coupon(
+#                         coupon_code=coupon_code,
+#                         discount=discount,
+#                         min_price=min_price,
+#                         start_date=start_date,
+#                         end_date=end_date
+#                     )
 
-                    new_coupon.save()
-                    messages.success(request, 'Coupon added successfully.')
-                    return redirect('coupon')
-            except ValueError:
-                messages.error(
-                    request, 'Invalid date format. Please use YYYY-MM-DD.')
+#                     new_coupon.save()
+#                     messages.success(request, 'Coupon added successfully.')
+#                     return redirect('coupon')
+#             except ValueError:
+#                 messages.error(
+#                     request, 'Invalid date format. Please use YYYY-MM-DD.')
 
-    return render(request, 'Admin-temp/add_coupon.html')
-
-
-@login_required(login_url='signin')
-def edit_coupon(request, coupon_id):
-    coupon = get_object_or_404(Coupon, id=coupon_id)
-
-    if request.method == "POST":
-        coupon_code = request.POST.get('coupon_code')
-        discount = request.POST.get('discount')
-        min_price = request.POST.get('min_price')
-        min_price = request.POST.get('min_price')
-        start_date = request.POST.get('start_date')
-        end_date = request.POST.get('end_date')
-
-        # Add validation for coupon_code, discount, and min_price here
-        if not coupon_code or not discount or not min_price:
-            messages.error(request, 'All fields are required.')
-        elif not discount.isdigit() or not min_price.isdigit():
-            messages.error(
-                request, 'Discount and minimum price should be numeric.')
-        else:
-            coupon.coupon_code = coupon_code
-            coupon.discount = discount
-            coupon.min_price = min_price
-            coupon.save()
-            messages.success(request, 'Coupon updated successfully.')
-            return redirect('coupon')
-
-    return render(request, 'Admin-temp/edit_coupon.html', {'i': coupon})
+#     return render(request, 'Admin-temp/add_coupon.html')
 
 
-@login_required(login_url='signin')
-def coupon_delete(request, coupon_id):
-    coupon = get_object_or_404(Coupon, id=coupon_id)
+# @login_required(login_url='signin')
+# def edit_coupon(request, coupon_id):
+#     coupon = get_object_or_404(Coupon, id=coupon_id)
 
-    if not coupon.is_deleted:
-        coupon.is_deleted = True
-        coupon.save()
-        messages.error(request, 'Deleted successfully')
+#     if request.method == "POST":
+#         coupon_code = request.POST.get('coupon_code')
+#         discount = request.POST.get('discount')
+#         min_price = request.POST.get('min_price')
+#         min_price = request.POST.get('min_price')
+#         start_date = request.POST.get('start_date')
+#         end_date = request.POST.get('end_date')
 
-    return redirect('coupon')
+#         # Add validation for coupon_code, discount, and min_price here
+#         if not coupon_code or not discount or not min_price:
+#             messages.error(request, 'All fields are required.')
+#         elif not discount.isdigit() or not min_price.isdigit():
+#             messages.error(
+#                 request, 'Discount and minimum price should be numeric.')
+#         else:
+#             coupon.coupon_code = coupon_code
+#             coupon.discount = discount
+#             coupon.min_price = min_price
+#             coupon.save()
+#             messages.success(request, 'Coupon updated successfully.')
+#             return redirect('coupon')
+
+#     return render(request, 'Admin-temp/edit_coupon.html', {'i': coupon})
 
 
-@login_required(login_url='signin')
-def coupon_undelete(request, coupon_id):
-    coupon = get_object_or_404(Coupon, id=coupon_id)
+# @login_required(login_url='signin')
+# def coupon_delete(request, coupon_id):
+#     coupon = get_object_or_404(Coupon, id=coupon_id)
 
-    if coupon.is_deleted:
-        coupon.is_deleted = False
-        coupon.save()
-        messages.error(request, 'Undeleted successfully')
+#     if not coupon.is_deleted:
+#         coupon.is_deleted = True
+#         coupon.save()
+#         messages.error(request, 'Deleted successfully')
 
-    return redirect('coupon')
+#     return redirect('coupon')
+
+
+# @login_required(login_url='signin')
+# def coupon_undelete(request, coupon_id):
+#     coupon = get_object_or_404(Coupon, id=coupon_id)
+
+#     if coupon.is_deleted:
+#         coupon.is_deleted = False
+#         coupon.save()
+#         messages.error(request, 'Undeleted successfully')
+
+#     return redirect('coupon')
 
 
 # OFFER
@@ -843,3 +843,80 @@ def pdf(request, start_date=None, end_date=None):
     except Exception as e:
         print(e)
         return render(request, 'Admin-temp/sales_report.html')
+
+
+
+
+
+# AUTHOR MANAGEMENT______________________________________
+    
+def author_management(request):
+    if request.user.is_superadmin:
+        authors = Authors.objects.all().order_by('id')
+
+        context = {
+            'authors': authors
+        }
+        return render(request, 'Admin-temp/author_management.html', context)
+    else:
+        return redirect('Home')
+
+# ADD CATEGORY
+
+
+def add_author(request):
+    if request.method == 'POST':
+        try:
+            author_name = request.POST['author_name']
+            author_description = request.POST['author_description']
+
+            # Check if the category already exists
+            if Authors.objects.filter(author_name=author_name).exists():
+                messages.error(
+                    request, 'Author  name already exists.')
+            else:
+                authors = Authors(
+                    author_name=author_name,
+                    author_description=author_description
+                )
+                authors.save()
+                messages.success(request, 'Author name  added successfully.')
+
+            return redirect('author_management')
+        except Exception as e:
+            messages.error(request, f'Error: {e}')
+
+    return render(request, 'Admin-temp/add_author.html')
+# UPDATE CATEGORY
+
+
+def edit_author(request, author_id):
+    try:
+        authors = Authors.objects.get(id=author_id)
+
+        if request.method == 'POST':
+            author_name = request.POST['author_name']
+            author_description = request.POST['author_description']
+            authors.author_name = author_name
+            authors.author_description = author_description
+
+            authors.save()
+            return redirect('author_management')
+
+        context = {
+            'authors': authors,
+        }
+    except Exception as e:
+        raise e
+
+    return render(request, 'Admin-temp/edit_author.html', context)
+
+# DELETE CATEGORY
+
+
+def delete_author(request, author_id):
+    authors = Authors.objects.get(id=author_id)
+    print(authors)
+    authors.delete()
+    return redirect('author_management')
+
