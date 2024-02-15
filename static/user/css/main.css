@@ -3349,3 +3349,28 @@ body {
 
 
 
+/* WISHLIST BTN _____________________________________________________________________________________________________________________________________ */
+
+a.boxed-btn,
+a.bordered-btn,
+a.wishlist-btn {
+    border-radius: 50px;
+}
+a.wishlist-btn {
+-webkit-transition: 0.3s;
+-o-transition: 0.3s;
+transition: 0.3s;
+}
+
+a.wishlist-btn:hover {
+background-color: #F28123;
+color: #fff;
+
+}
+a.wishlist-btn {
+font-family: 'Poppins', sans-serif;
+display: inline-block;
+background-color: #051922;
+color: #F28123;
+padding: 10px 20px;
+}
