@@ -1,6 +1,7 @@
 $(document).ready(function () {
     $('.payWithRazorpay').click(function (e) {
         e.preventDefault();
+        console.log('___________________________________________')
 
 
         var first_name = $("[name='first_name']").val();

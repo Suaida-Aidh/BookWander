@@ -1326,7 +1326,6 @@ a.cart-btn:hover {
   background-color: #051922;
   color: #F28123;
 }
-
 .recent-posts ul li {
   -webkit-transition: 0.3s;
   -o-transition: 0.3s;
@@ -1396,6 +1395,7 @@ ul.product-share li:hover a {
   -webkit-transition: 0.3s;
   -o-transition: 0.3s;
   transition: 0.3s;
+ 
 }
 
 .single-product-item:hover {
@@ -2528,9 +2528,20 @@ a.cart-btn {
   color: #fff;
   padding: 10px 20px;
 }
+a.cart-btn-shop{
+  font-family: 'Poppins', sans-serif;
+  display: inline-block;
+  background-color: #F28123;
+  color: #fff;
+  padding: 10px 20px;
+}
 
 a.cart-btn i {
   margin-right: 5px;
+}
+a.cart-btn-shop i{
+  margin-right: 5px;
+
 }
 
 .single-product-img img {
@@ -2601,7 +2612,7 @@ ul.product-share li a {
 }
 
 .single-product-content {
-  margin-left: 30px;
+  margin-left: 100px;
 }
 
 table.cart-table {
@@ -3195,136 +3206,146 @@ body {
 .btn-primary,
 .btn-primary.disabled,
 .btn-primary:disabled {
-  background-color: #4466f2 !important;
-  border-color: #4466f2 !important;
-}
-
-.empty-cart{
-  
-}
-
-
-
-
-/* HOME CSS______________________________ */
-
-body {
-  font-family: 'Roboto', sans-serif;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  text-decoration: none;
-}
-
-.sidebar {
-  position: fixed;
-  left: -250px;
-  width: 250px;
-  height: 100%;
-  background: #042331;
-  transition: all 0.5s ease;
-}
-
-.sidebar header {
-  font-size: 22px;
-  color: white;
-  text-align: center;
-  line-height: 70px;
-  background: #063146;
-  user-select: none;
-}
-
-.sidebar ul a {
-  display: block;
-  height: 100%;
-  width: 100%;
-  line-height: 65px;
-  font-size: 20px;
-  color: white;
-  padding-left: 40px;
-  box-sizing: border-box;
-  border-top: 1px solid rgba(255, 255, 255, .1);
-  border-bottom: 1px solid black;
-  transition: .4s;
-}
-
-ul li:hover a {
-  padding-left: 50px;
-}
-
-.sidebar ul a i {
-  margin-right: 16px;
-}
-
-#check {
-  display: none;
-}
-
-label #btn,
-label #cancel {
-  position: absolute;
-  cursor: pointer;
-  background: #042331;
-  border-radius: 3px;
-}
-
-label #btn {
-  left: 40px;
-  top: 25px;
-  font-size: 35px;
-  color: white;
-  padding: 6px 12px;
-}
-
-label #cancel {
-  z-index: 1111;
-  left: 195px;
-  top: 17px;
-  font-size: 30px;
-  color: #0a5275;
-  padding: 4px 9px;
-}
-
-#check:checked~.sidebar {
-  left: 0;
-}
-
-#check:checked~label #btn {
-  left: 250px;
-  opacity: 0;
-  pointer-events: none;
-}
-
-#check:checked~label #cancel {
-  left: 195px;
-}
-
-#check:checked~section {
-  margin-left: 250px;
-}
-
-section {
-  background: url(bg.jpeg) no-repeat;
-  background-position: center;
-  background-size: cover;
-  height: 100vh;
-  transition: all 0.5s;
-}
-
-/* Add your other styles here */
-
-/* Style for the boxed button */
-.boxed-btn {
-  display: inline-block;
+  background-color: #F28123 !important;
+  border-color: #F28123 !important;
+  color: #ffffff; /* Adjust the text color to match your design */
+  border: none;
   padding: 10px 20px;
-  background-color: orange;
-  color: white;
+  text-align: center;
   text-decoration: none;
-  position: relative;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
-.boxed-btn::after {
-  content: '\2192'; /* Unicode arrow right character */
-  position: absolute;
-  right: 10px; /* Adjust the distance of the arrow from the right edge */
+/* .empty-cart{
+  
+} */
+
+
+
+
+/* LOGIN\REGISTER FORM CSS______________________________________________________________________________________________________________________*/
+
+.error-messages {
+  color: red;
+  list-style: none;
+  padding: 0;
 }
+
+.background-image {
+  background-image: url(../img/log-bg2.jpg);
+  background-size: cover;
+  background-position: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Ensure the background image stays behind the content */
+}
+
+.card.bg-glass {
+  background-color: rgba(255, 255, 255, 0.3); /* Adjust the opacity here */
+  backdrop-filter: blur(10px); /* Add blur effect for better transparency */
+}
+
+/* Set transparent background for form inputs */
+.card.bg-glass input {
+  background-color: rgba(255, 255, 255, 0.2); /* Adjust the opacity here */
+  border: none; /* Remove border for cleaner look */
+}
+
+/* Style form labels */
+.card.bg-glass label {
+  color: white; /* Set label color */
+  font-weight: bold; /* Make labels bold */
+}
+
+/* Set transparent background for form button */
+.card.bg-glass button {
+  background-color: rgba(255, 255, 255, 0.5); /* Adjust the opacity here */
+  border: none; /* Remove border for cleaner look */
+}
+
+
+
+  /* Set form label color */
+  .card.bg-glass label {
+    color: #000; /* Dark black color */
+  }
+
+/* Set form input text color */
+.card.bg-glass input[type="text"],
+.card.bg-glass input[type="email"],
+.card.bg-glass input[type="password"] {
+    color: #000; /* Dark black color for input text */
+}
+
+/* Set placeholder color */
+.card.bg-glass input[type="text"]::placeholder,
+.card.bg-glass input[type="email"]::placeholder,
+.card.bg-glass input[type="password"]::placeholder {
+    color: #555; /* Light black color for placeholder text */
+}
+
+  .btn-custom {
+    background-color: black;
+    color: white; /* Change text color to white for better visibility */
+    /* Add any additional styles as needed */
+}
+
+
+
+
+
+/* Set signin button color */
+.card.bg-glass button[type="submit"] {
+  background-color: #000; /* Black background color */
+  color: #fff; /* White text color */
+  border: none; /* Remove border for cleaner look */
+}
+
+.register-link {
+  color: black;
+}
+
+
+/* SHOP MODIFICATIONS_______________________________________________________________________________________________________________________ */
+
+.single-product-item {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 30px;
+  transition: 0.3s;
+}
+
+.single-product-item {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Default shadow */
+  padding: 20px;
+  margin-bottom: 30px;
+  transition: box-shadow 0.3s ease;
+  /* Add transition effect */
+}
+
+.single-product-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  /* Lighten shadow on hover */
+}
+
+
+/* SINGLE PRODUCT CSS ________________________________________________________________________________________________________________________________ */
+
+.single-product-bg {
+
+  height: 50%;
+  background-image: url(../img/single-bg1.jpg);
+}
+
+
+

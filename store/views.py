@@ -73,17 +73,17 @@ def product_detail(request, product_slug):
 
     # Showing the old reviews
 
-    wishlist = None
+    in_wishlist = None
     if request.user.is_authenticated:
         # Check if the product is in the user's wishlist
-        wishlist = WishlistItem.objects.filter(user=request.user, product=single_product).exists()
+        in_wishlist = WishlistItem.objects.filter(user=request.user, product=single_product).exists()
 
     context = {
         'single_product': single_product,
         'in_cart': in_cart,
         'multiple_images': multiple_images,
         'orderitem': orderitem,
-        'wishlist': wishlist,
+        'in_wishlist': in_wishlist,
     }
 
     return render(request, 'User/single_product.html', context)
@@ -115,11 +115,13 @@ def search(request):
         'query': query,  # Pass the query string to the template for display
     }
     return render(request, 'User/shop.html', context)
-    # else:
-    #     return redirect('shop')  # Redirect to shop if no query is provided
-
-
    
+   
+# filter product 
+
+def filter_product(request):
+   pass
+
 
 
 

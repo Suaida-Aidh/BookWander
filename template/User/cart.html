@@ -149,27 +149,7 @@
 					</div>
 				</div>
 
-				<div class="user-actions user-actions__coupon">
-					{% if grand_total > 200 %}
-					<div class="alert alert-warning mb-3" id="coupon_alert" role="alert">
-						<p><i class="fa fa-exclamation-circle"></i> <a class="expand-btn" href="#coupon_info"> You're
-								eligible for a coupon. Click here to see available coupons.</a></p>
-					</div>
-					<div id="coupon_info" class="user-actions__form hide-in-default">
-						<!-- Display coupon information here -->
-						<h3>Available Coupons:</h3>
-						<ul>
-							{% for coupon in available_coupons %}
-							<li>Coupon Code: {{ coupon.coupon_code }}</li>
-							<li>Discount Amount: {{ coupon.discount }}</li>
-							<br>
-							{% endfor %}
-						</ul>
-					</div>
-					{% else %}
-					<p>You are not eligible for a coupon at this time.</p>
-					{% endif %}
-				</div>
+				
 			</div>
 			{% endif %}
 
@@ -203,11 +183,5 @@
 				}
 			});
 		});
-	});
-</script>
-<script>
-	document.getElementById('coupon_alert').addEventListener('click', function () {
-		var couponInfo = document.getElementById('coupon_info');
-		couponInfo.classList.toggle('show-coupon-info');
 	});
 </script>

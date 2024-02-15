@@ -164,7 +164,7 @@ def wishlist(request):
 
     return render(request, 'User/wishlist.html', {'products': products})
 
-
+@login_required(login_url='Login')
 def delete_from_wishlist(request, product_id):
     # Ensure that the user is authenticated
     if not request.user.is_authenticated:

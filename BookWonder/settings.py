@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-yvo2!6l*34u3npp1h21juee2!nc9d!*0%uyciv+t7wvjv$_#0y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['13.49.228.94','bookwander.store']
+# ALLOWED_HOSTS = ['13.49.228.94','bookwander.store','127.0.0.1:8000']
 
 
 # Application definition
@@ -87,27 +87,27 @@ AUTH_USER_MODEL = 'Authentication.Account'
 
 
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "HOST": 'localhost',
-#         "USER": 'postgres',
-#         "PASSWORD": 'suaida',
-#         "NAME": 'bookwander',
-#         "PORT": '5432',
-#     }
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'myproject',
-        'USER': 'myprojectuser',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": 'localhost',
+        "USER": 'postgres',
+        "PASSWORD": 'suaida',
+        "NAME": 'bookwander',
+        "PORT": '5432',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'myproject',
+#         'USER': 'myprojectuser',
+#         'PASSWORD': 'password',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
 
 
 # Password validation
