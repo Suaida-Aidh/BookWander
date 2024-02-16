@@ -22,10 +22,10 @@
 
 
 
-<section class="h-100 h-custom">
-    <div class="container h-100 py-5" style="margin-top: 10px;">
+<div class="cart-section mt-150 mb-150">
+    <div class="container h-100 py-5">
         <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col">
+            <div class="col-lg-8 col-md-12">
                 {% if products %}
                 <div class="table-responsive">
                     <table class="table">
@@ -60,36 +60,36 @@
                                     <p class="mb-0" style="font-weight: 500;">${{product.product.price}}</p>
                                 </td>
 
-                                
+
 
                                 <td class="align-middle">
                                     <a href="{% url 'single_product' product_slug=product.product.slug %}" id="view"
                                         class="wishlist-btn"> view</a>
                                 </td>
 
-                            
+
 
                                 <td class="align-middle">
-                                    <a href="{% url 'delete_from_wishlist' product_id=product.product.id %}" id="delete_from_wishlist"
-                                        class="cart-btn">X</a>
+                                    <a href="{% url 'delete_from_wishlist' product_id=product.product.id %}"
+                                        id="delete_from_wishlist" class="cart-btn">X</a>
                                 </td>
                             </tr>
-                            {% if not forloop.last %}
-                            <tr style="border-bottom: 1px solid #ccc;">
-                                <td colspan="4"></td>
-                            </tr>
-                            {% endif %}
+
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-
+                {% else %}
+                <div class="text-center mb-3">
+                    <h3>Your Wishlist Is <span class="orange-text">Empty </span></h3>
+                    <a href="{% url 'shop' %}" class="wishlist-btn mt-3">Go back to shopping</a>
+                </div>
 
                 {% endif %}
             </div>
         </div>
     </div>
-</section>
+</div>
 {% endblock %}
 
 <style>

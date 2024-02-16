@@ -1,176 +1,132 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %} 
+{% load static %} 
+{% block content %}
 {% include 'include/navbar.html' %}
 
-
-
-
+<style>
+    .h1 {
+        font-weight: 800;
+        /* 800 is often used for extra bold */
+        font-family: serif;
+        /* Set the font-family to serif */
+    }
+</style>
 
 <!-- breadcrumb-section -->
-<style>
-	.h1 {
-		font-weight: 800;
-		/* 800 is often used for extra bold */
-		font-family: serif;
-		/* Set the font-family to serif */
-	}
-</style>
 <div class="breadcrumb-section cart-bg">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-8 offset-lg-2 text-center">
-				<div class="breadcrumb-text">
-					<p>Content</p>
-					<h1 class="h1">Shopping Cart</h1>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 text-center">
+                <div class="breadcrumb-text">
+                    <p>Content</p>
+                    <h1 class="h1">Shopping Cart</h1>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- end breadcrumb section -->
 
-
-
-<div class="cart-section mt-150 mb-150">
-	<div class="container h-100 py-5">
-		<div class="row d-flex justify-content-center align-items-center h-100">
-			<div class="col-lg-8 col-md-12">
-				<div class="table-responsive">
-					{% if cart_items %}
-					<table class="table">
-						<thead>
-							<tr>
-								<th scope="col" class="h5">Shopping Bag</th>
-								<th scope="col">Category</th>
-								<th scope="col">Quantity</th>
-								<th scope="col">Price</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for cart_item in cart_items %}
-							<tr>
-								<th scope="row" class="border-bottom-0">
-									<div class="d-flex align-items-center">
-										<img src="{{ cart_item.product.images.url }}" class="img-fluid rounded-3"
-											style="width: 120px;" alt="Book">
-										<div class="flex-column ms-4">
-											<p class="mb-2">{{ cart_item.product.product_name }}</p>
-											<p class="mb-0">{{ cart_item.product.author }}</p>
-										</div>
-									</div>
-								</th>
-								<td class="align-middle">
-									<p class="mb-0" style="font-weight: 500;">{{product.product.category}}</p>
-								</td>
-
-								<td class="align-middle border-bottom-0">
-									<div class="d-flex flex-row">
-										<button class="btn btn-link px-2"
-											onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-											<i class="fas fa-minus"></i>
-										</button>
-
-										<input id="form1" min="0" name="quantity" value="{{ cart_item.quantity }}"
-											type="number" class="form-control form-control-sm" style="width: 50px;" />
-
-										<button class="btn btn-link px-2"
-											onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-											<i class="fas fa-plus"></i>
-										</button>
-									</div>
-								</td>
-								<td class="align-middle border-bottom-0">
-									<p class="mb-0" style="font-weight: 500;">{{ cart_item.product.price }}</p>
-								</td>
-								<td class="align-middle">
-									{% csrf_token %}
-									<a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}"
-										id="delete_from_wishlist" class="cart-btn">Remove</a>
-								</td>
-							</tr>
-							{% endfor %}
-							{% else %}
-							<div class="text-center mb-3">
-								<h3><span class="orange-text">Your Cart Is </span> Empty</h3>
-								<a href="{% url 'shop' %}" class="wishlist-btn mt-3">Go back to shopping</a>
-							</div>
-						</tbody>
-
-
-					</table>
-					{% endif %}
-				</div>
-			</div>
-			{% if cart_items %}
-			<div class="card shadow-2-strong mb-5 mb-lg-0" style="border-radius: 16px;">
-				<div class="card-body p-4">
-
-					<div class="row">
-
-
-						<div class="col-lg-4 col-xl-3">
-							<div class="d-flex justify-content-between" style="font-weight: 500;">
-								<p class="mb-2">Subtotal</p>
-								<p class="mb-2">₹{{total}}</p>
-							</div>
-
-
-							<div class="d-flex justify-content-between" style="font-weight: 500;">
-								<p class="mb-0">Shipping</p>
-								<p class="mb-0">₹{{ shipping }}</p>
-							</div>
-
-							<hr class="my-4">
-
-							<div class="d-flex justify-content-between mb-4" style="font-weight: 500;">
-								<p class="mb-2">Total (tax included)</p>
-								<p class="mb-2">₹{{ grand_total }}</p>
-							</div>
-
-							<a href="{% url 'checkout' %}">
-								<button type="button" class="btn btn-primary btn-block btn-lg">
-									<div class="d-flex justify-content-between">
-										<span>Checkout</span>
-										<span>₹{{ grand_total }}</span>
-									</div>
-								</button>
-							</a>
-
-
-						</div>
-					</div>
-
-				</div>
-			</div>
-			{% endif %}
-		</div>
-	</div>
+<!-- Products and shipping charges section -->
+<div class="container mt-150 mb-150">
+    <div class="row">
+        <div class="col-lg-8" style="margin-top: 5%;">
+            <div class="table-responsive">
+                {% if cart_items %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="h5">Shopping Bag</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cart_item in cart_items %}
+                        <tr>
+                            <!-- Product details -->
+                            <th scope="row">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ cart_item.product.images.url }}" class="img-fluid rounded-3" style="width: 120px;" alt="Book">
+                                    <div class="flex-column ms-4">
+                                        <p class="mb-2">{{ cart_item.product.product_name }}</p>
+                                        <p class="mb-0">{{ cart_item.product.author }}</p>
+                                    </div>
+                                </div>
+                            </th>
+                            <!-- Category -->
+                            <td class="align-middle">
+                                <p class="mb-0" style="font-weight: 500;">{{cart_item.product.category}}</p>
+                            </td>
+                            <!-- Quantity -->
+                            <td class="align-middle">
+                                <div class="d-flex flex-row">
+                                    <!-- Quantity buttons -->
+                                    <button class="btn btn-link px-2" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input id="form1" min="0" name="quantity" value="{{ cart_item.quantity }}" type="number" class="form-control form-control-sm" style="width: 50px;" />
+                                    <button class="btn btn-link px-2" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <!-- Price -->
+                            <td class="align-middle">
+                                <p class="mb-0" style="font-weight: 500;">{{ cart_item.product.price }}</p>
+                            </td>
+                            <!-- Remove button -->
+                            <td class="align-middle">
+                                {% csrf_token %}
+                                <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}" class="cart-btn remove_cart">Remove</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="text-center mb-3">
+                    <h3><span class="orange-text">Your Cart Is </span> Empty</h3>
+                    <a href="{% url 'shop' %}" class="wishlist-btn mt-3">Go back to shopping</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <!-- shipping charges section -->
+            <div class="card mb-4" style="max-width: 300px; margin-top: 10%;">
+                <div class="card-body">
+                    <div>
+                        <div class="d-flex justify-content-between" style="font-weight: 500;">
+                            <p class="mb-2">Subtotal</p>
+                            <p class="mb-2">₹{{total}}</p>
+                        </div>
+                        <div class="d-flex justify-content-between" style="font-weight: 500;">
+                            <p class="mb-0">Shipping</p>
+                            <p class="mb-0">₹{{ shipping }}</p>
+                        </div>
+                        <hr class="my-2">
+                        <div class="d-flex justify-content-between mb-2" style="font-weight: 500;">
+                            <p class="mb-2">Total (tax included)</p>
+                            <p class="mb-2">₹{{ grand_total }}</p>
+                        </div>
+                        <a href="{% url 'checkout' %}">
+                            <button type="button" class="btn btn-primary btn-block btn-sm">
+                                <div class="d-flex justify-content-between">
+                                    <span>Checkout</span>
+                                    <span>₹{{ grand_total }}</span>
+                                </div>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- end shipping charges section -->
+        </div>
+    </div>
 </div>
-
-
+<!-- End Products and shipping charges section -->
 
 {% endblock content %}
-
-
-
-<!-- Add this script to the end of your HTML body or in a separate JavaScript file -->
-<script>
-	$(document).ready(function () {
-		$('.remove_cart').on('click', function (e) {
-			e.preventDefault();
-			var removeUrl = $(this).attr('href');
-			// You can use AJAX to send a request to the remove URL
-			$.ajax({
-				url: removeUrl,
-				method: 'GET',  // Adjust the HTTP method if needed
-				success: function (data) {
-					// Handle success, e.g., remove the corresponding row from the table
-					// or update the page as needed
-					console.log('Item removed successfully');
-				},
-				error: function (error) {
-					console.log('Error removing item:', error);
-				}
-			});
-		});
-	});
-</script>

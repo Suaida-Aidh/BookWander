@@ -1,136 +1,122 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block content %}
-{% include 'include/navbar.html' %}
 
-<!-- breadcrumb-section -->
-<div class="breadcrumb-section">
-    <div class="container">
+
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<style>
+    .orange-text {
+        font-weight: bold;
+        /* You can adjust the font weight here */
+    }
+</style>
+
+
+<section style="background-color: #eee;" class="mt-5">
+    <div class="container py-5">
+
+        <!--Breadcrumb-->
         <div class="row">
-            <div class="col-lg-8 offset-lg-2 text-center">
-                <div class="breadcrumb-text">
-                    <p>Content</p>
-                    <h1>Edit Profile</h1>
-                </div>
+            <div class="col">
+                <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a href="">User
+                                Profile</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Add Address</li>
+                    </ol>
+                </nav>
             </div>
         </div>
-    </div>
-</div>
-<!-- end breadcrumb section -->
 
-<div class="checkout-section mt-150 mb-150">
-    <div class="container">
-        <div class="row justify-content-center"> <!-- Center the content -->
-            <div class="col-lg-8">
-                <div class="checkout-accordion-wrap">
-                    <div class="accordion" id="accordionExample">
-                        <div class="card single-accordion">
-                            <div class="card-header" id="headingOne">
-                                <h5 class="mb-0">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center mt-4">
+                        {% if userprofile.profile_picture %}
+                        <img src="{{userprofile.profile_picture.url}}" alt="avatar" class=" img-fluid"
+                            style="width: 200px;">
+                        {% else %}
+                        <img src="{% static 'path_to_default_image/default_image.jpg' %}" alt="avatar"
+                            class="rounded-circle img-fluid" style="width: 150px;">
+                        {% endif %}
+                        <h5 class="my-3">{{ user.username | capfirst }}</h5>
 
-
-
-
-                                    <button class="btn btn-link" type="button" data-toggle="collapse"
-                                        data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        Edit Address
-                                    </button>
-
-
-                                </h5>
-                            </div>
-
-                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                data-parent="#accordionExample">
-
-                                <div class="card-body">
-                                    <main class="col-md-9 ">
-                                        {% for message in messages %}
-                                        <div>
-                                            <p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
-                                        </div>
-                                        {% endfor %}
-
-                                        <div class="text-center my-5 ">
-                                            {% if userprofile.profile_picture %}
-                                            <img src="https://img.icons8.com/bubbles/100/000000/user.png" alt="Profile Picture"
-                                                width="100" style="border-radius: 50%;">
-                                            {% else %}
-                                            <img src="https://img.icons8.com/bubbles/100/000000/user.png" alt="IMG-LOGO" width="100"
-                                                style="border-radius: 50%;">
-                                            {% endif %}
-                                        </div>
-                                        <div class="billing-address-form">
-                                            <form action="{% url 'edit_profile' %}" method="POST"
-                                                enctype="multipart/form-data">
-                                                {% csrf_token %}
-                                                <!-- Your form fields here... -->
-
-                                                <div class="form-row">
-
-                                                    <div class="form-group col-md-6">
-                                                        <label> First Name </label>
-                                                        {{user_form.first_name}}
-
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <label> Last Name </label>
-                                                        {{user_form.last_name}}
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-6">
-                                                        <label> Mobile Number </label>
-                                                        {{user_form.phone_number}}
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <label> Profile Picture </label>
-                                                        {{profile_form.profile_picture}}
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="form-group ">
-                                                    <label> Address Line 1 </label>
-                                                    {{profile_form.address_line_1 }}
-                                                </div>
-                                                <div class="form-group ">
-                                                    <label> Address Line 2 </label>
-                                                    {{profile_form.address_line_2 }}
-                                                </div>
-
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-4">
-                                                        <label> City </label>
-                                                        {{profile_form.city }}
-                                                    </div>
-                                                    <div class="form-group col-md-4">
-                                                        <label> State </label>
-                                                        {{profile_form.state }}
-
-                                                    </div>
-                                                    <div class="form-group col-md-4">
-                                                        <label> Country </label>
-                                                        {{profile_form.country }}
-
-                                                    </div>
-                                                </div>
-
-                                                <button type="submit" class="boxed-btn">Save</button>
-                                            </form>
-                                        </div>
-                                    </main>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
+
+            <div class="col-lg-8">
+                <form method="POST" action="" class="account-form" name="address_form" enctype="multipart/form-data">
+                    {% if form.error%}
+                    <div class="alert alert-primary" role="alert">
+                        Errror: Plese try agin
+                        {% endif %}
+
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div><label class="orange-text ">Full Name</label>
+                                    <input type="text" name="full_name" value="{{user.first_name}} {{user.last_name}}">
+                                </div>
+
+                                <div><label class="orange-text">Email</label>
+                                    <input type="email" name="email" value="{{user.email}}">
+                                </div>
+
+                                <div><label class="orange-text">Phone Number</label>
+                                    <input type="text" name="phone_number" value="{{user.phone_number}}">
+                                </div>
+
+                                <div><label class="orange-text">City</label>
+                                    <input type="text" name="city" value="{{user.city}}">
+                                </div>
+
+
+
+                                <div><label class="orange-text">State</label>
+                                    <input type="text" name="state" value="{{user.state}}">
+                                </div>
+
+                                <div><label class="orange-text">Country</label>
+                                    <input type="text" name="country" value="{{user.country}}">
+                                </div>
+
+                                
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="text-center">
+                                    <form method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+
+                                        <button type="submit" class="btn wishlist-btn mt-2">Upload Picture</button>
+                                        <input type="file" name="profile_picture">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-dark cap btn-block py-2 mb-4 mt-4 fw-bold w-100" type="submit"
+                            onclick="submitform()">Save Changes</button>
+                    </div>
+
+                </form>
+            </div>
         </div>
-    </div>
-</div>
+</section>
 
-{% include 'include/footer.html' %}
+<script>
+    function submitform() {
+        var form = document.getElementsByName("address_form")[0];
+        form.submit();
+        from.reset();
+        return false;
+    }
+</script>
 
-{% endblock %}
+
+
+
+
+
+{% endblock content %}

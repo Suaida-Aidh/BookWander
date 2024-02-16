@@ -1,173 +1,81 @@
-<!-- <div class="wrapper">
-    <header>
-        <h2>Price Range</h2>
-        <p>Use slider or enter min and max price</p>
-    </header>
-    <div class="price-input">
+{% extends 'base_user.html' %}
 
-        <div class="field">
-            <span>Min</span>
-            <input type="number" class="input-min" value="2500">
-        </div>
-        <div class="seperator"></div>
+{% load static %}
 
-        <div class="field">
-            <span>Max</span>
-            <input type="number" class="input-min" value="7500">
-        </div>
+{% block title %}Edit Address{% endblock title %}
 
-        <div class="slider">
-            <div class="progress"></div>
-        </div>
-        <div class="range-input">
-            <input type="range" class="range-min" min="0" max="10000" value="2500">
-            <input type="range" class="range-max" min="0" max="10000" value="7500">
-        </div>
-        
-    </div>
-    
+{% block content %}
 
-</div>
-
-<script src="script.js"></script>
-
-<script>
-
-
-const rangeInput = document.querySelectorAll(".range-input input"),
-priceInput = document.querySelectorAll(".price-input input"),
-range = document.querySelector(".slider .progress");
-let priceGap = 1000;
-
-priceInput.forEach(input =>{
-    input.addEventListener("input", e =>{
-        let minPrice = parseInt(priceInput[0].value),
-        maxPrice = parseInt(priceInput[1].value);
-
-        if ((maxPrice - minPrice >= priceGap) && maxPrice <= rangeInput[1].max){
-            if(e.target.className === "input-min"){
-                rangeInput[0].value = minPrice;
-                range.style.left = ((minPrice / rangeInput[0].max) * 100) + "%";
-
-            
-            }else{
-                rangeInput[1].value = maxPrice;
-                range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
-
-
-            }
-
-        }
-    });
-});
-
-
-
-rangeInput.forEach(input =>{
-    input.addEventListener("input", e =>{
-        let minVal = parseInt(rangeInput[0].value),
-        maxVal = parseInt(rangeInput[1].value);
-
-
-        if((maxVal - minVal) < priceGap){
-            if(e.target.className === "range-min"){
-                rangeInput[0].value = maxVal - priceGap
-            }else{
-                rangeInput[1].value = minVal - priceGap;
-            }
-        }else{
-            priceInput[0].value = minVal;
-            priceInput[1].value = maxVal;
-            range.style.left = ((minVal / rangeInput[0].max) * 100) +"%";
-            range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
-        }
-    })
-})
-
-</script>
-
-
- -->
-
-<div class="col-lg-12">
-    <div class="row product-lists">
-        {% for product in products %}
-        <div class="col-lg-4 col-md-6 text-center strawberry">
-            <div class="single-product-item" data-category="{{ product.category }}">
-                <div class="product-image">
-                    <a href="{% url 'single_product' product.slug %}">
-                        <img src="{{ product.images.url }}" alt="" width="400" height="300">
-                    </a>
-                </div>
-                <h3>{{ product.product_name }}</h3>
-                <p class="product-price"><span></span>$ {{ product.price }}</p>
-                <a href="{% url 'single_product' product.slug %}" class="cart-btn"> View </a>
+<section style="background-color: #eee;" class="mt-5">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'dashboard' %}">User
+                                Profile</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit address</li>
+                    </ol>
+                </nav>
             </div>
         </div>
-        {% endfor %}
-    </div>
 
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <img src="{{user.user_image.url}}"
+                            alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                        <h5 class="my-3 text-dark">{{ user.username | capfirst }}</h5>
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-lg-8">
+                <form method="post" action="#" class="account-form" name="address_form" enctype="multipart/form-data">
+                    {% if form.error%}
+                    <div class="alert alert-primary" role="alert">
+                        Errror: Plese try agin
+                        {% endif %}
+                        {% csrf_token %}
+                        <label class="small fw-bold">{{ form.full_name.label }}</label>
+                        {{ form.full_name }}
 
-</div>
+                        <label class="small fw-bold">{{ form.house_name.label }}</label>
+                        {{ form.house_name }}
 
+                        <label class="small fw-bold">{{ form.phone_number.label }}</label>
+                        {{ form.phone_number }}
 
+                        <label class="small fw-bold">{{ form.city.label }}</label>
+                        {{ form.city }}
 
+                        <label class="small fw-bold">{{ form.district.label }}</label>
+                        {{ form.district }}
+                        
+                        <label class="small fw-bold">{{ form.state.label }}</label>
+                        {{ form.state }}
 
+                        <label class="small fw-bold">{{ form.country.label }}</label>
+                        {{ form.country }}
 
+                        <label class="small fw-bold">{{ form.pin.label }}</label>
+                        {{ form.pin }}
 
+                        <button class="btn btn-dark cap btn-block py-2 mb-4 mt-4 fw-bold w-100" 
+                        type="submit" onclick="submitform()">Save Changes</button>
+                </form>
+            </div>
+        </div>
+</section>
 
-ackground-color: #F28123;
-color: #051922;
-font-weight: 700;
-text-transform: uppercase;
-font-size: 15px;
-border: none !important;
-cursor: pointer;
-padding: 15px 25px;
-border-radius: 3px;
-
-
-
-<div class="flex-w flex-r-m p-b-10">
-    {% if in_wishlist %}
-    <a class="btn btn-outline-success flex-c-m size-116 bor14 p-lr-15 m-t-10" style="display: inline-block;">
-        Added to Wishlist
-    </a>
-
-    {% else %}
-    <a href="{% url 'add_to_wishlist' single_product.id %}"
-        class="btn btn-outline-dark flex-c-m size-116 bor14 p-lr-15 m-t-10" style="display: inline-block;">
-        Add to Wishlist
-    </a>
-    {% endif %}
-</div>
-
-<a href="{% url 'wishlist' %}" class="wishlist-btn"><i class="far fa-heart"></i>Add to wishlist</a>
-href="{% url 'add_to_wishlist' single_product.id %}"
-<style>
-    a.boxed-btn,
-    a.bordered-btn,
-    a.wishlist-btn {
-        border-radius: 50px;
+<script>
+    function submitform() {
+        var form = document.getElementsByName("address_form")[0];
+        form.submit();
+        from.reset();
+        return false;
     }
-    a.wishlist-btn {
-  -webkit-transition: 0.3s;
-  -o-transition: 0.3s;
-  transition: 0.3s;
-}
-
-a.wishlist-btn:hover {
-  background-color: #F28123;
-  color: #fff;
-  
-}
-a.wishlist-btn {
-  font-family: 'Poppins', sans-serif;
-  display: inline-block;
-  background-color: #051922;
-  color: #F28123;
-  padding: 10px 20px;
-}
-
-</style>
+</script>
+{% endblock content %}

@@ -108,7 +108,8 @@ def placeorder(request):
 def myorder(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     context = {
-        'orders': orders
+        'orders': orders,
+        
     }
     return render(request, 'User/my_order.html', context)
 
