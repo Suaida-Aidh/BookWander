@@ -28,135 +28,124 @@
 </div>
 <!-- end breadcrumb section -->
 
-<!-- cart -->
+
+
 <div class="cart-section mt-150 mb-150">
-	<div class="container">
-		<div class="row">
+	<div class="container h-100 py-5">
+		<div class="row d-flex justify-content-center align-items-center h-100">
 			<div class="col-lg-8 col-md-12">
-				<div class="cart-table-wrap">
+				<div class="table-responsive">
 					{% if cart_items %}
-					<table class="cart-table">
-						<thead class="cart-table-head">
-							<tr class="table-head-row">
-								<th class="product-remove"></th>
-								<th class="product-image">Product Image</th>
-								<th class="product-name">Name</th>
-								<th class="product-price">Price</th>
-								<th class="product-quantity">Quantity</th>
-								<th class="product-total">Total</th>
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col" class="h5">Shopping Bag</th>
+								<th scope="col">Category</th>
+								<th scope="col">Quantity</th>
+								<th scope="col">Price</th>
 							</tr>
 						</thead>
 						<tbody>
-
 							{% for cart_item in cart_items %}
-							<tr class="table-body-row">
-								<td class="product-remove">
-									<form action="{% url 'remove_cart' cart_item.product.id cart_item.id %}"
-										method="POST">
-										{% csrf_token %}
-										<button type="submit" class="remove-cart-button">
-											<i class="far remove-cart-icon">&#10006;</i>
+							<tr>
+								<th scope="row" class="border-bottom-0">
+									<div class="d-flex align-items-center">
+										<img src="{{ cart_item.product.images.url }}" class="img-fluid rounded-3"
+											style="width: 120px;" alt="Book">
+										<div class="flex-column ms-4">
+											<p class="mb-2">{{ cart_item.product.product_name }}</p>
+											<p class="mb-0">{{ cart_item.product.author }}</p>
+										</div>
+									</div>
+								</th>
+								<td class="align-middle">
+									<p class="mb-0" style="font-weight: 500;">{{product.product.category}}</p>
+								</td>
+
+								<td class="align-middle border-bottom-0">
+									<div class="d-flex flex-row">
+										<button class="btn btn-link px-2"
+											onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+											<i class="fas fa-minus"></i>
 										</button>
-									</form>
+
+										<input id="form1" min="0" name="quantity" value="{{ cart_item.quantity }}"
+											type="number" class="form-control form-control-sm" style="width: 50px;" />
+
+										<button class="btn btn-link px-2"
+											onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+											<i class="fas fa-plus"></i>
+										</button>
+									</div>
 								</td>
-
-								<td class="product-image"><img src="{{ cart_item.product.images.url }}" alt="IMG"></td>
-								<td class="product-name">{{ cart_item.product.product_name }}</td>
-
-								<td class="product-price">
-									<span class="product-price-wrapper">
-										{%if cart_item.offer_price%}
-										<span class="money">{{ cart_item.offer_price}}</span>
-										{%else%}
-										<span class="money">{{ cart_item.product.price }}</span>
-										{%endif%}
-									</span>
+								<td class="align-middle border-bottom-0">
+									<p class="mb-0" style="font-weight: 500;">{{ cart_item.product.price }}</p>
 								</td>
-
-								<td class="product-quantity">
-									<input type="number" placeholder="0" value="{{ cart_item.quantity }}"
-										name="quantity">
-								</td>
-
-								<td class="product-total">
-									<span class="product-price-wrapper">
-										{%if cart_item.offer_price%}
-										<span class="money">{{ cart_item.offer_price}}</span>
-										{%else%}
-										<span class="money">${{ cart_item.sub_total }}</span>
-										{%endif%}
-									</span>
+								<td class="align-middle">
+									{% csrf_token %}
+									<a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}"
+										id="delete_from_wishlist" class="cart-btn">Remove</a>
 								</td>
 							</tr>
 							{% endfor %}
 							{% else %}
-
-							<!-- <div class="col-lg-8 offset-lg-2 text-center" style="margin-top: 15%; margin-left: 50%;">
-								<img src="path/to/empty-cart-icon.png" alt="Empty Cart Icon"
-									style="width: 50px; height: 50px;">
-								<h1 class="h1"
-									style="font-family: 'IBM Plex Sans', sans-serif; font-size: 2em; color: #000;">Your
-									cart is empty.</h1>
-								<a class="inline-block button continue" href="{% url 'shop' %}"
-									style="color: white; font-family: 'IBM Plex Sans', sans-serif; font-size: 15px; background: #e37235; padding: 6.4px 24px; text-decoration: none; display: inline-block;">Continue
-									Shopping</a>
-							</div> -->
-							<div class="col-lg-8 offset-lg-2 text-center" style="margin-top: 15%; margin-left: 50%;">
-								<img src="path/to/empty-cart-icon.png" alt="Empty Cart Icon" style="width: 50px; height: 50px;">
-								<h1 class="h1" style="font-family: 'IBM Plex Sans', sans-serif; font-size: 2em; color: #000;">Your cart is empty.</h1>
-								<a class="inline-block button continue" href="{% url 'shop' %}" style="color: white; font-family: 'IBM Plex Sans', sans-serif; font-size: 15px; background: #e37235; padding: 6.4px 24px; text-decoration: none; display: inline-block;">Continue Shopping</a>
+							<div class="text-center mb-3">
+								<h3><span class="orange-text">Your Cart Is </span> Empty</h3>
+								<a href="{% url 'shop' %}" class="wishlist-btn mt-3">Go back to shopping</a>
 							</div>
-							
-
-
-
-
-
 						</tbody>
+
+
 					</table>
 					{% endif %}
 				</div>
 			</div>
 			{% if cart_items %}
-			<div class="col-lg-4">
-				<div class="total-section">
-					<table class="total-table">
-						<thead class="total-table-head">
-							<tr class="table-total-row">
-								<th>Total</th>
-								<th>Price</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr class="total-data">
-								<td><strong>Subtotal: </strong></td>
-								<td>₹{{total}}</td>
-							</tr>
-							<tr class="total-data">
-								<td><strong>Shipping: </strong></td>
-								<td>₹{{ shipping }}</td>
-							</tr>
-							<tr class="total-data">
-								<td><strong>Total: </strong></td>
-								<td>₹{{ grand_total }}</td>
-							</tr>
+			<div class="card shadow-2-strong mb-5 mb-lg-0" style="border-radius: 16px;">
+				<div class="card-body p-4">
 
-						</tbody>
-					</table>
-					<div class="cart-buttons">
+					<div class="row">
 
-						<a href="{% url 'checkout' %}" class="boxed-btn black">Check Out</a>
+
+						<div class="col-lg-4 col-xl-3">
+							<div class="d-flex justify-content-between" style="font-weight: 500;">
+								<p class="mb-2">Subtotal</p>
+								<p class="mb-2">₹{{total}}</p>
+							</div>
+
+
+							<div class="d-flex justify-content-between" style="font-weight: 500;">
+								<p class="mb-0">Shipping</p>
+								<p class="mb-0">₹{{ shipping }}</p>
+							</div>
+
+							<hr class="my-4">
+
+							<div class="d-flex justify-content-between mb-4" style="font-weight: 500;">
+								<p class="mb-2">Total (tax included)</p>
+								<p class="mb-2">₹{{ grand_total }}</p>
+							</div>
+
+							<a href="{% url 'checkout' %}">
+								<button type="button" class="btn btn-primary btn-block btn-lg">
+									<div class="d-flex justify-content-between">
+										<span>Checkout</span>
+										<span>₹{{ grand_total }}</span>
+									</div>
+								</button>
+							</a>
+
+
+						</div>
 					</div>
-				</div>
 
-				
+				</div>
 			</div>
 			{% endif %}
-
 		</div>
 	</div>
 </div>
-<!-- end cart -->
+
 
 
 {% endblock content %}

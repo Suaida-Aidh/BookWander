@@ -19,52 +19,59 @@
 
 </div>
 <!-- end breadcrumb section -->
-<div class="container my-5">
-    <!-- ============================ COMPONENT 1 ================================= -->
-    <div class="row">
-        <aside class="col-lg-12">
-            {% if products %}
-            <div class="card">
-                <div class="table-responsive"> <!-- Add this to make the table responsive on smaller screens -->
-                    <table class="table table-sm table-borderless table-shopping-cart">
+
+
+
+<section class="h-100 h-custom">
+    <div class="container h-100 py-5" style="margin-top: 10px;">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col">
+                {% if products %}
+                <div class="table-responsive">
+                    <table class="table">
                         {% if products.0.product.images.url %}
-                        <!-- Display header only if there is at least one product with an image -->
-                        <thead class="text-muted">
-                            <tr class="small text-uppercase">
-                                <th scope="col">Product</th>
-                                <th scope="col" width="80">Price</th>
-                                <th scope="col" width="80"></th>
-                                <th scope="col" width="80"></th>
+                        <thead>
+                            <tr>
+                                <th scope="col" class="h5">Wishlist Bag</th>
+                                <th scope="col">Category</th>
+
+                                <th scope="col">Price</th>
                             </tr>
                         </thead>
                         {% endif %}
                         <tbody>
                             {% for product in products %}
                             <tr>
-                                <td>
-                                    <figure class="itemside align-items-center">
-                                        <div class="how-itemcart1">
-                                            <img src="{{ product.product.images.url }}" alt="IMG"
-                                                style="max-width: 200px; max-height: 100px;" />
+                                <th scope="row">
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ product.product.images.url }}" class="img-fluid rounded-3"
+                                            style="width: 120px;" alt="Book">
+                                        <div class="flex-column ms-4">
+                                            <p class="mb-2">{{product.product.product_name}}</p>
+                                            <p class="mb-0">{{product.product.author}}</p>
                                         </div>
-                                        <figcaption class="info">
-                                            <a href="" class="title text-dark">{{product.product.product_name}}</a>
-                                        </figcaption>
-                                    </figure>
-                                </td>
-                                <td>
-                                    <div class="price-wrap my-3 align-items-center">
-                                        <var class="price ">${{product.product.price}}</var><br />
                                     </div>
+                                </th>
+                                <td class="align-middle">
+                                    <p class="mb-0" style="font-weight: 500;">{{product.product.category}}</p>
                                 </td>
-                                <td>
-                                    <div class="price-wrap my-3">
-                                        <a href="{% url 'single_product' product_slug=product.product.slug %}"><button class="btn btn-dark btn-sm">View product</button></a>
-                                    </div>
+
+                                <td class="align-middle">
+                                    <p class="mb-0" style="font-weight: 500;">${{product.product.price}}</p>
                                 </td>
-                               
-                                <td class="">
-                                    <a href="{% url 'delete_from_wishlist' product_id=product.product.id %}" class=" btn btn-danger delete-wish my-3 " data-item="{{ product.product.id }}">X</a>
+
+                                
+
+                                <td class="align-middle">
+                                    <a href="{% url 'single_product' product_slug=product.product.slug %}" id="view"
+                                        class="wishlist-btn"> view</a>
+                                </td>
+
+                            
+
+                                <td class="align-middle">
+                                    <a href="{% url 'delete_from_wishlist' product_id=product.product.id %}" id="delete_from_wishlist"
+                                        class="cart-btn">X</a>
                                 </td>
                             </tr>
                             {% if not forloop.last %}
@@ -76,17 +83,15 @@
                         </tbody>
                     </table>
                 </div>
+
+
+                {% endif %}
             </div>
-            {% else %}
-            <h2 class="text-center fw-bold" style="margin: 100px;">Your wishlist is Empty</h2>
-            {% endif %}
-        </aside>
+        </div>
     </div>
-</div>
-
-
-
-
-
-
+</section>
 {% endblock %}
+
+<style>
+
+</style>
