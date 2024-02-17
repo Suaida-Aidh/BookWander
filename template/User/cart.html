@@ -1,5 +1,5 @@
-{% extends 'base.html' %} 
-{% load static %} 
+{% extends 'base.html' %}
+{% load static %}
 {% block content %}
 {% include 'include/navbar.html' %}
 
@@ -49,7 +49,8 @@
                             <!-- Product details -->
                             <th scope="row">
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ cart_item.product.images.url }}" class="img-fluid rounded-3" style="width: 120px;" alt="Book">
+                                    <img src="{{ cart_item.product.images.url }}" class="img-fluid rounded-3"
+                                        style="width: 120px;" alt="Book">
                                     <div class="flex-column ms-4">
                                         <p class="mb-2">{{ cart_item.product.product_name }}</p>
                                         <p class="mb-0">{{ cart_item.product.author }}</p>
@@ -64,11 +65,14 @@
                             <td class="align-middle">
                                 <div class="d-flex flex-row">
                                     <!-- Quantity buttons -->
-                                    <button class="btn btn-link px-2" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                    <button class="btn btn-link px-2"
+                                        onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
                                         <i class="fas fa-minus"></i>
                                     </button>
-                                    <input id="form1" min="0" name="quantity" value="{{ cart_item.quantity }}" type="number" class="form-control form-control-sm" style="width: 50px;" />
-                                    <button class="btn btn-link px-2" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                    <input id="form1" min="0" name="quantity" value="{{ cart_item.quantity }}"
+                                        type="number" class="form-control form-control-sm" style="width: 50px;" />
+                                    <button class="btn btn-link px-2"
+                                        onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
@@ -80,18 +84,14 @@
                             <!-- Remove button -->
                             <td class="align-middle">
                                 {% csrf_token %}
-                                <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}" class="cart-btn remove_cart">Remove</a>
+                                <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}"
+                                    class="cart-btn remove_cart">Remove</a>
                             </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-                {% else %}
-                <div class="text-center mb-3">
-                    <h3><span class="orange-text">Your Cart Is </span> Empty</h3>
-                    <a href="{% url 'shop' %}" class="wishlist-btn mt-3">Go back to shopping</a>
-                </div>
-                {% endif %}
+
             </div>
         </div>
         <div class="col-lg-4">
@@ -124,6 +124,12 @@
                 </div>
             </div>
             <!-- end shipping charges section -->
+            {% else %}
+            <div class="text-center mb-3">
+                <h3><span class="orange-text">Your Cart Is </span> Empty</h3>
+                <a href="{% url 'shop' %}" class="wishlist-btn mt-3">Go back to shopping</a>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

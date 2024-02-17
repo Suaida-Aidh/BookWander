@@ -1,81 +1,123 @@
-{% extends 'base_user.html' %}
-
-{% load static %}
-
-{% block title %}Edit Address{% endblock title %}
-
+{% extends 'base.html' %}
+{% load static%}
 {% block content %}
+{% include 'include/navbar.html' %}
 
-<section style="background-color: #eee;" class="mt-5">
-    <div class="container py-5">
-        <div class="row">
-            <div class="col">
-                <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'dashboard' %}">User
-                                Profile</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Edit address</li>
-                    </ol>
-                </nav>
+
+
+<!-- breadcrumb-section -->
+<div class="breadcrumb-section orders-bg">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 offset-lg-2 text-center">
+        <div class="breadcrumb-text">
+          <p></p>
+          <h1>My orders</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end breadcrumb section -->
+
+
+
+<div class="cart-section mt-150 mb-150">
+  <div class="container h-100 py-5">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      {% for message in messages %}
+      <div>
+        <p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
+      </div>
+      {% endfor %}
+      <div class="col-lg-8 col-md-12">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <div class="media flex-sm-row flex-column-reverse justify-content-between  ">
+                <div class="col my-auto"> <h4 class="mb-0">Thanks for your Order,<span class="change-color">{{user.first_name}}</span> !</h4> </div>
             </div>
+              <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Name</th>
+                <th scope="col">Order Date</th>
+                <th scope="col">Tracking Number</th>
+                <th scope="col">Status</th>
+
+                <th scope="col">Total Price</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for order in orders %}
+              {% for order_item in order.orderitem_set.all %}
+              <tr>
+                <td class="align-middle">
+                  {% if order_item.product %}
+                  <img src="{{ order_item.product.image_url }}" alt="{{ order_item.product.name }}"
+                    style="max-width: 100px; max-height: 100px;">
+                  {% else %}
+                  <!-- Handle the case when there's no product -->
+                  <p>No product associated</p>
+                  {% endif %}
+                </td>
+
+                <td class="align-middle">
+                  <p class="mb-0" style="font-weight: 500;">{{ order_item.product }}</p>
+                </td>
+
+                <td class="align-middle">
+                  <p class="mb-0" style="font-weight: 500;">{{ order.created_at|date:"F j, Y" }}</p>
+                </td>
+
+                <td class="align-middle">
+                  <p class="mb-0" style="font-weight: 500;">{{ order.tracking_no }}</p>
+                </td>
+
+                {% if order.status == 'Cancelled' %}
+                <td class="text-danger "><b>{{ order.status }}</b></td>
+                {% elif order.status == 'Pending' %}
+                <td class="text-warning "><b>{{ order.status }}</b></td>
+                {% else %}
+                <td class="text-success fw-bold "> <b>{{ order.status }}</b></td>
+                {% endif %}
+
+                <td class="align-middle">
+                  <p class="mb-0" style="font-weight: 500;">₹ {{ order_item.price }}</p>
+                </td>
+
+
+
+                <td class="align-middle">
+                  <a href="{% url 'view_order' order.tracking_no %}" id="view" class="wishlist-btn">view</a>
+                </td>
+
+
+
+
+              </tr>
+              {% endfor %}
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
 
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="card mb-4">
-                    <div class="card-body text-center">
-                        <img src="{{user.user_image.url}}"
-                            alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                        <h5 class="my-3 text-dark">{{ user.username | capfirst }}</h5>
-                    </div>
-                </div>
-            </div>
+        <!-- <div class="text-center mb-3">
+                  <h3>Your Wishlist Is <span class="orange-text">Empty </span></h3>
+                  <a href="{% url 'shop' %}" class="wishlist-btn mt-3">Go back to shopping</a>
+              </div> -->
 
-            <div class="col-lg-8">
-                <form method="post" action="#" class="account-form" name="address_form" enctype="multipart/form-data">
-                    {% if form.error%}
-                    <div class="alert alert-primary" role="alert">
-                        Errror: Plese try agin
-                        {% endif %}
-                        {% csrf_token %}
-                        <label class="small fw-bold">{{ form.full_name.label }}</label>
-                        {{ form.full_name }}
 
-                        <label class="small fw-bold">{{ form.house_name.label }}</label>
-                        {{ form.house_name }}
+      </div>
+    </div>
+  </div>
+</div>
 
-                        <label class="small fw-bold">{{ form.phone_number.label }}</label>
-                        {{ form.phone_number }}
 
-                        <label class="small fw-bold">{{ form.city.label }}</label>
-                        {{ form.city }}
+             
 
-                        <label class="small fw-bold">{{ form.district.label }}</label>
-                        {{ form.district }}
-                        
-                        <label class="small fw-bold">{{ form.state.label }}</label>
-                        {{ form.state }}
 
-                        <label class="small fw-bold">{{ form.country.label }}</label>
-                        {{ form.country }}
+{% endblock %}
 
-                        <label class="small fw-bold">{{ form.pin.label }}</label>
-                        {{ form.pin }}
 
-                        <button class="btn btn-dark cap btn-block py-2 mb-4 mt-4 fw-bold w-100" 
-                        type="submit" onclick="submitform()">Save Changes</button>
-                </form>
-            </div>
-        </div>
-</section>
-
-<script>
-    function submitform() {
-        var form = document.getElementsByName("address_form")[0];
-        form.submit();
-        from.reset();
-        return false;
-    }
-</script>
-{% endblock content %}
