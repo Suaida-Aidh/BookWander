@@ -73,11 +73,11 @@ class Coupon(models.Model):
     
 class Product(models.Model):
     product_name = models.CharField(max_length=255, unique=True)
-    slug = AutoSlugField(max_length=200, unique=True, populate_from='product_name')  # Specify the source field
+    slug = AutoSlugField(max_length=200, unique=True, populate_from='product_name')  
     product_description = models.TextField(max_length=300, blank=True)
     price = models.IntegerField()
     stock = models.IntegerField()
-    images = models.ImageField( upload_to='photos/products')
+    images = models.ImageField(upload_to='photos/products')
     is_available = models.BooleanField(default=True)
     category = models.ForeignKey(Category_list, on_delete=models.CASCADE)
     author = models.ForeignKey(Authors, on_delete=models.CASCADE)
@@ -93,7 +93,13 @@ class Product(models.Model):
 
     def __str__(self):
         return self.product_name
-    
+
+    @property
+    def image_url(self):
+        if self.images:
+            return self.images.url
+        return None
+
 
 
 #multiple images

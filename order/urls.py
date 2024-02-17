@@ -1,6 +1,8 @@
 
 from django.urls import path
 from .import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
 
@@ -10,4 +12,4 @@ urlpatterns = [
     path('cancel_order/<str:t_no>', views.Cancel_order, name ='cancel_order'),
     path('proceed-to-pay/',views.razorpaycheck , name='proceed-to-pay'),
 
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

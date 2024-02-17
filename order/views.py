@@ -10,7 +10,7 @@ import random
 from django.contrib import messages
 from cart.models import Cart
 from django.http import JsonResponse
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from Authentication.models import Account
 
@@ -104,12 +104,24 @@ def placeorder(request):
 
 # MY ORDER FUNCTION
 @never_cache
-@login_required(login_url=('signin'))
+@login_required(login_url='signin')
 def myorder(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    
+    # Pagination
+    paginator = Paginator(orders, 10)  # Show 10 orders per page
+    page_number = request.GET.get('page')
+    try:
+        orders = paginator.page(page_number)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        orders = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        orders = paginator.page(paginator.num_pages)
+    
     context = {
         'orders': orders,
-        
     }
     return render(request, 'User/my_order.html', context)
 

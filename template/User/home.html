@@ -103,7 +103,8 @@
                     </div>
                     <h3>{{ product.name }}</h3>
                     <p class="product-price"><span>Price</span> {{ product.price }}$ </p>
-                    <a href="{% url 'cart' %}" class="cart-btn"> Add to <i class="fas fa-shopping-cart"></i></a>
+                    <a href="{% url 'add_cart' product.id %}" class="cart-btn"> Add to <i class="fas fa-shopping-cart"></i></a>
+
                 </div>
             </div>
             {% endfor %}
