@@ -3,14 +3,13 @@ from store.models import Product
 from Authentication.models import Account
 
 # Create your models here.
-# Create your models here.
 class Cart(models.Model):
+    user = models.ForeignKey(Account,on_delete=models.CASCADE,null=True)
     cart_id    = models.CharField(max_length=250, blank=True)
     date_added = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.cart_id
-
 
 
 class CartItem(models.Model):

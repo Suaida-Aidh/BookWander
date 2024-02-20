@@ -4,7 +4,7 @@ from django.views.decorators.cache import never_cache
 from cart.models import CartItem
 from Authentication.models import Account
 from .models import Profile
-from .models import Order, OrderItem
+from .models import Order, OrderItem , Wallet, Transaction
 from store.models import Product
 import random
 from django.contrib import messages
@@ -141,8 +141,23 @@ def vieworder(request, t_no):
 
 def Cancel_order(request, t_no):
     order = Order.objects.get(tracking_no=t_no, user=request.user)
-    order.status = 'Cancelled'
-    order.save()
+
+    if order.status != 'Cancelled':
+        order.status = 'Cancelled'
+        order.save()
+
+        # Retrieve or create the user's wallet
+        wallet , _= Wallet.objects.get_or_create(user=request.user)
+        print("wallet")
+        print(wallet)
+
+        # Add the order amount back to the wallet balance
+        wallet.balance += order.total_price
+        wallet.save()
+
+        # Create a transaction record for the refund
+        Transaction.objects.create(wallet=wallet, transaction_type='Refund', amount=order.total_price)
+
     return redirect('my_order')
 
 

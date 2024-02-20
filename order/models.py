@@ -55,7 +55,21 @@ class OrderItem(models.Model):
     def __str__(self):
         return'{} {}'.format(self.order.id, self.order.tracking_no)  # type: ignore
 
+class Wallet(models.Model):
+    user = models.OneToOneField(Account, on_delete=models.CASCADE)
+    balance = models.FloatField(default=0)
 
+    def __str__(self):
+        return f"Wallet of {self.user.email}"
+
+class Transaction(models.Model):
+    wallet = models.ForeignKey(Wallet, related_name='transactions', on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
+    transaction_type = models.CharField(max_length=100)
+    amount = models.FloatField()
+
+    def __str__(self):
+        return f"{self.transaction_type} of ${self.amount} on {self.date_added}"
 
 class Profile(models.Model):
     user = models.ForeignKey(Account,on_delete=models.CASCADE)
@@ -69,3 +83,7 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.email
+    
+
+
+

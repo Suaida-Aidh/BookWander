@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 urlpatterns = [
 
     path('place-order/', views.placeorder, name = 'place_order'),  
-    path('my-orders/', views.myorder, name = 'my_order'),
+    path('my-orders/', views.myorder, name = 'myorder'),
     path('view-order/<str:t_no>', views.vieworder, name = 'view_order'),
     path('cancel_order/<str:t_no>', views.Cancel_order, name ='cancel_order'),
     path('proceed-to-pay/',views.razorpaycheck , name='proceed-to-pay'),

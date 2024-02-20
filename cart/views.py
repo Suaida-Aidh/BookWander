@@ -73,6 +73,32 @@ def add_cart(request, product_id):
 
     return redirect('cart')
 
+# def add_cart(request):
+#     if request.method == 'POST':
+#         if request.user.is_authenticated:
+#             prod_id = int(request.POST.get('product_id'))
+#             product_check = Product.objects.filter(id=prod_id).first()
+#             if product_check:
+#                 quantity = int(request.POST.get('quantity'))
+#                 if product_check.quantity >= quantity:
+#                     # Check if the item already exists in the cart
+#                     cart_item, created = CartItem.objects.get_or_create(
+#                         user=request.user,
+#                         product_id=prod_id,
+#                         defaults={'quantity': quantity}
+#                     )
+#                     if not created:
+#                         cart_item.quantity += quantity
+#                         cart_item.save()
+#                     return JsonResponse({'status': "Product added successfully"})
+#                 else:
+#                     return JsonResponse({'status': f"Only {product_check.quantity} quantity available"})
+#             else:
+#                 return JsonResponse({'status': "No such product found"})
+#         else:
+#             return JsonResponse({'status': "Login to Continue"})
+#     return redirect('/')
+
 
 # REMOVE CART ITEM
 def remove_cart(request, product_id, cart_item_id):
@@ -120,8 +146,10 @@ def checkout(request, total=0, quantity=0, cart_items=None):
             shipping = (6 * total)/100
             grand_total = total+shipping
 
-        client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-        payment = client.order.create({'amount': int(grand_total) * 100, 'currency': 'INR', 'payment_capture': 1})
+        client = razorpay.Client(
+            auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+        payment = client.order.create(
+            {'amount': int(grand_total) * 100, 'currency': 'INR', 'payment_capture': 1})
 
     except ObjectDoesNotExist:
         pass
@@ -163,6 +191,7 @@ def wishlist(request):
     print(products, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
 
     return render(request, 'User/wishlist.html', {'products': products})
+
 
 @login_required(login_url='Login')
 def delete_from_wishlist(request, product_id):

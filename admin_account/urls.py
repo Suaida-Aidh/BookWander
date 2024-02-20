@@ -42,22 +42,6 @@ urlpatterns = [
     path('export_csv/<str:start_date>/<str:end_date>/', views.export_csv, name='export_csv'),
     path('pdf/<str:start_date>/<str:end_date>/',views.pdf , name='pdf'),
 
-         
-    # path('coupon',views.coupon,name='coupon'),
-    # path('add_coupon',views.add_coupon,name='add_coupon'),
-    # path('edit_coupon/<int:coupon_id>/',views.edit_coupon,name='edit_coupon'), 
-    # path('coupon_delete/<int:coupon_id>/',views.coupon_delete,name='coupon_delete'),
-    # path('coupon_undelete/<int:coupon_id>/',views.coupon_undelete,name='coupon_undelete'),
-    
-
-
-    path('offer',views.offer,name='offer'),
-    path('add_offer',views.add_offer,name='add_offer'),
-    path('edit_offer/<int:offer_id>/',views.edit_offer,name='edit_offer'), 
-    path('offer_delete/<int:offer_id>/', views.offer_delete, name='offer_delete'),
-    path('offer_undelete/<int:offer_id>/', views.offer_undelete, name='offer_undelete'),
-
-
     path('author_management/', views.author_management, name="author_management"),
     path('add_author/', views.add_author, name='add_author'),
     path('edit_author/<int:authors_id>/', views.edit_author, name="edit_author"),

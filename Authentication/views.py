@@ -179,6 +179,9 @@ def user_profile(request):
     }
 
     return render(request, 'User/user_profile.html', context)
+
+
+
 # @login_required(login_url='signin')
 # def user_profile(request):
 #     if request.method == 'POST':

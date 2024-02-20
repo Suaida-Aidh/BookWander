@@ -1,314 +1,32 @@
-<!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
-<!------ Include the above in your HEAD tag ---------->
-
-<!-- <div class="container emp-profile">
-    <form method="post">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="profile-img">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog"
-                        alt="" />
-                    <div class="file btn btn-lg btn-primary">
-                        Change Photo
-                        <input type="file" name="file" />
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="profile-head">
-                    <h5>
-                        Kshiti Ghelani
-                    </h5>
-                    <h6>
-                        Web Developer and Designer
-                    </h6>
-                    <p class="proile-rating">RANKINGS : <span>8/10</span></p>
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                                aria-controls="home" aria-selected="true">About</a>
-                        </li>
-
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-md-2">
-                <a href="" class="wishlist-btn">Edit Profile<i class="fas fa-shopping-cart"></i></a>
-
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="profile-work">
-                    <p>WORK LINK</p>
-                    <a href="">Website Link</a><br />
-                    <a href="">Bootsnipp Profile</a><br />
-                    <a href="">Bootply Profile</a>
-                    <p>SKILLS</p>
-                    <a href="">Web Designer</a><br />
-                    <a href="">Web Developer</a><br />
-                    <a href="">WordPress</a><br />
-                    <a href="">WooCommerce</a><br />
-                    <a href="">PHP, .Net</a><br />
-                </div>
-            </div>
-            <div class="col-md-8">
-                <div class="tab-content profile-tab" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>User Id</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Kshiti123</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Name</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Kshiti Ghelani</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Email</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>kshitighelani@gmail.com</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Phone</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>123 456 7890</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Profession</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Web Developer and Designer</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Experience</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Expert</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Hourly Rate</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>10$/hr</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Total Projects</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>230</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>English Level</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Expert</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Availability</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>6 months</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label>Your Bio</label><br />
-                                <p>Your detail description</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-
-
-
-
-
-
-
-<style>
-    body {
-        background: #d48748;
-    }
-
-    .emp-profile {
-        padding: 3%;
-        margin-top: 3%;
-        margin-bottom: 3%;
-        border-radius: 0.5rem;
-        background: #fff;
-    }
-
-    .profile-img {
-        text-align: center;
-    }
-
-    .profile-img img {
-        width: 70%;
-        height: 100%;
-    }
-
-    .profile-img .file {
-        position: relative;
-        overflow: hidden;
-        margin-top: -20%;
-        width: 70%;
-        border: none;
-        border-radius: 0;
-        font-size: 15px;
-        background: #212529b8;
-    }
-
-    .profile-img .file input {
-        position: absolute;
-        opacity: 0;
-        right: 0;
-        top: 0;
-    }
-
-    .profile-head h5 {
-        color: #333;
-    }
-
-    .profile-head h6 {
-        color: #0062cc;
-    }
-
-    .profile-edit-btn {
-        border: none;
-        border-radius: 1.5rem;
-        width: 70%;
-        padding: 2%;
-        font-weight: 600;
-        color: #6c757d;
-        cursor: pointer;
-    }
-
-    .proile-rating {
-        font-size: 12px;
-        color: #818182;
-        margin-top: 5%;
-    }
-
-    .proile-rating span {
-        color: #495057;
-        font-size: 15px;
-        font-weight: 600;
-    }
-
-    .profile-head .nav-tabs {
-        margin-bottom: 5%;
-    }
-
-    .profile-head .nav-tabs .nav-link {
-        font-weight: 600;
-        border: none;
-    }
-
-    .profile-head .nav-tabs .nav-link.active {
-        border: none;
-        border-bottom: 2px solid #0062cc;
-    }
-
-    .profile-work {
-        padding: 14%;
-        margin-top: -15%;
-    }
-
-    .profile-work p {
-        font-size: 12px;
-        color: #818182;
-        font-weight: 600;
-        margin-top: 10%;
-    }
-
-    .profile-work a {
-        text-decoration: none;
-        color: #495057;
-        font-weight: 600;
-        font-size: 14px;
-    }
-
-    .profile-work ul {
-        list-style: none;
-    }
-
-    .profile-tab label {
-        font-weight: 600;
-    }
-
-    .profile-tab p {
-        font-weight: 600;
-        color: #0062cc;
-    }
-
-
-    a.boxed-btn,
-    a.bordered-btn,
-    a.wishlist-btn {
-        border-radius: 50px;
-    }
-
-    a.wishlist-btn {
-        -webkit-transition: 0.3s;
-        -o-transition: 0.3s;
-        transition: 0.3s;
-    }
-
-    a.wishlist-btn:hover {
-        background-color: #F28123;
-        color: #fff;
-
-    }
-
-    a.wishlist-btn {
-        font-family: 'Poppins', sans-serif;
-        display: inline-block;
-        background-color: #051922;
-        color: #F28123;
-        padding: 10px 20px;
-    }
-</style> -->
-
 {% extends 'base.html' %} {% load static %} {% block content %}
 
 <style>
     .orange-text {
         font-weight: bold;
         /* You can adjust the font weight here */
+    }
+</style>
+
+<style>
+    /* Define the styles for the wallet card */
+    .wallet-card {
+        width: 400px; /* Set the width of the card */
+        padding: 100px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Style for the header */
+    .wallet-card h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    /* Style for the wallet details */
+    .wallet-card p {
+        font-size: 16px;
+        margin-bottom: 8px;
     }
 </style>
 
@@ -325,6 +43,21 @@
                         <li class="breadcrumb-item" aria-current="page"><a href="">User
                                 Profile</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Add Address</li>
+                        <li style="margin-left: 70%;">
+                            <input type="checkbox" id="popup-toggle" style="display: none;">
+
+                            <!-- Overlay -->
+                            <div class="overlay"></div>
+
+                            <!-- Popup Card -->
+                            <div class="wallet-card">
+                                <label for="popup-toggle" class="popup-close">&times;</label>
+                                
+                            </div>
+
+                            <!-- Button to trigger popup -->
+                            <label for="popup-toggle" class="btn btn-primary"> <i class="fas fa-wallet"></i></label>
+                        </li>
                     </ol>
                 </nav>
             </div>
@@ -342,7 +75,7 @@
                             class="rounded-circle img-fluid" style="width: 150px;">
                         {% endif %}
                         <h5 class="my-3">{{ user.username | capfirst }}</h5>
-                        
+
                     </div>
                 </div>
             </div>
@@ -389,14 +122,14 @@
                                     <h4>{{ orders_count }}</h4>
                                 </div>
                                 <div class="text-center">
-                                    <a href="{% url 'cart' %}" class="boxed-btn"> View </a>
+                                    <a href="{% url 'myorder' %}" class="boxed-btn"> View </a>
                                     <a href="{% url 'signout' %}" class="boxed-btn">Signout</a>
                                 </div>
-                                
+
                                 <div class="text-center">
                                     <a href="{% url 'shop' %}" class="wishlist-btn mt-3">Go back to shopping</a>
 
-                                    
+
                                 </div>
                                 <!-- <div class="text-center">
                                     <form method="post" enctype="multipart/form-data">
@@ -411,8 +144,9 @@
 
 
                         </div>
-                        
-                        <a href="{% url 'edit_profile' %}" class="btn btn-dark py-2 mb-4 mt-4 fw-bold w-100">Edit Address</a>
+
+                        <a href="{% url 'edit_profile' %}" class="btn btn-dark py-2 mb-4 mt-4 fw-bold w-100">Edit
+                            Address</a>
                     </div>
 
                 </form>
@@ -422,8 +156,50 @@
 
 
 
+<div class="tab-pane fade" id="wallet">
+                                       
+    <div class="row">
+        <div class="col-md-6 mb-sm--20">
+            <div class="text-block">
+                <!-- <h4 class="mb--20">Wallet Amount</h4> -->
+                <!-- {% for user_wallet in user_wallets %}
+                    User: {{ user_wallet.user }}, Wallet Amount: {{ user_wallet.wallet_amount }}<br>
+                {% endfor %} -->
+                
+               
+                 
+                {% for user_wallet in wallet %}
+                
+                <p>Wallet Amount: ${{ user_wallet.wallet_amount }}</p>
+            
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Date & Time</th>
+                            
+                            <th scope="col">Transaction Type</th>
+                            <th scope="col">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in user_wallet.transactions.all %}
+                            <tr>
+                                <td>{{ transaction.date_added }}</td>
+                                <td>{{ transaction.transaction_type }}</td>
+                                <td>${{ transaction.amount }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="fade show active"><p><a href="{% url 'user:shop' %}">You Can Purchase Or Redeem</a>>
+                </p></div>
+               {% endfor %}
 
-
+            </div>
+        </div>
+        
+    </div>
+</div>
 
 
 
