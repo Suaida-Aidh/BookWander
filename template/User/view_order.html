@@ -2,14 +2,9 @@
 {% load static%}
 {% block content %}
 
-
-
 <div class="container my-3">
-
   <div class="row">
-
     <div class="col-md-12" style="margin-top: px;">
-
       <div class="card shadow">
         <div class="col-lg-8 offset-lg-2 text-center" style="margin-top: 20px;">
           <div class="section-title">
@@ -17,9 +12,6 @@
 
           </div>
         </div>
-        <!-- <div class="card-header">
-          <h3>View order</h3>
-        </div> -->
         <div class="card-body">
           <div class="row">
             <div class="col-md-6">
@@ -27,7 +19,6 @@
               <hr>
               <label class="mt-2"> Name</label>
               <div class="border p-1 ">{{order.first_name}} {{ order.last_name }}</div>
-
               <label class="mt-2">Email</label>
               <div class="border p-1">{{order.email}}</div>
               <label class="mt-2">Phone Number</label>
@@ -49,9 +40,9 @@
                     <th scope="col">Quantity</th>
                     <th scope="col">Price</th>
                     <th scope="col"></th>
-
                   </tr>
                 </thead>
+                
                 <tbody>
                   {% for item in orderitems %}
                   <tr>
@@ -87,6 +78,7 @@
                   {% endfor %}
                 </tbody>
               </table>
+
               <hr>
               <div>
                 <h5 class="d-flex align-end">Grand Total : ₹{{order.total_price}}</h5><br>
@@ -116,9 +108,5 @@
     </div>
   </div>
 </div>
-
-<!-- SECOND ONE  -->
-
-
 
 {% endblock %}

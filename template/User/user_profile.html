@@ -1,39 +1,7 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
 
-<style>
-    .orange-text {
-        font-weight: bold;
-        /* You can adjust the font weight here */
-    }
-</style>
-
-<style>
-    /* Define the styles for the wallet card */
-    .wallet-card {
-        width: 400px; /* Set the width of the card */
-        padding: 100px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Style for the header */
-    .wallet-card h1 {
-        font-size: 24px;
-        margin-bottom: 10px;
-    }
-
-    /* Style for the wallet details */
-    .wallet-card p {
-        font-size: 16px;
-        margin-bottom: 8px;
-    }
-</style>
-
-
 <section style="background-color: #eee;" class="mt-5">
     <div class="container py-5">
-
         <!--Breadcrumb-->
         <div class="row">
             <div class="col">
@@ -43,21 +11,54 @@
                         <li class="breadcrumb-item" aria-current="page"><a href="">User
                                 Profile</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Add Address</li>
+                        <!-- WALLET SECTION ____________________________________________________________ -->
                         <li style="margin-left: 70%;">
                             <input type="checkbox" id="popup-toggle" style="display: none;">
-
                             <!-- Overlay -->
                             <div class="overlay"></div>
-
                             <!-- Popup Card -->
                             <div class="wallet-card">
+                                <h3 style="margin-top: 5%;"><span class="orange-text">Your</span> WALLET</h3>
+                                <h4>{{user.first_name}},</h4>
                                 <label for="popup-toggle" class="popup-close">&times;</label>
-                                
-                            </div>
 
+                                
+
+                                {% if wallet %}
+                                <h4>Wallet Amount: ${{ wallet.balance }}</h4>
+                                {% else %}
+                                <p>No wallet found.</p>
+                                {% endif %}
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Date & Time</th>
+                                            <th scope="col">Transaction Type</th>
+                                            <th scope="col">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if transactions %}
+                                        {% for transaction in transactions %}
+                                        
+                                        <tr>
+                                            <td>{{ transaction.date_added }}</td>
+                                            <td>{{ transaction.transaction_type }}</td>
+                                            <td>${{ transaction.amount }}</td>
+                                        </tr>
+
+                                        {% endfor %}
+                                        {% else %}
+                                        <p>No transactions found.</p>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
                             <!-- Button to trigger popup -->
                             <label for="popup-toggle" class="btn btn-primary"> <i class="fas fa-wallet"></i></label>
+
                         </li>
+                        <!-- END WALLET SECTION _____________________________________________________________________ -->
                     </ol>
                 </nav>
             </div>
@@ -100,27 +101,21 @@
                                     : {{user.phone_number}}</div>
 
                                 <div><label class="orange-text">City</label>
-                                    : {{user.city}}</div>
-
-
+                                    : {{userprofile.city}}</div>
 
                                 <div><label class="orange-text">State</label>
-                                    : {{user.state}}</div>
+                                    : {{userprofile.state}}</div>
 
                                 <div><label class="orange-text">Country</label>
-                                    : {{user.country}}</div>
-
-
-
-
+                                    : {{userprofile.country}}</div>
 
                             </div>
-
                             <div class="col-md-6">
                                 <div class="text-center">
                                     <label class="orange-text">Total Orders</label>
                                     <h4>{{ orders_count }}</h4>
                                 </div>
+
                                 <div class="text-center">
                                     <a href="{% url 'myorder' %}" class="boxed-btn"> View </a>
                                     <a href="{% url 'signout' %}" class="boxed-btn">Signout</a>
@@ -128,79 +123,15 @@
 
                                 <div class="text-center">
                                     <a href="{% url 'shop' %}" class="wishlist-btn mt-3">Go back to shopping</a>
-
-
                                 </div>
-                                <!-- <div class="text-center">
-                                    <form method="post" enctype="multipart/form-data">
-                                        {% csrf_token %}
-                                        
-                                        <button type="submit" class="btn wishlist-btn mt-2">Upload Picture</button>
-                                        <input type="file" name="profile_picture">
-                                    </form>
-                                </div> -->
-
                             </div>
-
-
                         </div>
-
                         <a href="{% url 'edit_profile' %}" class="btn btn-dark py-2 mb-4 mt-4 fw-bold w-100">Edit
                             Address</a>
                     </div>
-
                 </form>
             </div>
         </div>
 </section>
-
-
-
-<div class="tab-pane fade" id="wallet">
-                                       
-    <div class="row">
-        <div class="col-md-6 mb-sm--20">
-            <div class="text-block">
-                <!-- <h4 class="mb--20">Wallet Amount</h4> -->
-                <!-- {% for user_wallet in user_wallets %}
-                    User: {{ user_wallet.user }}, Wallet Amount: {{ user_wallet.wallet_amount }}<br>
-                {% endfor %} -->
-                
-               
-                 
-                {% for user_wallet in wallet %}
-                
-                <p>Wallet Amount: ${{ user_wallet.wallet_amount }}</p>
-            
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Date & Time</th>
-                            
-                            <th scope="col">Transaction Type</th>
-                            <th scope="col">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for transaction in user_wallet.transactions.all %}
-                            <tr>
-                                <td>{{ transaction.date_added }}</td>
-                                <td>{{ transaction.transaction_type }}</td>
-                                <td>${{ transaction.amount }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <div class="fade show active"><p><a href="{% url 'user:shop' %}">You Can Purchase Or Redeem</a>>
-                </p></div>
-               {% endfor %}
-
-            </div>
-        </div>
-        
-    </div>
-</div>
-
-
 
 {% endblock content %}

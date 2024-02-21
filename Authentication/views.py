@@ -8,48 +8,37 @@ from django.contrib.auth import login
 from .models import Account
 from .forms import UserForm, UserProfileForm
 from order.models import Profile
-
-
-# VERIFICATION IMPORTS
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
-
-
 from . models import UserProfile
-from order.models import Order
+from order.models import Order, Wallet, Transaction
 from store.models import Product
+from django.http import Http404
 
 
 # Create your views here.
 
 # HOME PAGE
 def Home(request):
-
     products = Product.objects.all().filter(
         is_available=True).order_by('-created_date')
-
     products_count = products.count()
-
     context = {
         'products': products,
     }
-
     return render(request, 'User/home.html', context)
 
+
 # ABOUT PAGE
-
-
 def about(request):
-
     return render(request, 'User/about.html')
 
+
 # CONTACT PAGE
-
-
 def contact(request):
     print('aaaaaaaaaaaaaaaaaaaa')
     return render(request, 'User/contact.html')
@@ -162,116 +151,37 @@ def user_profile(request):
     # Get or create user profile
     userprofile, created = UserProfile.objects.get_or_create(user=request.user)
 
-    if request.method == 'POST':
-        profile_form = UserProfileForm(
-            request.POST, request.FILES, instance=userprofile)
-        if profile_form.is_valid():
-            profile_form.save()
-            # Redirect to the same page after successful upload
-            return redirect('user_profile')
-    else:
-        profile_form = UserProfileForm(instance=userprofile)
+    try:
+        wallet = Wallet.objects.get(user=request.user)
+        transactions = Transaction.objects.filter(wallet=wallet)
+        print(wallet.balance)
+    except Wallet.DoesNotExist:
+        # Handle the case where the wallet doesn't exist for the user
+        wallet = None
+        transactions = []
 
     context = {
         'orders_count': orders_count,
         'userprofile': userprofile,
-        'profile_form': profile_form
+        'wallet': wallet,
+        'transactions': transactions,
     }
-
     return render(request, 'User/user_profile.html', context)
 
 
-
-# @login_required(login_url='signin')
-# def user_profile(request):
-#     if request.method == 'POST':
-#         # Retrieve data from the request
-#         first_name = request.POST.get('first_name')
-#         last_name = request.POST.get('last_name')
-
-#         country = request.POST.get('country')
-
-
-#         state = request.POST.get('state')
-#         phone = request.POST.get('phone')
-#         email = request.POST.get('email')
-
-    # Perform validation here
-    # if not first_name or not last_name or not email:
-    #     messages.error(request, 'Please fill in required fields (First Name, Last Name, Email)')
-    # elif len(phone) < 10:
-    #     messages.error(request, 'Phone number must be at least 10 digits long')
-    # else:
-    # Data is valid; create a new Profile object and save it
-    # address = Profile(
-    # user=request.user,  # Assuming user is associated with the logged-in user
-    #     firstname=first_name,
-    #     lastname=last_name,
-
-    #     country=country,
-
-    #     state=state,
-    #     phone=phone,
-    #     email=email
-    # )
-    # address.save()
-    # messages.success(request, 'Address Added Successfully')
-    # Redirect to a success page
-
-    # Retrieve the user's address data
-    # user_profile = Profile.objects.filter(user=request.user.id)
-
-    # Call the order_history function to get user order history
-    # user_order = Order.objects.filter(user=request.user).order_by('-created_at')
-    # orders = Order.objects.filter(user=request.user).order_by('-created_at')
-    # orders_count = orders.count()
-
-    # order_details = []
-
-    # for order in user_order:
-    # Get the products associated with the current order
-    # products = order.product.all()
-
-    # Check if any product in this order has an offer
-    # has_offer = any(product.product_offer is not None for product in products)
-
-    # order details
-    # order_detail = {
-
-    #     'order': order,
-    #     'products': products,
-    #     'has_offer': has_offer,
-    # }
-
-    # order_details.append(order_detail)
-
-    # Retrieve the user's wallet data
-
-    # context with the user's address data, order history, and wallet data
-    # context = {
-    #     'orders_count': orders_count,
-    #     'user_profile': user_profile,
-    #     'user_order': user_order,
-    #     'order_details': order_details,
-
-    # }
-
-    # return render(request, 'User/user_profile.html', context)
-
-
 # EDIT PROFILE CONDITION
-
 @login_required(login_url='signin')
 def edit_profile(request):
     userprofile, created = UserProfile.objects.get_or_create(user=request.user)
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
-        profile_form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+        profile_form = UserProfileForm(
+            request.POST, request.FILES, instance=userprofile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
             messages.success(request, 'Your profile has been updated')
-            return redirect('edit_profile')  # Redirect to the same page after update
+            return redirect('user_profile')
     else:
         user_form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=userprofile)
@@ -280,4 +190,14 @@ def edit_profile(request):
         'profile_form': profile_form,
         'userprofile': userprofile,
     }
+
     return render(request, 'User/edit_profile.html', context)
+
+
+# <div class="wallet-card">
+#                                 <label for="popup-toggle" class="popup-close">&times;</label>
+#                                 <h5>Wallet Balance : {{ wallet.balance }}</h5>
+#                             </div>
+
+
+#

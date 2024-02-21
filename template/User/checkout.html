@@ -1,9 +1,6 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
 {% include 'include/navbar.html' %}
 
-
-
-
 <!-- breadcrumb-section -->
 <div class="breadcrumb-section cart-bg">
     <div class="container">
@@ -22,22 +19,16 @@
 <!-- check out section -->
 <div class="checkout-section mt-150 mb-150">
     <div class="container" style="margin-top: 5%;">
-
         <form id="checkoutForm" action="{% url 'place_order' %}" method="POST">
-
             {% csrf_token %}
             <div class="row">
-
                 <div class="col-lg-8">
                     <div class="checkout-accordion-wrap">
                         <div class="accordion" id="accordionExample">
-
                             <div class="card single-accordion">
                                 <div class="card-header d-flex justify-content-center" id="headingOne"
                                     style="margin-top: 8%;">
-
                                     <h3><span class="orange-text">Billing</span> Address</h3>
-
                                 </div>
 
                                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
@@ -55,12 +46,10 @@
 
                                             <p><input type="email" name="email" placeholder="Email" class="form-control"
                                                     required value="{{ request.user.email }}"></p>
-
                                             <p><input type="text" name="phone" placeholder="Phone Number"
                                                     class="form-control" required
                                                     value="{{ request.user.phone_number }}">
                                             </p>
-
 
                                             <p><input type="text" name="address" placeholder="Address"
                                                     class="form-control" required value="{{ userprofile.address }}"></p>
@@ -86,15 +75,9 @@
                                     </div>
                                 </div>
                             </div>
-
-
-
                         </div>
-
                     </div>
                 </div>
-
-
 
                 <div class="col-lg-4">
                     <div class="card" style="max-width: 300px;">
@@ -103,7 +86,6 @@
                                 <thead>
                                     <tr>
                                         <th><span class="orange-text">Order </span> Details</th>
-                                     
                                         <th>Price</th>
                                     </tr>
                                 </thead>
@@ -135,20 +117,15 @@
                                 Order</button>
                             <input type="hidden" value="Razorpay" name="payment_mode">
                             <button class="btn wishlist-btn btn-block payWithRazorpay mt-2">Pay with Razorpay</button>
-
-                            <a href="{% url 'shop' %}" style="color: black;"> <span class="orange-text">Click </span>Continue Shopping</a>
-
+                            <a href="{% url 'shop' %}" style="color: black;"> <span class="orange-text">Click
+                                </span>Continue Shopping</a>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </form>
-
     </div>
 </div>
-
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="{% static 'j/checkout.js' %}"></script>

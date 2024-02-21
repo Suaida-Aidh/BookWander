@@ -3,8 +3,6 @@
 {% block content %}
 {% include 'include/navbar.html' %}
 
-
-
 <!-- breadcrumb-section -->
 <div class="breadcrumb-section orders-bg">
   <div class="container">
@@ -49,7 +47,6 @@
                 <th scope="col">Order Date</th>
                 <th scope="col">Tracking Number</th>
                 <th scope="col">Status</th>
-
                 <th scope="col">Total Price</th>
                 <th scope="col">Action</th>
               </tr>
@@ -93,14 +90,9 @@
                   <p class="mb-0" style="font-weight: 500;">₹ {{ order_item.price }}</p>
                 </td>
 
-
-
                 <td class="align-middle">
                   <a href="{% url 'view_order' order.tracking_no %}" id="view" class="wishlist-btn">view</a>
                 </td>
-
-
-
 
               </tr>
               {% endfor %}
@@ -108,7 +100,6 @@
             </tbody>
           </table>
         </div>
-
 
         <div class="row">
           <div class="col-lg-12 text-center">
@@ -141,10 +132,5 @@
     </div>
   </div>
 </div>
-
-
 <!-- End Pagination -->
-
-
-
 {% endblock %}

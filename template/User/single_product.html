@@ -1,8 +1,6 @@
 {% extends 'base.html' %} {% load static %} {% block content %} {% include 'include/navbar.html' %}
 
-
 <!-- breadcrumb-section -->
-
 <div class="breadcrumb-section single-product-bg">
     <div class="container">
         <div class="row">
@@ -19,7 +17,6 @@
 <!-- single product -->
 <div class="single-product mt-150 mb-150" style="margin-top: 8%;">
     <div class="container">
-        <!-- <div class="card shadow product_data"> -->
         <div class="row">
             <div class="col-lg-4 col-md-6 text-center strawberry mt-4 mt-md-0 mt-lg-0 ">
                 <div class="card shadow product-card" style="width:400px; height:500px;">
@@ -31,61 +28,25 @@
                     </div>
                 </div>
             </div>
-
-
+            
             <div class="col-md-8 mt-5 mt-md-0 mt-lg-0">
                 <div class="single-product-content">
                     <h3>{{ single_product.product_name }}</h3>
                     <p class="single-product-pricing"><span>Price</span> ${{ single_product.price }}</p>
                     <div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta sint dignissimos, rem
-                            commodi
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta sint dignissimos, rem commodi
                             cum
                             voluptatem quae reprehenderit repudiandae ea tempora incidunt ipsa, quisquam animi
                             perferendis
                             eos eum modi! Tempora, earum.</p>
                     </div>
-
                     <p>{{ single_product.description }}</p>
                     <div class="single-product-form">
                         <form action="{% url 'add_cart' single_product.id %}" id="addToCartForm">
                             <!-- <div><input type="number" id="productQuantity" placeholder="0" value="0"></div> -->
-
-
                             <a href="{% url 'add_cart' single_product.id %}" class="cart-btn"> Add to <i
                                     class="fas fa-shopping-cart"></i></a>
-
-
                         </form>
-
-                        <!-- <div class="row mt-2">
-                                <div class="col-md-3">
-                                    {% csrf_token %}
-                                    <input type="hidden" value="{{ product.id }}" class="prod_id">
-                                    <label for="Quantity">Quantity</label>
-                                    <div class="input-group text-center mb-3" style="width: 130px;">
-                                        <button class="input-group-text decrement-btn">-</button>
-                                        <input type="text" name="quantity" class="form-control qty-input text-center"
-                                            value="1">
-                                        <button class="input-group-text increment-btn">+</button>
-                                    </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <button type="button" class="btn btn-primary me-3 addToCartBtn float-start">Add to
-                                        Cart <i class="fa fa-shopping-cart"></i></button>
-                                </div>
-                            </div>
- -->
-
-
-
-
-
-
-
-
-
-
                         <div class="size-204 flex-w flex-m respon6-next d-flex justify-content-between ">
                             {% if user.is_authenticated %}
                             {% if wishlist %}
@@ -104,23 +65,15 @@
                             {% endif %}
                             {% endif %}
                         </div>
-
-
                     </div>
-                    <!-- <a href="{% url 'add_cart' single_product.id %}?quantity=" id="addToCartBtn" class="btn btn-primary">
-                            <i class="fas fa-shopping-cart"></i> Add to Cart
-                        </a> -->
-
                     <p><strong>Category: </strong>{{ single_product.category.category_name }}</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- </div> -->
+</div>
 <!-- end single product -->
-
-
 
 
 

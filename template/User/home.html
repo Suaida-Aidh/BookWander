@@ -1,8 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-
-
-
 {% block content %}
 {% include 'include/navbar.html' %}
 
@@ -16,7 +13,6 @@
                         <p class="subtitle">GIVE THE BEST SELLING BOOKS ABOUT NEXT-LEVEL FRIENDSHIP </p>
                         <h1>GO TO BUY</h1>
                         <div class="hero-btns">
-
                             {% if user.is_superadmin %}
                             <a href="{% url 'admin_dashboard' %}" class="bordered-btn">Admin Panel</a>
                             {% endif %}
@@ -27,7 +23,6 @@
                             <a href="login\" class="boxed-btn">Login</a>
                             <a href="register\" class="bordered-btn">Sign up</a>
                             {% endif %}
-
                         </div>
                     </div>
                 </div>
@@ -137,6 +132,4 @@
 <!-- end advertisement section -->
 
 {% include 'include/footer.html' %}
-</body>
-
 {% endblock content %}

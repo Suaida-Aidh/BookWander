@@ -10,7 +10,6 @@
                             Home
                         </a>
                     </div><!--//col-->
-
                     <div class="col-auto">
                         <a id="sidepanel-toggler" class="sidepanel-toggler d-inline-block d-xl-none" href="#">
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"
@@ -21,11 +20,6 @@
                             </svg>
                         </a>
                     </div><!--//col-->
-
-
-
-
-
                 </div><!--//app-utilities-->
             </div><!--//row-->
         </div><!--//app-header-content-->
@@ -39,9 +33,7 @@
                 <a class="app-logo" href=""><img class="logo-icon me-2"
                         src="{% static 'admin_account/images/app-logo.svg' %}" alt="logo"><span
                         class="logo-text">PORTAL</span></a>
-
             </div><!--//app-branding-->
-
             <nav id="app-nav-main" class="app-nav app-nav-main flex-grow-1">
                 <ul class="app-menu list-unstyled accordion" id="menu-accordion">
                     <li class="nav-item">
@@ -69,9 +61,6 @@
                         </a>
                     </li> -->
                     
-
-
-
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'product_list' %}">
                             <span class="nav-icon">
@@ -81,7 +70,6 @@
                         </a><!--//nav-link-->
                     </li>
                     
-
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'category_management' %}">
                             <span class="nav-icon">
@@ -91,7 +79,6 @@
                         </a><!--//nav-link-->
                     </li>
                     
-
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'order_management' %}">
                             <span class="nav-icon">
@@ -100,8 +87,6 @@
                             <span class="nav-link-text">Orders</span>
                         </a>
                     </li>
-                    
-
 
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'user_management' %}">
@@ -116,33 +101,12 @@
                                 </svg>
                             </span>
                             <span class="nav-link-text">Users</span>
-                        </a><!--//nav-link-->
-                    </li><!--//nav-item-->
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'author_management' %}">
-                            <span class="nav-icon">
-                                <!-- Custom coupon-themed badge icon -->
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-badge"
-                                    fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M2 0.5a1 1 0 0 0-1 1v13.793l6.854-6.853a1 1 0 0 1 1.32-.084l1.166 1.165 6.854-6.853V14.5a1 1 0 0 0 2 0V1.5a1 1 0 0 0-1-1H2z" />
-                                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#fff"
-                                        font-size="8">
-                                        Author
-                                    </text>
-                                </svg>
-                            </span>
-                            <span class="nav-link-text">Author</span>
-                        </a><!--//nav-link-->
-                    </li><!--//nav-item-->
-
-
+                        </a>
+                    </li>
 
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'multiple_image_management' %}">
                             <span class="nav-icon">
-                                <!-- SVG for a stack of photos -->
                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-images"
                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <rect width="4" height="3" x="1" y="2" rx=".5" ry=".5" />
@@ -157,32 +121,13 @@
                                 </svg>
                             </span>
                             <span class="nav-link-text">Multiple image</span>
-                        </a><!--//nav-link-->
-                    </li><!--//nav-item-->
-
-
-                    <li class="nav-item">
-                        <!--//FontAwesome Icon: https://fontawesome.com/icons/star?style=solid -->
-                        <a class="nav-link" href="{% url 'offer' %}">
-                            <span class="nav-icon">
-                                <i class="fas fa-star"></i>
-                            </span>
-                            <span class="nav-link-text">Offer</span>
-                        </a><!--//nav-link-->
-                    </li><!--//nav-item-->
-
-
-
-
-
-                </ul><!--//app-menu-->
-            </nav><!--//app-nav-->
-
-
-        </div><!--//sidepanel-inner-->
-    </div><!--//app-sidepanel-->
-
-</header><!--//app-header-->
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>
 
 
 

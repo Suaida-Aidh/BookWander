@@ -103,7 +103,6 @@ def add_cart(request, product_id):
 # REMOVE CART ITEM
 def remove_cart(request, product_id, cart_item_id):
     product = get_object_or_404(Product, id=product_id)
-
     try:
         if request.user.is_authenticated:
             cart_item = CartItem.objects.get(
@@ -115,6 +114,8 @@ def remove_cart(request, product_id, cart_item_id):
 
         if cart_item.quantity > 1:
             cart_item.quantity -= 1
+            print("helooo carttttttttt qunatityyy")
+            print(cart_item.quantity)
             cart_item.save()
         else:
             cart_item.delete()
@@ -164,6 +165,8 @@ def checkout(request, total=0, quantity=0, cart_items=None):
     }
 
     return render(request, 'User/checkout.html', context)
+
+
 
 
 # WISHLIST

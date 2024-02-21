@@ -3,11 +3,8 @@
 {% block content %}
 {% include 'include/navbar.html' %}
 
-
-
 <!-- breadcrumb-section -->
 <div class="breadcrumb-section wishlist-bg " class="container">
-
     <div class="row">
         <div class="col-md-8 offset-md-2 text-center">
             <div class="breadcrumb-text">
@@ -16,12 +13,11 @@
             </div>
         </div>
     </div>
-
 </div>
 <!-- end breadcrumb section -->
 
 
-
+<!-- WISHLIST PORDUCTS -->
 <div class="cart-section mt-150 mb-150">
     <div class="container h-100 py-5">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -34,7 +30,6 @@
                             <tr>
                                 <th scope="col" class="h5">Wishlist Bag</th>
                                 <th scope="col">Category</th>
-
                                 <th scope="col">Price</th>
                             </tr>
                         </thead>
@@ -60,21 +55,16 @@
                                     <p class="mb-0" style="font-weight: 500;">${{product.product.price}}</p>
                                 </td>
 
-
-
                                 <td class="align-middle">
                                     <a href="{% url 'single_product' product_slug=product.product.slug %}" id="view"
                                         class="wishlist-btn"> view</a>
                                 </td>
-
-
 
                                 <td class="align-middle">
                                     <a href="{% url 'delete_from_wishlist' product_id=product.product.id %}"
                                         id="delete_from_wishlist" class="cart-btn">X</a>
                                 </td>
                             </tr>
-
                             {% endfor %}
                         </tbody>
                     </table>
@@ -84,7 +74,6 @@
                     <h3>Your Wishlist Is <span class="orange-text">Empty </span></h3>
                     <a href="{% url 'shop' %}" class="wishlist-btn mt-3">Go back to shopping</a>
                 </div>
-
                 {% endif %}
             </div>
         </div>

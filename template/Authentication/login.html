@@ -36,6 +36,8 @@
                 {% endfor %}
             </ul>
             {% endif %}
+           
+          
 
             <form action="{% url 'Login' %}" method="POST">
               {% csrf_token %}
@@ -75,6 +77,8 @@
               <!-- Register buttons -->
               <div class="text-center mt-4">
                 <p>Don't have an account?<a href="{% url 'Register' %}" class="register-link"> Register</a></p>
+                 <!-- FORGET PASWORD -->
+                <p><a href="{% url 'password_reset' %}" class="register-link"> Forget Password</a></p>
 
               </div>
             </form>

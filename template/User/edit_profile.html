@@ -1,13 +1,6 @@
-
-
 {% extends 'base.html' %} {% load static %} {% block content %}
 
-<style>
-    .orange-text {
-        font-weight: bold;
-        /* You can adjust the font weight here */
-    }
-</style>
+
 
 
 <section style="background-color: #eee;" class="mt-5">
@@ -45,74 +38,54 @@
             </div>
 
             <div class="col-lg-8">
-                <form method="POST" action="" class="account-form" name="address_form" enctype="multipart/form-data">
-                    {% if form.error%}
-                    <div class="alert alert-primary" role="alert">
-                        Errror: Plese try agin
-                        {% endif %}
+                <form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label> First Name </label>
+                            {{user_form.first_name}}
 
-                        {% csrf_token %}
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div><label class="orange-text ">Full Name</label>
-                                    <input type="text" name="full_name" value="{{user.first_name}} {{user.last_name}}">
-                                </div>
-
-                                <div><label class="orange-text">Email</label>
-                                    <input type="email" name="email" value="{{user.email}}">
-                                </div>
-
-                                <div><label class="orange-text">Phone Number</label>
-                                    <input type="text" name="phone_number" value="{{user.phone_number}}">
-                                </div>
-
-                                <div><label class="orange-text">City</label>
-                                    <input type="text" name="city" value="{{user.city}}">
-                                </div>
-
-
-
-                                <div><label class="orange-text">State</label>
-                                    <input type="text" name="state" value="{{user.state}}">
-                                </div>
-
-                                <div><label class="orange-text">Country</label>
-                                    <input type="text" name="country" value="{{user.country}}">
-                                </div>
-
-                                
-
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="text-center">
-                                    <form method="post" enctype="multipart/form-data">
-                                        {% csrf_token %}
-
-                                        <button type="submit" class="btn wishlist-btn mt-2">Upload Picture</button>
-                                        <input type="file" name="profile_picture">
-                                    </form>
-                                </div>
-                            </div>
                         </div>
+                        <div class="form-group col-md-6">
+                            <label> Last Name </label>
+                            {{user_form.last_name}}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label> Mobile Number </label>
+                            {{user_form.phone_number}}
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label> Profile Picture </label>
+                            {{profile_form.profile_picture}}
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label> City </label>
+                            {{profile_form.city }}
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label> State </label>
+                            {{profile_form.state }}
 
-                        <button class="btn btn-dark cap btn-block py-2 mb-4 mt-4 fw-bold w-100" type="submit"
-                            onclick="submitform()">Save Changes</button>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label> Country </label>
+                            {{profile_form.country }}
+
+                        </div>
                     </div>
 
+                    <button class="btn cart-btn "> Save</button>
                 </form>
             </div>
         </div>
 </section>
 
-<script>
-    function submitform() {
-        var form = document.getElementsByName("address_form")[0];
-        form.submit();
-        from.reset();
-        return false;
-    }
-</script>
+
 
 
 

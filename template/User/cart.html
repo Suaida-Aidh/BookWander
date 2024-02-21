@@ -3,15 +3,6 @@
 {% block content %}
 {% include 'include/navbar.html' %}
 
-<style>
-    .h1 {
-        font-weight: 800;
-        /* 800 is often used for extra bold */
-        font-family: serif;
-        /* Set the font-family to serif */
-    }
-</style>
-
 <!-- breadcrumb-section -->
 <div class="breadcrumb-section cart-bg">
     <div class="container">
@@ -61,20 +52,33 @@
                             <td class="align-middle">
                                 <p class="mb-0" style="font-weight: 500;">{{cart_item.product.category}}</p>
                             </td>
-                            <!-- Quantity -->
+                            <!-- Quantity_________________________________________________________________________________________ -->
                             <td class="align-middle">
-                                <div class="d-flex flex-row">
-                                    <!-- Quantity buttons -->
-                                    <button class="btn btn-link px-2 decrement-btn">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                    <input id="form1" min="0" name="quantity" value="{{ cart_item.quantity }}" type="number" class="form-control form-control-sm quantity-input" style="width: 50px;" />
-                                    <button class="btn btn-link px-2 increment-btn">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
+                                <div class="col">
+                                    <div class="input-group input-spinner">
+                                        <div class="input-group-prepend">
+                                            <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}"
+                                                class="btn btn-light" type="button" id="button-plus"><i
+                                                    class="fa fa-minus"></i>
+                                            </a>
+                                        </div>
+                                        <input type="text" class="form-control col-4  text-center"
+                                            value="{{ cart_item.quantity }}">
+                                        <div class="input-group-append">
+                                            <form action="{% url 'add_cart' cart_item.product.id %}" method="POST">
+                                                {% csrf_token %}
+                                                {% for item in cart_item.variation.all %}
+                                                <input type="hidden" name="{{ item.variation_category | lower }}"
+                                                    value="{{ item.variation_value | capfirst }}">
+                                                {% endfor %}
+                                                <button class="btn btn-light" type="submit" id="button-minus"> <i
+                                                        class="fa fa-plus"></i> </button>
+                                            </form>
+                                        </div>
+                                    </div> <!-- input-group.// -->
                                 </div>
                             </td>
-                            
+
                             <!-- Price -->
                             <td class="align-middle">
                                 <p class="mb-0" style="font-weight: 500;">{{ cart_item.product.price }}</p>
@@ -134,50 +138,3 @@
 <!-- End Products and shipping charges section -->
 
 {% endblock content %}
-
-
-<script>
-    $(document).ready(function() {
-    // Increment quantity
-    $('.increment-btn').click(function() {
-        var input = $(this).parent().find('.quantity-input');
-        var currentValue = parseInt(input.val());
-        input.val(currentValue + 1);
-        updateQuantity(input);
-    });
-
-    // Decrement quantity
-    $('.decrement-btn').click(function() {
-        var input = $(this).parent().find('.quantity-input');
-        var currentValue = parseInt(input.val());
-        if (currentValue > 0) {
-            input.val(currentValue - 1);
-            updateQuantity(input);
-        }
-    });
-
-    // Function to update quantity via AJAX
-    function updateQuantity(input) {
-        var newValue = parseInt(input.val());
-        var itemId = input.data('item-id'); // Assuming you have an attribute to identify each item
-
-        $.ajax({
-            url: '/update_quantity', // Your server-side endpoint
-            type: 'POST',
-            data: {
-                item_id: itemId,
-                new_quantity: newValue
-            },
-            success: function(response) {
-                // Update any other elements if needed
-                console.log('Quantity updated successfully');
-            },
-            error: function(xhr, status, error) {
-                console.error('Error updating quantity:', error);
-                // Handle error scenario
-            }
-        });
-    }
-});
-
-</script>

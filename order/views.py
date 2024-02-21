@@ -158,7 +158,7 @@ def Cancel_order(request, t_no):
         # Create a transaction record for the refund
         Transaction.objects.create(wallet=wallet, transaction_type='Refund', amount=order.total_price)
 
-    return redirect('my_order')
+    return redirect('myorder')
 
 
 @never_cache
