@@ -8,6 +8,7 @@ from cart.views import _cart_id
 from django.db.models import Q
 from django.http import Http404
 from django.http import HttpResponse
+from django.db.models import Min,Max
 
 
 # Create your views here.
@@ -120,6 +121,7 @@ def search(request):
 # filter product 
 
 def filter_product(request):
+#    minMaxPrice=Pro
    pass
 
 
