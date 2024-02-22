@@ -21,76 +21,58 @@ from django.http import HttpResponse
 from fpdf import FPDF
 from django.db.models import Prefetch
 from itertools import groupby
+from .context_processor import revenue_calculator
+from django.db.models import Count
 
 
 # Create your views here.
-
 @login_required(login_url='Login')
 def dashboard(request):
-
-    orders = Order.objects.order_by('id').order_by('-id')[:10:]
-    order = Order.objects.all()
-
+    orders = Order.objects.order_by('-id')[:10]
     sales_data = OrderItem.objects.values('order__created_at__date').annotate(
         total_sale=Sum('price')).order_by('-order__created_at__date')
-    categories = [item['order__created_at__date'].strftime(
-        '%d/%m') for item in sales_data]
+    categories = [item['order__created_at__date'].strftime('%d/%m') for item in sales_data]
     sales_values = [item['total_sale'] for item in sales_data]
+
     return_data = OrderItem.objects.filter(status__in=["Return", "Cancelled"]).values(
         'order__created_at__date').annotate(total_returns=Sum('price')).order_by('-order__created_at__date')
     return_values = [item['total_returns'] for item in return_data]
-    print(return_values)
-    print(sales_values)
-    try:
-        total_sale = 0
-        order = Order.objects.all()
-        for i in order:
-            i.total_price
-            total_sale += i.total_price
-    except:
-        total_sale = 0
 
-    try:
-        total_earning = 0
-        order_ear = Order.objects.filter(status='Delivered')
-        for i in order_ear:
-            total_earning += i.total_price
-    except:
-        total_earning = 0
-    try:
-        status_delivery = Order.objects.filter(status='Delivered').count()
-        status_return = Order.objects.filter(status='Return').count()
-        status_cancel = Order.objects.filter(status='Cancelled').count()
-        total = status_delivery + status_return + status_cancel
-        status_delivery = (status_delivery/100)*total
-        status_cancel = (status_cancel/100)*total
-        status_return = (status_return/100)*total
-    except:
-        status_delivery = 0
-        status_cancel = 0
-        status_return = 0
+    total_sale = sum(order.total_price for order in Order.objects.all())
+    orders_by_date = Order.objects.values('created_at__date').annotate(order_count=Count('id')).order_by('created_at__date')
 
-    print(status_cancel)
-    print(total_sale)
-    print(total_earning)
-    print(status_return)
-    print(status_return)
-    print(sales_values)
+    total_earning = sum(order.total_price for order in Order.objects.filter(status='Delivered'))
+
+    status_delivery = Order.objects.filter(status='Delivered').count()
+    status_return = Order.objects.filter(status='Return').count()
+    status_cancel = Order.objects.filter(status='Cancelled').count()
+    total = status_delivery + status_return + status_cancel
+    status_delivery_percentage = (status_delivery / total) * 100
+    status_return_percentage = (status_return / total) * 100
+
+    dates = [item['created_at__date'].strftime('%Y-%m-%d') for item in orders_by_date]
+    order_counts = [item['order_count'] for item in orders_by_date]
+
+
+    # Call the revenue_calculator function
+    revenue_context = revenue_calculator(request)
+    revenue = revenue_context.get('revenue', 0)
+
     context = {
         'orders': orders,
         'total_sale': total_sale,
         'total_earning': total_earning,
-        'total_sale': total_sale,
-        'status_return': status_return,
+        'status_return': status_return_percentage,
         'status_cancel': status_cancel,
-        'status_delivery': status_delivery,
+        'status_delivery': status_delivery_percentage,
         'sales_values': sales_values,
         'return_values': return_values,
-        'categories': categories
+        'categories': categories,
+        'revenue': revenue,
+        'dates': dates,
+        'order_counts': order_counts
     }
     return render(request, 'Admin-temp/dashboard.html', context)
-
-
 # PRODUCT  MANAGEMENT
 @never_cache
 @login_required(login_url='signin')

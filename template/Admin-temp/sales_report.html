@@ -7,7 +7,7 @@
 
 <div style="margin-left:20%; margin-right:5%; margin-top:2%;">
     <br><br>
-    <h2 class="text-dark font-weight-bold" style="margin-left: 10px;"> Sales Report </h2>
+    <h2 class="text-dark font-weight-bold" style="margin-left: 10px;">Admin Dashboard</h2>
 
     <section class="section dashboard">
         <div class="row">
@@ -18,22 +18,48 @@
                     <div class="col-12">
                         <div class="card recent-sales overflow-auto">
                             <div class="card-body">
+
+
+                                <div class="col-xxl-4 col-md-6">
+                                    <div class="card info-card sales-card">
+
+                                        <div class="card-body">
+                                            <h5 class="card-title">Total Sales</h5>
+
+                                            <div class="d-flex align-items-center">
+                                                <div
+                                                    class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                    <i class="bi bi-cart"></i>
+                                                </div>
+                                                <div class="ps-3">
+                                                    <h6>{{sales}}</h6>
+                                                    <span class="text-primary small pt-1 fw-bold">Products</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div><!-- End Sales Card -->
+
                                 <form style="margin-left: 20%; font-size: large;" method='POST' action="">
                                     {% csrf_token %}
                                     <label for="start_date">Start Date:</label>
-                                    <input type="date" id="start-date"  name='start_date'  value="{{ sales_report.start_date }}" >
+                                    <input type="date" id="start-date" name='start_date'
+                                        value="{{ sales_report.start_date }}">
                                     <label for="end_date">End Date:</label>
-                                    <input type="date" id="end-date" name='end_date' value="{{ sales_report.end_date }}" >
+                                    <input type="date" id="end-date" name='end_date'
+                                        value="{{ sales_report.end_date }}">
                                     <button type="submit" class="btn btn-primary">Generate Report</button>
                                 </form>
 
                                 <div style="display: flex;  padding:5%; justify-content: space-evenly;">
-                                    <h4>Total Sales: ₹ {{sales_report.total_sales}}  </h4>
+                                    <h4>Total Sales: ₹ {{sales_report.total_sales}} </h4>
                                     <h4>Total Orders: {{sales_report.total_orders}} </h4>
                                 </div>
                                 <h2 style="margin-left: 40%;">Sales by Status</h2>
                                 <div>
-                                    <ul style="display: flex;justify-content: space-evenly; font-weight: bold; margin-top: 5%; ">
+                                    <ul
+                                        style="display: flex;justify-content: space-evenly; font-weight: bold; margin-top: 5%; ">
                                         <li>Pending: {{sales_report.sales_by_status.Pending}} </li>
                                         <li>Processing: {{sales_report.sales_by_status.Processing}} </li>
                                         <li>Shipped: {{sales_report.sales_by_status.Shipped}}</li>
@@ -42,15 +68,18 @@
                                         <li>Return: {{sales_report.sales_by_status.Return}}</li>
                                     </ul>
                                 </div>
-                                <h2 style="margin-top: 5%;">{% if sales_report.start_date and sales_report.end_date %}All Orders{% else %}Recent Orders{% endif %}</h2>
+                                <h2 style="margin-top: 5%;">{% if sales_report.start_date and sales_report.end_date
+                                    %}All Orders{% else %}Recent Orders{% endif %}</h2>
                                 {% if sales_report.start_date and sales_report.end_date %}
-                                <a href="{% url 'adminside:export_csv' sales_report.start_date sales_report.end_date %}" class="btn btn-success">Export as CSV</a>
-                                    Download CSV <i class="mdi mdi-file-excel" style="font-size: x-large;"></i>
-                                  </a>
-                                <a href="{% url 'adminside:pdf' sales_report.start_date sales_report.end_date %}" class="btn btn-danger" >
+                                <a href="{% url 'adminside:export_csv' sales_report.start_date sales_report.end_date %}"
+                                    class="btn btn-success">Export as CSV</a>
+                                Download CSV <i class="mdi mdi-file-excel" style="font-size: x-large;"></i>
+                                </a>
+                                <a href="{% url 'adminside:pdf' sales_report.start_date sales_report.end_date %}"
+                                    class="btn btn-danger">
                                     Download PDF <i class="mdi mdi-file-pdf" style="font-size: x-large;"></i>
-                                  </a>
-                                  {% endif %}
+                                </a>
+                                {% endif %}
 
                                 <div class="table-responsive">
                                     <table id="example" class="display nowrap mt-5 table" style="width:100%">
@@ -74,7 +103,7 @@
                                                 <td> {{i.od_status}} </td>
                                                 <td> {{i.created_at}} </td>
                                             </tr>
-                                            {%  endfor %}
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
@@ -100,11 +129,11 @@
 </div>
 
 <script>
-    setTimeout(function() {
+    setTimeout(function () {
         $('#message').fadeOut('slow');
     }, 2000);
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#example').DataTable({
             dom: 'Bfrtip',
             buttons: [

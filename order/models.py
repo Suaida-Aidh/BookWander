@@ -20,6 +20,7 @@ class Order(models.Model):
     total_price=models.FloatField(null=False)
     payment_mode=models.CharField(max_length=150,null=False)
     payment_id= models.CharField(max_length=500,null=True)
+    tax_amount = models.FloatField(default=0.0) 
     orderstatuses={
         ('Pending','Pending'),
         ('Out For Shipping','Out For Shipping'),
