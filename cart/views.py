@@ -73,31 +73,6 @@ def add_cart(request, product_id):
 
     return redirect('cart')
 
-# def add_cart(request):
-#     if request.method == 'POST':
-#         if request.user.is_authenticated:
-#             prod_id = int(request.POST.get('product_id'))
-#             product_check = Product.objects.filter(id=prod_id).first()
-#             if product_check:
-#                 quantity = int(request.POST.get('quantity'))
-#                 if product_check.quantity >= quantity:
-#                     # Check if the item already exists in the cart
-#                     cart_item, created = CartItem.objects.get_or_create(
-#                         user=request.user,
-#                         product_id=prod_id,
-#                         defaults={'quantity': quantity}
-#                     )
-#                     if not created:
-#                         cart_item.quantity += quantity
-#                         cart_item.save()
-#                     return JsonResponse({'status': "Product added successfully"})
-#                 else:
-#                     return JsonResponse({'status': f"Only {product_check.quantity} quantity available"})
-#             else:
-#                 return JsonResponse({'status': "No such product found"})
-#         else:
-#             return JsonResponse({'status': "Login to Continue"})
-#     return redirect('/')
 
 
 # REMOVE CART ITEM
@@ -212,3 +187,15 @@ def delete_from_wishlist(request, product_id):
         wishlist_item.save()
 
     return redirect('wishlist')
+
+
+
+def add_address(request):
+    if request.method == 'POST':
+        # Process the form data if it's a POST request
+        # This is where you would handle saving the address to the database
+        # You can access the submitted address data using request.POST dictionary
+        # For simplicity, let's just print the data for now
+        print(request.POST)
+       
+    return render(request, 'User/add_address.html')

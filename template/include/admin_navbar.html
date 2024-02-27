@@ -60,107 +60,126 @@
                         </a><!--//nav-link-->
                     </li><!--//nav-item-->
 
-                   
-                    
 
 
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'product_list' %}">
-                            <span class="nav-icon">
-                                <i class="fas fa-box-open"></i>
-                            </span>
-                            <span class="nav-link-text">Products</span>
-                        </a><!--//nav-link-->
-                    </li>
-                    
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'category_management' %}">
-                            <span class="nav-icon">
-                                <i class="fas fa-list"></i>
-                            </span>
-                            <span class="nav-link-text">Category</span>
-                        </a><!--//nav-link-->
-                    </li>
-                    
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'order_management' %}">
-                            <span class="nav-icon">
-                                <i class="fas fa-shopping-bag"></i>
-                            </span>
-                            <span class="nav-link-text">Orders</span>
-                        </a>
-                    </li>
-                    
-
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'user_management' %}">
-                            <span class="nav-icon">
-                                <!-- Bootstrap Icons "people" icon -->
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-people"
-                                    fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M5.5 5.5a2 2 0 1 0-4 0 2 2 0 0 0 4 0zM14 5.5a2 2 0 1 0-4 0 2 2 0 0 0 4 0zM8 11a4.5 4.5 0 0 0-3 1.5h6a4.5 4.5 0 0 0-3-1.5z" />
-                                    <path fill-rule="evenodd"
-                                        d="M8 1a6 6 0 0 1 6 6c0 1.053-.258 2.037-.71 2.88-.12.16-.276.314-.448.447a8.392 8.392 0 0 1-1.83 1.26A5.978 6.978 0 0 1 8 15a6.978 6.978 0 0 1-3.022-.667 8.392 8.392 0 0 1-1.83-1.26A2.955 2.955 0 0 1 1.71 9.88C1.259 9.037 1 8.053 1 7a6 6 0 0 1 6-6zM2.5 7a7.978 7.978 0 0 0 1.446 4.5c.19.26.417.503.67.72a5.456 5.456 0 0 0 1.823 1.104A6.996 6.996 0 0 1 2.5 7zM8 13a6.02 6.02 0 0 1-3-.798A6.02 6.02 0 0 1 2 9c0-1.616.632-3.131 1.768-4.269C4.349 3.836 6.163 3 8 3s3.652.836 4.232 2.731C13.368 5.869 14 7.384 14 9a6.02 6.02 0 0 1-2 4.202A6.02 6.02 0 0 1 8 13zm7.5-6a5.456 5.456 0 0 0-1.823-1.104A6.996 6.996 0 0 1 13.5 7a6.996 6.996 0 0 1 2.177 4.396 5.456 5.456 0 0 0 1.823 1.104A6.978 6.978 0 0 1 15 7a6.978 6.978 0 0 1 .667-2.977z" />
-                                </svg>
-                            </span>
-                            <span class="nav-link-text">Users</span>
-                        </a><!--//nav-link-->
-                    </li><!--//nav-item-->
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'author_management' %}">
-                            <span class="nav-icon">
-                                <!-- Custom coupon-themed badge icon -->
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-badge"
-                                    fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M2 0.5a1 1 0 0 0-1 1v13.793l6.854-6.853a1 1 0 0 1 1.32-.084l1.166 1.165 6.854-6.853V14.5a1 1 0 0 0 2 0V1.5a1 1 0 0 0-1-1H2z" />
-                                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#fff"
-                                        font-size="8">
-                                        Author
-                                    </text>
-                                </svg>
-                            </span>
-                            <span class="nav-link-text">Author</span>
-                        </a><!--//nav-link-->
-                    </li><!--//nav-item-->
-
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'multiple_image_management' %}">
-                            <span class="nav-icon">
-                                <!-- SVG for a stack of photos -->
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-images"
-                                    fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="4" height="3" x="1" y="2" rx=".5" ry=".5" />
-                                    <rect width="4" height="3" x="11" y="2" rx=".5" ry=".5" />
-                                    <rect width="4" height="3" x="6" y="2" rx=".5" ry=".5" />
-                                    <rect width="4" height="3" x="1" y="7" rx=".5" ry=".5" />
-                                    <rect width="4" height="3" x="11" y="7" rx=".5" ry=".5" />
-                                    <rect width="4" height="3" x="6" y="7" rx=".5" ry=".5" />
-                                    <rect width="4" height="3" x="1" y="12" rx=".5" ry=".5" />
-                                    <rect width="4" height="3" x="11" y="12" rx=".5" ry=".5" />
-                                    <rect width="4" height="3" x="6" y="12" rx=".5" ry=".5" />
-                                </svg>
-                            </span>
-                            <span class="nav-link-text">Multiple image</span>
-                        </a><!--//nav-link-->
-                    </li><!--//nav-item-->
-
-
-                   
+                    <nav id="app-nav-main" class="app-nav app-nav-main flex-grow-1">
+                        <ul class="app-menu list-unstyled accordion" id="menu-accordion">
+                            <li class="nav-item">
+                                <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                                <a class="nav-link " href="{% url 'sales_report' %}">
+                                    <span class="nav-icon">
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-house-door"
+                                            fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd"
+                                                d="M7.646 1.146a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 .146.354v7a.5.5 0 0 1-.5.5H9.5a.5.5 0 0 1-.5-.5v-4H7v4a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .146-.354l6-6zM2.5 7.707V14H6v-4a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4h3.5V7.707L8 2.207l-5.5 5.5z" />
+                                            <path fill-rule="evenodd"
+                                                d="M13 2.5V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
+                                        </svg>
+                                    </span>
+                                    <span class="nav-link-text">Sales Report</span>
+                                </a><!--//nav-link-->
+                            </li><!--//nav-item-->
 
 
 
 
 
-                </ul><!--//app-menu-->
-            </nav><!--//app-nav-->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'product_list' %}">
+                                    <span class="nav-icon">
+                                        <i class="fas fa-box-open"></i>
+                                    </span>
+                                    <span class="nav-link-text">Products</span>
+                                </a><!--//nav-link-->
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'category_management' %}">
+                                    <span class="nav-icon">
+                                        <i class="fas fa-list"></i>
+                                    </span>
+                                    <span class="nav-link-text">Category</span>
+                                </a><!--//nav-link-->
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'order_management' %}">
+                                    <span class="nav-icon">
+                                        <i class="fas fa-shopping-bag"></i>
+                                    </span>
+                                    <span class="nav-link-text">Orders</span>
+                                </a>
+                            </li>
+
+
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'user_management' %}">
+                                    <span class="nav-icon">
+                                        <!-- Bootstrap Icons "people" icon -->
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-people"
+                                            fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M5.5 5.5a2 2 0 1 0-4 0 2 2 0 0 0 4 0zM14 5.5a2 2 0 1 0-4 0 2 2 0 0 0 4 0zM8 11a4.5 4.5 0 0 0-3 1.5h6a4.5 4.5 0 0 0-3-1.5z" />
+                                            <path fill-rule="evenodd"
+                                                d="M8 1a6 6 0 0 1 6 6c0 1.053-.258 2.037-.71 2.88-.12.16-.276.314-.448.447a8.392 8.392 0 0 1-1.83 1.26A5.978 6.978 0 0 1 8 15a6.978 6.978 0 0 1-3.022-.667 8.392 8.392 0 0 1-1.83-1.26A2.955 2.955 0 0 1 1.71 9.88C1.259 9.037 1 8.053 1 7a6 6 0 0 1 6-6zM2.5 7a7.978 7.978 0 0 0 1.446 4.5c.19.26.417.503.67.72a5.456 5.456 0 0 0 1.823 1.104A6.996 6.996 0 0 1 2.5 7zM8 13a6.02 6.02 0 0 1-3-.798A6.02 6.02 0 0 1 2 9c0-1.616.632-3.131 1.768-4.269C4.349 3.836 6.163 3 8 3s3.652.836 4.232 2.731C13.368 5.869 14 7.384 14 9a6.02 6.02 0 0 1-2 4.202A6.02 6.02 0 0 1 8 13zm7.5-6a5.456 5.456 0 0 0-1.823-1.104A6.996 6.996 0 0 1 13.5 7a6.996 6.996 0 0 1 2.177 4.396 5.456 5.456 0 0 0 1.823 1.104A6.978 6.978 0 0 1 15 7a6.978 6.978 0 0 1 .667-2.977z" />
+                                        </svg>
+                                    </span>
+                                    <span class="nav-link-text">Users</span>
+                                </a><!--//nav-link-->
+                            </li><!--//nav-item-->
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'author_management' %}">
+                                    <span class="nav-icon">
+                                        <!-- Custom coupon-themed badge icon -->
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-badge"
+                                            fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M2 0.5a1 1 0 0 0-1 1v13.793l6.854-6.853a1 1 0 0 1 1.32-.084l1.166 1.165 6.854-6.853V14.5a1 1 0 0 0 2 0V1.5a1 1 0 0 0-1-1H2z" />
+                                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+                                                fill="#fff" font-size="8">
+                                                Author
+                                            </text>
+                                        </svg>
+                                    </span>
+                                    <span class="nav-link-text">Author</span>
+                                </a><!--//nav-link-->
+                            </li><!--//nav-item-->
+
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'multiple_image_management' %}">
+                                    <span class="nav-icon">
+                                        <!-- SVG for a stack of photos -->
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-images"
+                                            fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <rect width="4" height="3" x="1" y="2" rx=".5" ry=".5" />
+                                            <rect width="4" height="3" x="11" y="2" rx=".5" ry=".5" />
+                                            <rect width="4" height="3" x="6" y="2" rx=".5" ry=".5" />
+                                            <rect width="4" height="3" x="1" y="7" rx=".5" ry=".5" />
+                                            <rect width="4" height="3" x="11" y="7" rx=".5" ry=".5" />
+                                            <rect width="4" height="3" x="6" y="7" rx=".5" ry=".5" />
+                                            <rect width="4" height="3" x="1" y="12" rx=".5" ry=".5" />
+                                            <rect width="4" height="3" x="11" y="12" rx=".5" ry=".5" />
+                                            <rect width="4" height="3" x="6" y="12" rx=".5" ry=".5" />
+                                        </svg>
+                                    </span>
+                                    <span class="nav-link-text">Multiple image</span>
+                                </a><!--//nav-link-->
+                            </li><!--//nav-item-->
+
+
+
+
+
+
+
+
+                        </ul><!--//app-menu-->
+                    </nav><!--//app-nav-->
 
 
         </div><!--//sidepanel-inner-->

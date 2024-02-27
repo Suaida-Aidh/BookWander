@@ -194,10 +194,4 @@ def edit_profile(request):
     return render(request, 'User/edit_profile.html', context)
 
 
-# <div class="wallet-card">
-#                                 <label for="popup-toggle" class="popup-close">&times;</label>
-#                                 <h5>Wallet Balance : {{ wallet.balance }}</h5>
-#                             </div>
 
-
-#

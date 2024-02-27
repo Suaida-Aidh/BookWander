@@ -52,27 +52,27 @@
                                         class="fas fa-shopping-cart"></i></a>
                             </form>
                             {% endif %}
-                            <div class="size-204 flex-w flex-m respon6-next d-flex justify-content-between ">
-                                {% if user.is_authenticated %}
-                                {% if wishlist %}
-                                <!-- If the product is in the wishlist -->
-                                <a href="{% url 'add_to_wishlist' single_product.id %}"
-                                    class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 delete-wish"
-                                    data-item="{{ single_product.id }}">
-                                    <i class="far fa-heart "></i> Added to Wishlist
-                                </a>
-                                {% else %}
-                                <!-- If the product is not in the wishlist -->
-                                <a href="{% url 'add_to_wishlist' single_product.id %}" id="addtowishlist"
-                                    class="wishlist-btn">
-                                    <i class="far fa-heart "></i> Add to Wishlist
-                                </a>
-                                {% endif %}
-                                {% endif %}
-                            </div>
+
                         </div>
                         <p><strong>Category: </strong>{{ single_product.category.category_name }}</p>
-
+                        <div class="size-204 flex-w flex-m respon6-next d-flex justify-content-between ">
+                            {% if user.is_authenticated %}
+                            {% if wishlist %}
+                            <!-- If the product is in the wishlist -->
+                            <a href="{% url 'add_to_wishlist' single_product.id %}"
+                                class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 delete-wish"
+                                data-item="{{ single_product.id }}">
+                                <i class="far fa-heart "></i> Added to Wishlist
+                            </a>
+                            {% else %}
+                            <!-- If the product is not in the wishlist -->
+                            <a href="{% url 'add_to_wishlist' single_product.id %}" id="addtowishlist"
+                                class="wishlist-btn">
+                                <i class="far fa-heart "></i> Add to Wishlist
+                            </a>
+                            {% endif %}
+                            {% endif %}
+                        </div>
                 </div>
             </div>
         </div>
@@ -82,5 +82,33 @@
 <!-- end single product -->
 
 
+<div class="product-detail">
+    <h2>{{ single_product.name }}</h2>
+    <!-- Other product details display -->
+    {% if wishlist %}
+    <form action="{% url 'delete_from_wishlist' product_id=single_product.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Remove from Wishlist</button>
+    </form>
+    {% else %}
+    <form id="add-to-wishlist-form" action="{% url 'add_to_wishlist' product_id=single_product.id %}" method="post">
+        {% csrf_token %}
+        <button id="add-to-wishlist-button" type="submit">Add to Wishlist</button>
+    </form>
+    {% endif %}
+</div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var addToWishlistForm = document.getElementById('add-to-wishlist-form');
+        var addToWishlistButton = document.getElementById('add-to-wishlist-button');
+
+        addToWishlistForm.addEventListener('submit', function (event) {
+            event.preventDefault();  // Prevent the form from submitting
+            addToWishlistButton.disabled = true;  // Disable the button to prevent multiple clicks
+            addToWishlistForm.submit();  // Submit the form
+            addToWishlistButton.style.display = 'none';  // Hide the button after submission
+        });
+    });
+</script>
 {% endblock content %}

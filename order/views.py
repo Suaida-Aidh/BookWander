@@ -98,8 +98,8 @@ def placeorder(request):
         return JsonResponse({'status': "Your order has been placed successfully"})
 
     elif (payMode == "COD"):
-        return redirect('my_order')
-    return redirect('my_order')
+        return redirect('myorder')
+    return redirect('myorder')
 
 
 # MY ORDER FUNCTION
@@ -146,6 +146,17 @@ def Cancel_order(request, t_no):
         order.status = 'Cancelled'
         order.save()
 
+        # Credit stock for each item in the order
+        order_items = OrderItem.objects.filter(order=order)
+        for item in order_items:
+            product = item.product
+            print(f"Before credit: Product {product.id} - Stock: {product.stock}")
+            product.stock += item.quantity  # Increase the stock quantity
+            product.save()
+            print(f"After credit: Product {product.id} - Stock: {product.stock}")
+            
+
+
         # Retrieve or create the user's wallet
         wallet , _= Wallet.objects.get_or_create(user=request.user)
         print("wallet")
@@ -155,11 +166,44 @@ def Cancel_order(request, t_no):
         wallet.balance += order.total_price
         wallet.save()
 
+    
+
         # Create a transaction record for the refund
         Transaction.objects.create(wallet=wallet, transaction_type='Refund', amount=order.total_price)
 
     return redirect('myorder')
 
+
+
+
+def return_order(request, t_no):
+    order = Order.objects.get(tracking_no=t_no, user=request.user)
+
+    if order.status == 'Delivered':
+        # Calculate refund amount (for demonstration purposes, assuming full refund)
+        refund_amount = order.total_price
+
+        # Update order status to indicate it's returned
+        order.status = 'Returned'
+        order.save()
+        
+        # Credit stock for each item in the order
+        order_items = OrderItem.objects.filter(order=order)
+        for item in order_items:
+            product = item.product
+            product.stock += item.quantity  # Increase the stock quantity
+            product.save()
+        # Retrieve or create the user's wallet
+        wallet, _ = Wallet.objects.get_or_create(user=request.user)
+
+        # Add the refund amount back to the wallet balance
+        wallet.balance += refund_amount
+        wallet.save()
+
+        # Create a transaction record for the refund
+        Transaction.objects.create(wallet=wallet, transaction_type='Refund', amount=refund_amount)
+
+    return redirect('myorder')
 
 @never_cache
 @login_required(login_url=('Login'))  # type: ignore

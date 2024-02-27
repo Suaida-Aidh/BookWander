@@ -97,17 +97,17 @@
                                                 {% elif item.status == 'Out For Shipping' %}
                                                 <td class="text-info fw-bold">{{ item.status }}</td>
                                                 {% elif item.status == 'Shipped' %}
-                                                <td class="text-primar fw-bold">{{ item.status }}</td>
+                                                <td class="text-primary fw-bold">{{ item.status }}</td>
                                                 {% elif item.status == 'Delivered' %}
                                                 <td class="text-success fw-bold">{{ item.status }}</td>
                                                 {% elif item.status == 'Pending' %}
                                                 <td class="text-warning fw-bold">{{ item.status }}</td>
+                                                {% elif item.status == 'Returned' %}
+                                                <td class="text-secondary fw-bold">{{ item.status }}</td>
                                                 {% endif %}
-                                                <!-- <td>{{ i.end_date }}</td> -->
                                                 <td><a href="{% url 'manager_vieworder' item.tracking_no %}" class="btn btn-dark">View</a></td>
-
-
                                             </tr>
+                                            
                                             {% endfor %}
 
 

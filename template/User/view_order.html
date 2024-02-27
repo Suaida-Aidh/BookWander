@@ -42,7 +42,7 @@
                     <th scope="col"></th>
                   </tr>
                 </thead>
-                
+
                 <tbody>
                   {% for item in orderitems %}
                   <tr>
@@ -92,14 +92,22 @@
                 {% endif %}
                 <h6>Tracking Number : {{order.tracking_no}}</h6><br>
               </div>
+
+
               <div class="d-flex justify-content-end">
-                {% if order.status != 'Cancelled' %}
+                {% if order.status == 'Delivered' %}
+                <form action="{% url 'return_order' order.tracking_no %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary">Return Order</button>
+                </form>
+                {% elif order.status != 'Cancelled' %}
                 <form action="{% url 'cancel_order' order.tracking_no %}" method="post">
                   {% csrf_token %}
                   <button type="submit" class="btn btn-danger">Cancel Order</button>
                 </form>
                 {% endif %}
               </div>
+
 
             </div>
           </div>

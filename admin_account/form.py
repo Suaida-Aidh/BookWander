@@ -1,6 +1,7 @@
 from django import forms
 from store.models import Product
 from store.models import MultipleImages
+# from cart.models import UserAddressBook
 
 class ProductForm(forms.ModelForm):
 
@@ -31,3 +32,10 @@ class MultipleImagesForm (forms.ModelForm):
 
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
+
+
+
+# class AddressBookForm(forms.ModelForm):
+#     class Meta:
+#         model=UserAddressBook
+#         fields=('address','status')

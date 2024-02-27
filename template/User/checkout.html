@@ -19,66 +19,12 @@
 <!-- check out section -->
 <div class="checkout-section mt-150 mb-150">
     <div class="container" style="margin-top: 5%;">
+        <a href="{% url 'add_address' %}" type="submit" class="boxed-btn">Add another address</a>
+
         <form id="checkoutForm" action="{% url 'place_order' %}" method="POST">
             {% csrf_token %}
             <div class="row">
-                <div class="col-lg-8">
-                    <div class="checkout-accordion-wrap">
-                        <div class="accordion" id="accordionExample">
-                            <div class="card single-accordion">
-                                <div class="card-header d-flex justify-content-center" id="headingOne"
-                                    style="margin-top: 8%;">
-                                    <h3><span class="orange-text">Billing</span> Address</h3>
-                                </div>
-
-                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                    data-parent="#accordionExample">
-                                    <div class="card-body">
-                                        <div class="billing-address-form">
-
-                                            <p><input type="text" name="first_name" placeholder="First Name"
-                                                    class="form-control" required value="{{ request.user.first_name }}">
-                                            </p>
-
-                                            <p><input type="text" name="last_name" placeholder="Last Name"
-                                                    class="form-control" required value="{{ request.user.last_name }}">
-                                            </p>
-
-                                            <p><input type="email" name="email" placeholder="Email" class="form-control"
-                                                    required value="{{ request.user.email }}"></p>
-                                            <p><input type="text" name="phone" placeholder="Phone Number"
-                                                    class="form-control" required
-                                                    value="{{ request.user.phone_number }}">
-                                            </p>
-
-                                            <p><input type="text" name="address" placeholder="Address"
-                                                    class="form-control" required value="{{ userprofile.address }}"></p>
-
-                                            <p><input type="text" name="city" placeholder="City" class="form-control"
-                                                    required value="{{ userprofile.city }}"></p>
-
-                                            <p><input type="text" name="state" placeholder="State" class="form-control"
-                                                    required value="{{ userprofile.state }}"></p>
-
-                                            <p><input type="text" name="country" placeholder="Country"
-                                                    class="form-control" required value="{{ userprofile.country }}"></p>
-
-                                            <p><input type="text" name="pincode" placeholder="Pincode"
-                                                    class="form-control" required value="{{ userprofile.pincode }}"></p>
-
-                                            <p><textarea name="bill" id="bill" cols="30" rows="10"
-                                                    placeholder="Say Something"></textarea></p>
-
-                                            <a href="" type="submit" class="boxed-btn">Add another address</a>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+               
                 <div class="col-lg-4">
                     <div class="card" style="max-width: 300px;">
                         <div class="card-body">
@@ -129,6 +75,17 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="{% static 'j/checkout.js' %}"></script>
+
+
+
+
+
+
+
+
+
+
+
 
 
 {% include 'include/footer.html' %}

@@ -23,14 +23,14 @@ from django.db.models import Prefetch
 from itertools import groupby
 from .context_processor import revenue_calculator
 from django.db.models import Count
-
+from django.utils import timezone
 
 # Create your views here.
 @login_required(login_url='Login')
 def dashboard(request):
     orders = Order.objects.order_by('-id')[:10]
     sales_data = OrderItem.objects.values('order__created_at__date').annotate(
-        total_sale=Sum('price')).order_by('-order__created_at__date')
+    total_sale=Sum('price')).order_by('-order__created_at__date')
     categories = [item['order__created_at__date'].strftime('%d/%m') for item in sales_data]
     sales_values = [item['total_sale'] for item in sales_data]
 
@@ -435,7 +435,6 @@ def delete_multiple_images(request, multi_id):
 
     return redirect('multiple_image_management')
 
-
 @login_required(login_url='signin')
 def sales_report(request):
     try:
@@ -448,70 +447,45 @@ def sales_report(request):
             if start_date and end_date:
                 start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
                 end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-                print('start date and end date', start_date, end_date)
                 if start_date > end_date:
-                    messages.error(request, 'Start date must be end date')
-                    return redirect('adminside:dashboard')
-                if end_date > date.today():
+                    messages.error(request, 'Start date must be before end date')
+                    return redirect('Admin-temp:dashboard')
+                if end_date > timezone.localdate():
                     messages.error(request, 'End date cannot be in the future')
-                    return redirect('adminside:dashboard')
-                orders = Order.objects.filter(
-                    created_at__date__range=(start_date, end_date))
-                print('the order is the ', orders)
-                recend_order = orders.order_by('created_at')
-                total_sale = sum(order.total_price for order in orders)
-                total_count = orders.count()
+                    return redirect('Admin-temp:dashboard')
+                orders = Order.objects.filter(created_at__date__range=(start_date, end_date))
+        else:
+            orders = Order.objects.all()
 
-                sales_by_status = {
-                    'Pending': orders.filter(od_status='Pending').count(),
-                    'Processing': orders.filter(od_status='Processing').count(),
-                    'Shipped': orders.filter(od_status='Shipped').count(),
-                    'Delivered': orders.filter(od_status='Delivered').count(),
-                    'Cancelled': orders.filter(od_status='Cancelled').count(),
-                    'Return': orders.filter(od_status='Return').count()
-                }
-
-                sales_report = {
-                    'start_date': start_date.strftime('%Y-%m-%d') if start_date else '',
-                    'end_date': end_date.strftime('%Y-%m-%d') if end_date else '',
-                    'total_sales': total_sale,
-                    'total_orders': total_count,
-                    'sales_by_status': sales_by_status,
-                    'recent_orders': recend_order,
-                }
-                context = {
-                    'sales_report': sales_report,
-                }
-                print('the total sale is the ', total_sale)
-                return render(request, 'adminside/salesreport.html', context)
-
-        recend = Order.objects.order_by('created_at')[:10]
-        orders = Order.objects.all()
         total_sale = sum(order.total_price for order in orders)
+        total_sale=Sum(('price')).order_by('-order__created_at__date')
+
         total_count = orders.count()
 
         sales_by_status = {
-            'Pending': orders.filter(od_status='Pending').count(),
-            'Processing': orders.filter(od_status='Processing').count(),
-            'Shipped': orders.filter(od_status='Shipped').count(),
-            'Delivered': orders.filter(od_status='Delivered').count(),
-            'Cancelled': orders.filter(od_status='Cancelled').count(),
-            'Return': orders.filter(od_status='Return').count()
+            'Pending': orders.filter(status='Pending').count(),
+            'Processing': orders.filter(status='Processing').count(),
+            'Shipped': orders.filter(status='Shipped').count(),
+            'Delivered': orders.filter(status='Delivered').count(),
+            'Cancelled': orders.filter(status='Cancelled').count(),
+            'Return': orders.filter(status='Return').count()
         }
+
+        recent_orders = Order.objects.order_by('created_at')[:10]
 
         sales_report = {
             'start_date': start_date.strftime('%Y-%m-%d') if start_date else '',
             'end_date': end_date.strftime('%Y-%m-%d') if end_date else '',
-            'total_sales': total_sale,
+            'total_sale': total_sale,
             'total_orders': total_count,
             'sales_by_status': sales_by_status,
-            'recent_orders': recend,
+            'recent_orders': recent_orders,
         }
         context = {
             'sales_report': sales_report,
         }
-        print('the total sale is the ', total_sale)
         return render(request, 'Admin-temp/sales_report.html', context)
+
     except Exception as e:
         print(e)
         return render(request, 'Admin-temp/sales_report.html')
