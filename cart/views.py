@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 import razorpay
 from django.conf import settings
+from order.models import Profile
+from django.views.decorators.cache import never_cache
+from django.contrib import messages
 
 from .models import WishlistItem
 
@@ -30,7 +33,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
         for cart_item in cart_items:
             total += (cart_item.product.price * cart_item.quantity)
             quantity += cart_item.quantity
-        shipping = (8 * total) / 100
+        shipping = (6 * total) / 100
         grand_total = total + shipping
     except ObjectDoesNotExist:
         pass
@@ -45,9 +48,13 @@ def cart(request, total=0, quantity=0, cart_items=None):
     return render(request, 'User/cart.html', context)
 
 
+
 def add_cart(request, product_id):
     product = Product.objects.get(id=product_id)
     current_user = request.user
+
+    if product.stock < 1:
+        return JsonResponse({'message': "Sorry, this product is out of stock."}, status=400)
 
     if current_user.is_authenticated:
         # If user is authenticated, add the product to the cart
@@ -102,30 +109,41 @@ def remove_cart(request, product_id, cart_item_id):
 
 # CHECK OUT CONDITONS
 
-
+@never_cache
 @login_required(login_url='Login')
 def checkout(request, total=0, quantity=0, cart_items=None):
+
     shipping = 0
     grand_total = 0
     try:
 
+        print("ssssssssssssssssssssssssssssss")
+
         if request.user.is_authenticated:
             cart_items = CartItem.objects.filter(
                 user=request.user, is_active=True)
+            print(cart_items)
         #    userprofile = Profile.objects.filter(user=request.user).first()
         else:
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+
+        if not cart_items.exists():
+            print('ifffffffffffffffffffffffff')
+            return redirect('Home')
+        
         for cart_item in cart_items:
             total += (cart_item.product.price * cart_item.quantity)
             quantity += cart_item.quantity
             shipping = (6 * total)/100
             grand_total = total+shipping
-
+        print(grand_total)
+        print(shipping)
+        print(total)
         client = razorpay.Client(
             auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
         payment = client.order.create(
-            {'amount': int(grand_total) * 100, 'currency': 'INR', 'payment_capture': 1})
+            {'amount': (grand_total) * 100, 'currency': 'INR', 'payment_capture': 1})
 
     except ObjectDoesNotExist:
         pass
@@ -136,7 +154,6 @@ def checkout(request, total=0, quantity=0, cart_items=None):
         'shipping': shipping,
         'grand_total': grand_total,
         'payment': payment,
-        # 'userprofile': userprofile, #type:ignore
     }
 
     return render(request, 'User/checkout.html', context)
@@ -183,8 +200,7 @@ def delete_from_wishlist(request, product_id):
         user=request.user, product=product, is_active=True).first()
 
     if wishlist_item:
-        wishlist_item.is_active = False
-        wishlist_item.save()
+        wishlist_item.delete()
 
     return redirect('wishlist')
 

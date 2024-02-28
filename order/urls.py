@@ -13,5 +13,11 @@ urlpatterns = [
     path('proceed-to-pay/',views.razorpaycheck , name='proceed-to-pay'),
     path('return_order/<str:t_no>', views.return_order, name='return_order'),
 
+    path('addresses/', views.addresses, name='addresses'),
+    path('add_address/', views.add_address, name='add_address'),  # Define the URL pattern for add_address view
+    path('select_address/', views.select_address, name='select_address'),
+
+
+
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

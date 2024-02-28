@@ -19,12 +19,51 @@
 <!-- check out section -->
 <div class="checkout-section mt-150 mb-150">
     <div class="container" style="margin-top: 5%;">
-        <a href="{% url 'add_address' %}" type="submit" class="boxed-btn">Add another address</a>
-
         <form id="checkoutForm" action="{% url 'place_order' %}" method="POST">
             {% csrf_token %}
             <div class="row">
-               
+                <div class="col-lg-8">
+                    <div class="checkout-accordion-wrap">
+                        <div class="accordion" id="accordionExample">
+                            <div class="card single-accordion">
+                                <div class="card-header d-flex justify-content-center" id="headingOne"
+                                    style="margin-top: 8%;">
+                                    <h3><span class="orange-text">Billing</span> Address</h3>
+                                </div>
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                    data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <div class="billing-address-form">
+                                            <form method="post" action="{% url 'select_address' %}">
+                                                {% csrf_token %}
+                                                {% for address in addresses %}
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">
+                                                            <label>
+                                                                <input type="radio" name="selected_address"
+                                                                    value="{{ address.id }}">
+                                                                {{ address.first_name }} {{ address.last_name }}
+                                                            </label>
+                                                        </h5>
+                                                        <p class="card-text">{{ address.address }}, {{ address.city }},
+                                                            {{ address.state }}, {{ address.country }} - {{
+                                                            address.pincode }}</p>
+                                                        <p class="card-text">Phone: {{ address.phone }}</p>
+                                                        <p class="card-text">Email: {{ address.email }}</p>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            </form>
+                                            <a href="{% url 'add_address' %}" type="submit" class="boxed-btn">Add another address</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-lg-4">
                     <div class="card" style="max-width: 300px;">
                         <div class="card-body">
@@ -75,18 +114,6 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="{% static 'j/checkout.js' %}"></script>
-
-
-
-
-
-
-
-
-
-
-
-
 
 {% include 'include/footer.html' %}
 

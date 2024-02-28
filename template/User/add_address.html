@@ -2,7 +2,7 @@
 
 
 <!-- check out section -->
-<div class="checkout-section mt-150 mb-150">
+<!-- <div class="checkout-section mt-150 mb-150">
     <div class="container" style="margin-top: 5%;">
         <form id="checkoutForm" action="{% url 'add_address' %}" method="POST">
             {% csrf_token %}
@@ -69,9 +69,32 @@
 </div>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script src="{% static 'j/checkout.js' %}"></script>
+<script src="{% static 'j/checkout.js' %}"></script> -->
 
 
-{% include 'include/footer.html' %}
+
+
+<!-- add_address.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Address</title>
+</head>
+<body>
+    <h2>Add Address</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
 
 {% endblock content %}

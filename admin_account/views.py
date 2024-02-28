@@ -437,7 +437,7 @@ def delete_multiple_images(request, multi_id):
 
 @login_required(login_url='signin')
 def sales_report(request):
-    try:
+    # try:
         start_date = None
         end_date = None
         if request.method == 'POST':
@@ -449,16 +449,15 @@ def sales_report(request):
                 end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
                 if start_date > end_date:
                     messages.error(request, 'Start date must be before end date')
-                    return redirect('Admin-temp:dashboard')
+                    return redirect('admin_dashboard')
                 if end_date > timezone.localdate():
                     messages.error(request, 'End date cannot be in the future')
-                    return redirect('Admin-temp:dashboard')
+                    return redirect('admin_dashboard')
                 orders = Order.objects.filter(created_at__date__range=(start_date, end_date))
         else:
             orders = Order.objects.all()
 
         total_sale = sum(order.total_price for order in orders)
-        total_sale=Sum(('price')).order_by('-order__created_at__date')
 
         total_count = orders.count()
 
@@ -470,8 +469,9 @@ def sales_report(request):
             'Cancelled': orders.filter(status='Cancelled').count(),
             'Return': orders.filter(status='Return').count()
         }
-
-        recent_orders = Order.objects.order_by('created_at')[:10]
+        print("sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
+        print(sales_by_status)
+        recent_orders = Order.objects.filter(created_at__range=(start_date, end_date))[:10]
 
         sales_report = {
             'start_date': start_date.strftime('%Y-%m-%d') if start_date else '',
@@ -481,14 +481,19 @@ def sales_report(request):
             'sales_by_status': sales_by_status,
             'recent_orders': recent_orders,
         }
+        print('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+        print(sales_report)
         context = {
             'sales_report': sales_report,
         }
+        print("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
+        print(context)
         return render(request, 'Admin-temp/sales_report.html', context)
-
-    except Exception as e:
-        print(e)
-        return render(request, 'Admin-temp/sales_report.html')
+    
+    # except Exception as e:
+    #     print(e)
+    #     print("errrrrrrrrrrrrrrrrrrrrr")
+    #     return render(request, 'Admin-temp/sales_report.html')
 
 
 

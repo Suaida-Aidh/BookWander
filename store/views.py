@@ -75,9 +75,12 @@ def product_detail(request, product_slug):
     # Showing the old reviews
 
     in_wishlist = None
+    
     if request.user.is_authenticated:
         # Check if the product is in the user's wishlist
         in_wishlist = WishlistItem.objects.filter(user=request.user, product=single_product).exists()
+
+        print(in_wishlist)
 
     context = {
         'single_product': single_product,

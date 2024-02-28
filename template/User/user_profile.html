@@ -19,16 +19,15 @@
                             <!-- Popup Card -->
                             <div class="wallet-card">
                                 <h3 style="margin-top: 5%;"><span class="orange-text">Your</span> WALLET</h3>
-                                <h4>{{user.first_name}},</h4>
+                                <h4>{{ user.first_name }},</h4>
                                 <label for="popup-toggle" class="popup-close">&times;</label>
-
-                                
-
+                            
                                 {% if wallet %}
                                 <h4>Wallet Amount: ${{ wallet.balance }}</h4>
                                 {% else %}
                                 <p>No wallet found.</p>
                                 {% endif %}
+                            
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -40,20 +39,55 @@
                                     <tbody>
                                         {% if transactions %}
                                         {% for transaction in transactions %}
-                                        
                                         <tr>
                                             <td>{{ transaction.date_added }}</td>
                                             <td>{{ transaction.transaction_type }}</td>
                                             <td>${{ transaction.amount }}</td>
                                         </tr>
-
                                         {% endfor %}
                                         {% else %}
-                                        <p>No transactions found.</p>
+                                        <tr>
+                                            <td colspan="3">No transactions found.</td>
+                                        </tr>
                                         {% endif %}
                                     </tbody>
                                 </table>
+                            
+                                {% if transactions.has_other_pages %}
+                                <ul class="pagination">
+                                    {% if transactions.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1">&laquo;</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">&laquo;</span>
+                                    </li>
+                                    {% endif %}
+                                    {% for i in transactions.paginator.page_range %}
+                                    {% if transactions.number == i %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ i }}</span>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                    </li>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if transactions.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ transactions.next_page_number }}">&raquo;</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">&raquo;</span>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                                {% endif %}
                             </div>
+                            
                             <!-- Button to trigger popup -->
                             <label for="popup-toggle" class="btn btn-primary"> <i class="fas fa-wallet"></i></label>
 

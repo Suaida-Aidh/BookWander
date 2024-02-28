@@ -20,6 +20,7 @@
 <!-- end breadcrumb section -->
 
 <!-- product section -->
+
 <div class="product-section mt-150 mb-150">
 	<div class="container">
 		{% if no_products_found %}
@@ -138,5 +139,17 @@
 	</div>
 </div>
 
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Your AJAX code to add the product to the cart goes here
+        // When you receive the response, check if the message is for a warning
+        // If it is, display the warning message in the warning-container
+        // For example:
+        // var warningContainer = document.getElementById('warning-container');
+        // warningContainer.innerText = response.message;
+        // warningContainer.style.display = 'block';
+    });
+</script>
 {% include 'include/footer.html' %}
 {% endblock content %}

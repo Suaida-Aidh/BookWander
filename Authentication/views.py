@@ -152,8 +152,10 @@ def user_profile(request):
     userprofile, created = UserProfile.objects.get_or_create(user=request.user)
 
     try:
+
         wallet = Wallet.objects.get(user=request.user)
-        transactions = Transaction.objects.filter(wallet=wallet)
+        transactions = Transaction.objects.filter(wallet=wallet).order_by('-date_added')[:5]
+        
         print(wallet.balance)
     except Wallet.DoesNotExist:
         # Handle the case where the wallet doesn't exist for the user
@@ -167,6 +169,7 @@ def user_profile(request):
         'transactions': transactions,
     }
     return render(request, 'User/user_profile.html', context)
+
 
 
 # EDIT PROFILE CONDITION
