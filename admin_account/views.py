@@ -24,6 +24,11 @@ from itertools import groupby
 from .context_processor import revenue_calculator
 from django.db.models import Count
 from django.utils import timezone
+from django.http import HttpResponse
+from django.template.loader import get_template
+from django.template import Context
+import os
+from weasyprint import HTML
 
 # Create your views here.
 @login_required(login_url='Login')
@@ -495,7 +500,23 @@ def sales_report(request):
     #     print("errrrrrrrrrrrrrrrrrrrrr")
     #     return render(request, 'Admin-temp/sales_report.html')
 
+def generate_sales_report_pdf(request):
+    sales_report = request.session.get('sales_report')  # Retrieve sales report from session
+    template_path = 'Admin-temp/sales_report_pdf_template.html'  # Template for PDF
 
+    # Render template with sales report data
+    template = get_template(template_path)
+    html = template.render({'sales_report': sales_report})
+
+    # Generate PDF
+    pdf_file = os.path.join(os.path.dirname(__file__), 'sales_report.pdf')
+    HTML(string=html).write_pdf(pdf_file)
+
+    # Serve PDF for download
+    with open(pdf_file, 'rb') as pdf:
+        response = HttpResponse(pdf.read(), content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="sales_report.pdf"'
+    return response
 
 
 

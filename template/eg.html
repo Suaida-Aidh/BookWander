@@ -2,25 +2,23 @@ from datetime import datetime
 from django.utils import timezone
 
 def sales_report(request):
-    # Get the current date and time in the current time zone
-    now = timezone.now()
+# Get the current date and time in the current time zone
+now = timezone.now()
 
-    # Get the first day of the current month
-    first_day_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+# Get the first day of the current month
+first_day_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
 
-    # Get the last day of the current month
-    last_day_of_month = first_day_of_month.replace(month=first_day_of_month.month + 1, day=1) - timezone.timedelta(days=1)
-    last_day_of_month = last_day_of_month.replace(hour=23, minute=59, second=59, microsecond=999999)
+# Get the last day of the current month
+last_day_of_month = first_day_of_month.replace(month=first_day_of_month.month + 1, day=1) - timezone.timedelta(days=1)
+last_day_of_month = last_day_of_month.replace(hour=23, minute=59, second=59, microsecond=999999)
 
-    # Filter orders created between the start and end of the month
-    monthly_orders = Order.objects.filter(created_at__range=(first_day_of_month, last_day_of_month))
+# Filter orders created between the start and end of the month
+monthly_orders = Order.objects.filter(created_at__range=(first_day_of_month, last_day_of_month))
 
-    # Calculate total sales for the month
-    monthly_sales_total = sum(order.total_price for order in monthly_orders)
+# Calculate total sales for the month
+monthly_sales_total = sum(order.total_price for order in monthly_orders)
 
-    # Continue with your logic...
-
-
+# Continue with your logic...
 
 
 
@@ -33,30 +31,56 @@ def sales_report(request):
 
 
 
-    from datetime import datetime, timedelta
-    from django.utils import timezone
-    
-    def sales_report(request):
-        # Get the current date and time in the current time zone
-        now = timezone.now()
-    
-        # Calculate the start date of the week (going back 7 days from today)
-        start_of_week = now - timedelta(days=now.weekday() + 1)
-    
-        # Set the time to midnight for the start date
-        start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
-    
-        # Calculate the end date of the week (7 days from the start of the week)
-        end_of_week = start_of_week + timedelta(days=6)
-    
-        # Set the time to 23:59:59 for the end date
-        end_of_week = end_of_week.replace(hour=23, minute=59, second=59, microsecond=999999)
-    
-        # Filter orders created between the start and end of the week
-        weekly_orders = Order.objects.filter(created_at__range=(start_of_week, end_of_week))
-    
-        # Calculate total sales for the week
-        weekly_sales_total = sum(order.total_price for order in weekly_orders)
-    
-        # Continue with your logic...
-    
+
+
+from datetime import datetime, timedelta
+from django.utils import timezone
+
+def sales_report(request):
+# Get the current date and time in the current time zone
+now = timezone.now()
+
+# Calculate the start date of the week (going back 7 days from today)
+start_of_week = now - timedelta(days=now.weekday() + 1)
+
+# Set the time to midnight for the start date
+start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
+
+# Calculate the end date of the week (7 days from the start of the week)
+end_of_week = start_of_week + timedelta(days=6)
+
+# Set the time to 23:59:59 for the end date
+end_of_week = end_of_week.replace(hour=23, minute=59, second=59, microsecond=999999)
+
+# Filter orders created between the start and end of the week
+weekly_orders = Order.objects.filter(created_at__range=(start_of_week, end_of_week))
+
+# Calculate total sales for the week
+weekly_sales_total = sum(order.total_price for order in weekly_orders)
+
+# Continue with your logic...
+
+
+
+
+
+
+
+
+
+
+{% if addresses %}
+{% for address in addresses %}
+<div class="address-card">
+    <input type="radio" name="selected_address" value="{{ address.id }}" id="address_{{ address.id }}">
+    <label for="address_{{ address.id }}">
+        <strong>{{ address.address_line1 }}</strong><br>
+        {{ address.city }}, {{ address.state }} - {{ address.pincode }}<br>
+        {{ address.country }}<br>
+        Phone: {{ address.phone }}
+    </label>
+</div>
+{% endfor %}
+{% else %}
+<p>No addresses found.</p>
+{% endif %} 

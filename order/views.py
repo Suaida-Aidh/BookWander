@@ -9,6 +9,9 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import AddressForm
+from django.shortcuts import get_object_or_404
+from decimal import Decimal
+
 
 
 
@@ -16,6 +19,11 @@ from .forms import AddressForm
 @login_required(login_url=('Login'))
 def placeorder(request):
     if request.method == 'POST':
+
+
+        # Fetch selected billing address
+        billing_address_id = request.POST.get('billing_address')
+        billing_address = get_object_or_404(Address, id=billing_address_id)
         # Fetch payment mode and payment id
         payment_mode = request.POST.get('payment_mode')
         payment_id = request.POST.get('payment_id')
@@ -27,7 +35,15 @@ def placeorder(request):
         # Create the order
         new_order = Order.objects.create(
             user=request.user,
+            first_name=request.user.first_name,
+            last_name=request.user.last_name,
             email=request.user.email,
+            phone=billing_address.phone,  # Assuming this is a field in your User model
+            address=billing_address.address,
+            city=billing_address.city,
+            state=billing_address.state,
+            country=billing_address.country,
+            pincode=billing_address.pincode,
             total_price=total_price,
             payment_mode=payment_mode,
             payment_id=payment_id
@@ -61,7 +77,7 @@ def placeorder(request):
 
         # Redirect or return JSON response based on payment mode
         if payment_mode == "Paid by Razorpay":
-            return JsonResponse({'status': "Your order has been placed successfully"})
+                return JsonResponse({'status': "Your order has been placed successfully"})
         else:
             return redirect('myorder')
 
@@ -73,6 +89,16 @@ def placeorder(request):
 def myorder(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     
+
+    for order in orders:
+        total = 0
+        for item in order.orderitem_set.all():  # Assuming you have an OrderItem model related to Order
+            total += (item.product.price * item.quantity)
+        shipping = Decimal('0.06') * total  # Calculate shipping charges
+        order.total_price = total + shipping
+        order.shipping_charges = shipping  # Save shipping charges to order object
+        order.save()  # Save the updated total price and shipping charges to the database
+        
     # Pagination
     paginator = Paginator(orders, 10)  # Show 10 orders per page
     page_number = request.GET.get('page')
@@ -85,8 +111,10 @@ def myorder(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         orders = paginator.page(paginator.num_pages)
     
+        
     context = {
         'orders': orders,
+        
     }
     return render(request, 'User/my_order.html', context)
 
@@ -96,10 +124,11 @@ def myorder(request):
 def vieworder(request, t_no):
     order = Order.objects.filter(tracking_no=t_no, user=request.user).first()
     orderitems = OrderItem.objects.filter(order=order)
+    address = Address.objects.filter(user=request.user).first()  # Fetch associated address
     context = {
         'order': order,
         'orderitems': orderitems,
-
+        'address': address,  # Pass the address object to the context
     }
     return render(request, 'User/view_order.html', context)
 
@@ -121,19 +150,15 @@ def add_address(request):
     return render(request, 'User/add_address.html', {'form': form})
 
 
-
 def select_address(request):
     if request.method == 'POST':
         selected_address_id = request.POST.get('selected_address')
         if selected_address_id:
             selected_address = Address.objects.get(id=selected_address_id)
-            # Do something with the selected address, such as saving it to the user's profile
-            # For example, you might want to save it to a session variable or update the user's profile with the selected address
-            # For demonstration purposes, let's assume you want to save it to the session
             request.session['selected_address_id'] = selected_address_id
-            return redirect('success_page')  # Redirect to a success page or any other appropriate page after selecting the address
-    # If the request method is not POST or if there's no selected address ID, render the template again
-    addresses = Address.objects.all()  # Retrieve all addresses from the database
+            return redirect('checkout')
+
+    addresses = Address.objects.all()
     return render(request, 'User/checkout.html', {'addresses': addresses})
 
 def Cancel_order(request, t_no):

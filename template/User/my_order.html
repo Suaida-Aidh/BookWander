@@ -85,10 +85,10 @@
                 {% else %}
                 <td class="text-success fw-bold "> <b>{{ order.status }}</b></td>
                 {% endif %}
-
                 <td class="align-middle">
-                  <p class="mb-0" style="font-weight: 500;">₹ {{ order_item.price }}</p>
-                </td>
+                  <!-- Display total amount (total_price + tax_amount) -->
+                  <p class="mb-0" style="font-weight: 500;">₹ {{ order.total_price }}</p>
+              </td>
 
                 <td class="align-middle">
                   <a href="{% url 'view_order' order.tracking_no %}" id="view" class="wishlist-btn">view</a>

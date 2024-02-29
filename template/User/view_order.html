@@ -17,20 +17,25 @@
             <div class="col-md-6">
               <h4>Shipping Details</h4>
               <hr>
-              <label class="mt-2"> Name</label>
-              <div class="border p-1 ">{{order.first_name}} {{ order.last_name }}</div>
+              {% for address in addresses %}
+
+              <label class="mt-2">Name</label>
+              <div class="border p-1">{{ address.first_name }} {{ address.last_name }}</div>
               <label class="mt-2">Email</label>
-              <div class="border p-1">{{order.email}}</div>
+              <div class="border p-1">{{ address.email }}</div>
               <label class="mt-2">Phone Number</label>
-              <div class="border p-1">{{order.phone}}</div>
+              <div class="border p-1">{{ address.phone }}</div>
               <label class="mt-2">Delivery Address</label>
-              <div class="border p-1">{{order.address}} <br>
-                {{order.city}} <br>
-                {{order.state}} <br>
-                {{order.country}} <br>
-                Pin Code : {{order.pincode}}
+              <div class="border p-1">
+                {{ address.address }} <br>
+                {{ address.city }} <br>
+                {{ address.state }} <br>
+                {{ address.country }}<br>
+                  Pin Code : {{ address.pincode }}
               </div>
-            </div>
+              {% endfor %}
+
+          </div>
             <div class="col-md-6 ">
               <h4>Order Details</h4>
               <table class="table table-borderless ">

@@ -11,7 +11,7 @@ from django.views.decorators.cache import never_cache
 from django.contrib import messages
 
 from .models import WishlistItem
-
+from order.models import Address
 
 def _cart_id(request):
     cart = request.session.session_key
@@ -115,6 +115,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
 
     shipping = 0
     grand_total = 0
+    addresses = None 
     try:
 
         print("ssssssssssssssssssssssssssssss")
@@ -127,6 +128,10 @@ def checkout(request, total=0, quantity=0, cart_items=None):
         else:
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+
+
+        addresses = Address.objects.all()  # Retrieve all addresses
+
 
         if not cart_items.exists():
             print('ifffffffffffffffffffffffff')
@@ -154,6 +159,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
         'shipping': shipping,
         'grand_total': grand_total,
         'payment': payment,
+        'addresses': addresses,
     }
 
     return render(request, 'User/checkout.html', context)

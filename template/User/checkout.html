@@ -30,35 +30,21 @@
                                     style="margin-top: 8%;">
                                     <h3><span class="orange-text">Billing</span> Address</h3>
                                 </div>
-                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                    data-parent="#accordionExample">
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="billing-address-form">
-                                            <form method="post" action="{% url 'select_address' %}">
-                                                {% csrf_token %}
+                                            <label for="billing_address">Select Billing Address:</label>
+                                            <select name="billing_address" id="billing_address">
+                                                <option value="{{ address.id }}" >Select an address</option>
                                                 {% for address in addresses %}
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">
-                                                            <label>
-                                                                <input type="radio" name="selected_address"
-                                                                    value="{{ address.id }}">
-                                                                {{ address.first_name }} {{ address.last_name }}
-                                                            </label>
-                                                        </h5>
-                                                        <p class="card-text">{{ address.address }}, {{ address.city }},
-                                                            {{ address.state }}, {{ address.country }} - {{
-                                                            address.pincode }}</p>
-                                                        <p class="card-text">Phone: {{ address.phone }}</p>
-                                                        <p class="card-text">Email: {{ address.email }}</p>
-                                                    </div>
-                                                </div>
+                                                    <option value="{{ address.id }}">{{ address.street_address }}, {{ address.city }}, {{ address.state }}, {{ address.country }}</option>
                                                 {% endfor %}
-                                            </form>
-                                            <a href="{% url 'add_address' %}" type="submit" class="boxed-btn">Add another address</a>
+                                            </select>
+                                            <a href="{% url 'add_address' %}" class="boxed-btn">Add New Address</a>
                                         </div>
                                     </div>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -75,18 +61,24 @@
                                     </tr>
                                 </thead>
                                 <tbody class="order-details-body">
-                                    <tr>
-                                        <td>Product</td>
-                                        <td>Total</td>
-                                    </tr>
+                                    
                                     {% for cart_item in cart_items %}
                                     <tr>
                                         <td>{{ cart_item.product.product_name }}</td>
-                                        <td>₹{{ cart_item.product.price }}</td>
+                                        <td>Price:₹{{ cart_item.product.price }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
                                 <tbody class="checkout-details">
+                                    <tr>
+                                        <td>quantity</td>
+                                        <td>{{ quantity }}</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Total product price</td>
+                                        <td>₹{{total}}</td>
+                                    </tr>
                                     <tr>
                                         <td>Shipping</td>
                                         <td>{{ shipping }}</td>
@@ -114,6 +106,17 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="{% static 'j/checkout.js' %}"></script>
+
+
+
+
+
+
+
+
+
+
+    
 
 {% include 'include/footer.html' %}
 
