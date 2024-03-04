@@ -77,7 +77,12 @@
 						</div>
 						<h3>{{ product.product_name }}</h3>
 						<p class="product-price"><span></span>$ {{ product.price }}</p>
+						{% if product.stock <= 0 %}
+						<a  class="wishlist-btn"> Out of stock</a>
+						{% else %}
 						<a href="{% url 'add_cart' product.id %}" class="cart-btn"> Add to <i class="fas fa-shopping-cart"></i></a>
+						{% endif %}
+
 					</div>
 				</div>
 				{% endfor %}

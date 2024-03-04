@@ -1,5 +1,6 @@
 {% extends 'admin_base.html' %} {% load static %} {% block content %}
 {% include 'include/admin_navbar.html' %}
+
 <!-- Side Navbar Column -->
 
 
@@ -41,56 +42,65 @@
                                     </div>
                                 </div><!-- End Sales Card -->
 
-                                <form style="margin-left: 20%; font-size: large;" method='POST' action="{% url 'sales_report' %}">
+
+
+                                <form method="POST" action="{% url 'sales_report' %}">
                                     {% csrf_token %}
-                                    <label for="start_date">Start Date:</label>
-                                    <input type="date" id="start-date" name='start_date' value="{{ sales_report.start_date }}">
-                                    <label for="end_date">End Date:</label>
-                                    <input type="date" id="end-date" name='end_date' value="{{ sales_report.end_date }}">
-                                    <button type="submit" class="btn btn-primary">Generate Report</button>
+                                    <label for="report_type">Select Report Type:</label>
+                                    <select name="report_type" id="report_type">
+                                        <option value="daily">Daily</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                        <option value="custom">Custom</option>
+                                    </select>
 
-                                    <div class="col-auto">
-
-                                        <select class="form-select w-auto">
-                                            <option selected value="option-1">Today</option>
-                                            <option value="option-2">This week</option>
-                                            <option value="option-3">This month</option>
-        
-                                        </select>
+                                    <div id="custom_dates" style="display: none;">
+                                        <label for="start_date">Start Date:</label>
+                                        <input type="date" name="start_date" id="start_date">
+                                        <label for="end_date">End Date:</label>
+                                        <input type="date" name="end_date" id="end_date">
                                     </div>
+
+                                    <button type="submit">Generate Report</button>
                                 </form>
-                                
+
+                                <h5>_________________________</h5>
+                                <form action="{% url 'generate_sales_report' %}" method="get">
+                                    <label for="start_date">Start Date:</label>
+                                    <input type="date" id="start_date" name="start_date">
+                                    <label for="end_date">End Date:</label>
+                                    <input type="date" id="end_date" name="end_date">
+
+                                    <label for="report_type">Report Type:</label>
+                                    <select id="report_type" name="report_type">
+                                        <option value="monthly">Monthly</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="daily">Daily</option>
+                                    </select>
+
+                                    <button type="submit">Generate Report</button>
+                                </form>
 
                                 <div style="display: flex;  padding:5%; justify-content: space-evenly;">
-                                    <h4>Total Sales: ₹ {{sales_report.sales}} </h4>
+                                    <h4>Total Sales: ₹ {{ total_sales }} </h4>
                                     <h4>Total Orders: {{sales_report.total_orders}} </h4>
+                                    <p>Start Date: {{ start_date }}</p>
+                                    <p>End Date: {{ end_date }}</p>
                                 </div>
                                 <h2 style="margin-left: 40%;">Sales by Status</h2>
                                 <div>
                                     <ul
                                         style="display: flex;justify-content: space-evenly; font-weight: bold; margin-top: 5%; ">
-                                        <li>Pending: {{sales_report.sales_by_status.Pending}} </li>
-                                        <li>Processing: {{sales_report.sales_by_status.Processing}} </li>
-                                        <li>Shipped: {{sales_report.sales_by_status.Shipped}}</li>
-                                        <li>Delivered: {{sales_report.sales_by_status.Delivered}}</li>
-                                        <li>Cancelled: {{sales_report.sales_by_status.Cancelled}}</li>
-                                        <li>Return: {{sales_report.sales_by_status.Return}}</li>
+
+                                        {% for status_count in status_counts %}
+                                        <li>{{ status_count.status }}: {{ status_count.count }}</li>
+                                        {% endfor %}
                                     </ul>
                                 </div>
-                                <h2 style="margin-top: 5%;">{% if sales_report.start_date and sales_report.end_date %}
-                                    All Orders
-                                    {% else %}
-                                    Recent Orders
-                                    {% endif %}
-                                </h2>
-                                {% if sales_report.start_date and sales_report.end_date %}
-                              
-                                Download CSV <i class="mdi mdi-file-excel" style="font-size: x-large;"></i>
-                                </a>
-                              
-                                {% endif %}
 
-                                <div class="table-responsive">
+
+
+                                <div class="table-responsive" id="sales_report">
                                     <table id="example" class="display nowrap mt-5 table" style="width:100%">
                                         <thead>
                                             <tr>
@@ -102,32 +112,33 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for i in sales_report.recent_orders %}
+
 
                                             <!-- Sample data -->
-                                            <tr>
+                                            <!-- <tr>
                                                 <td> {{i.id}} </td>
                                                 <td> {{i.tracking_no}} </td>
                                                 <td>$ {{i.total_price}} </td>
                                                 <td> {{i.od_status}} </td>
                                                 <td> {{i.created_at}} </td>
+                                            </tr> -->
+                                            {% for order in orders %}
+                                            <tr>
+                                                <td>{{ order.id }}</td>
+                                                <td>{{ order.tracking_no }}</td>
+                                                <td>{{ order.total_price }}</td>
+                                                <td>{{ order.od_status }}</td>
+                                                <td>{{ order.created_at }}</td>
+
+                                                <!-- Add more columns as needed -->
                                             </tr>
                                             {% endfor %}
+
                                         </tbody>
                                     </table>
                                 </div>
 
-                                <!-- <script>
-                                    const startDate = document.getElementById("start-date");
-                                    const endDate = document.getElementById("end-date");
 
-                                    endDate.addEventListener("change", function() {
-                                        if (endDate.value < startDate.value) {
-                                            alert("End date cannot be before the start date.");
-                                            endDate.value = '';
-                                        }
-                                    });
-                                </script> -->
                             </div>
                         </div>
                     </div>
@@ -151,7 +162,16 @@
         });
     });
 </script>
-
+<script>
+    document.getElementById('report_type').addEventListener('change', function () {
+        var customDates = document.getElementById('custom_dates');
+        if (this.value === 'custom') {
+            customDates.style.display = 'block';
+        } else {
+            customDates.style.display = 'none';
+        }
+    });
+</script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
@@ -168,6 +188,59 @@
 <!-- Include DataTables and other scripts -->
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
-<!-- ... other scripts ... -->
+
+
+<form action="{% url 'generate_sales_report' %}" method="get">
+    <label for="start_date">Start Date:</label>
+    <input type="date" id="start_date" name="start_date">
+    <label for="end_date">End Date:</label>
+    <input type="date" id="end_date" name="end_date">
+
+    <label for="report_type">Report Type:</label>
+    <select id="report_type" name="report_type">
+        <option value="monthly">Monthly</option>
+        <option value="weekly">Weekly</option>
+        <option value="daily">Daily</option>
+    </select>
+
+    <button type="submit">Generate Report</button>
+</form>
+
+
+
+
+<body>
+    <h1>Sales Report</h1>
+    <p>Start Date: {{ start_date }}</p>
+    <p>End Date: {{ end_date }}</p>
+    <p>Total Sales: {{ total_sales }}</p>
+
+    <h2>Status Counts</h2>
+    <ul>
+        {% for status_count in status_counts %}
+        <li>{{ status_count.status }}: {{ status_count.count }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Payment Mode Counts</h2>
+    <ul>
+        {% for payment_mode_count in payment_mode_counts %}
+        <li>{{ payment_mode_count.payment_mode }}: {{ payment_mode_count.count }}</li>
+        {% endfor %}
+    </ul>
+    <!-- Add more data display as needed -->
+
+
+    {% for order in orders %}
+    <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.total_price }}</td>
+        <!-- Add more columns as needed -->
+    </tr>
+    {% endfor %}
+</body>
+
+
+
 
 {% endblock %}

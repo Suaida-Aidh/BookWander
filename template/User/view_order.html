@@ -17,23 +17,24 @@
             <div class="col-md-6">
               <h4>Shipping Details</h4>
               <hr>
-              {% for address in addresses %}
+              
 
               <label class="mt-2">Name</label>
-              <div class="border p-1">{{ address.first_name }} {{ address.last_name }}</div>
+              <h1></h1>
+              <div class="border p-1">{{ order.multiple_address.first_name }} {{ order.multiple_address.last_name }}</div>
               <label class="mt-2">Email</label>
-              <div class="border p-1">{{ address.email }}</div>
+              <div class="border p-1">{{ order.multiple_address.email }}</div>
               <label class="mt-2">Phone Number</label>
-              <div class="border p-1">{{ address.phone }}</div>
+              <div class="border p-1">{{ order.multiple_address.phone }}</div>
               <label class="mt-2">Delivery Address</label>
               <div class="border p-1">
-                {{ address.address }} <br>
-                {{ address.city }} <br>
-                {{ address.state }} <br>
-                {{ address.country }}<br>
+                {{ order.multiple_address.address }} <br>
+                {{ order.multiple_address.city }} <br>
+                {{ order.multiple_address.state }} <br>
+                {{ order.multiple_address.country }}<br>
                   Pin Code : {{ address.pincode }}
               </div>
-              {% endfor %}
+              
 
           </div>
             <div class="col-md-6 ">
@@ -72,6 +73,7 @@
                       <label class="my-3" for="">{{ item.quantity }}</label>
                     </td>
                     <td>
+                      
                       <div class="price-wrap">
                         <var class="price">₹{{ item.price }}</var><br>
                         <small class="text-muted"> ₹{{ item.product.price}} each </small>
@@ -96,6 +98,8 @@
                 <h6>Order Status: <span class="text-success">{{order.status}}</span></h6> <br>
                 {% endif %}
                 <h6>Tracking Number : {{order.tracking_no}}</h6><br>
+               
+
               </div>
 
 

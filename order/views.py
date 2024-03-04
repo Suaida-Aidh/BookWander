@@ -24,6 +24,8 @@ def placeorder(request):
         # Fetch selected billing address
         billing_address_id = request.POST.get('billing_address')
         billing_address = get_object_or_404(Address, id=billing_address_id)
+        print(billing_address,billing_address_id,"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        
         # Fetch payment mode and payment id
         payment_mode = request.POST.get('payment_mode')
         payment_id = request.POST.get('payment_id')
@@ -46,7 +48,8 @@ def placeorder(request):
             pincode=billing_address.pincode,
             total_price=total_price,
             payment_mode=payment_mode,
-            payment_id=payment_id
+            payment_id=payment_id,
+            multiple_address=billing_address
         )
 
         # Generate tracking number
@@ -78,14 +81,16 @@ def placeorder(request):
         # Redirect or return JSON response based on payment mode
         if payment_mode == "Paid by Razorpay":
                 return JsonResponse({'status': "Your order has been placed successfully"})
-        else:
+        elif payment_mode == "COD" :
             return redirect('myorder')
+        return redirect('myorder')
+        
 
 
 
 # MY ORDER FUNCTION
 @never_cache
-@login_required(login_url='signin')
+@login_required(login_url='Login')
 def myorder(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     
@@ -120,11 +125,13 @@ def myorder(request):
 
 
 @never_cache
-@login_required(login_url=('signin'))
+@login_required(login_url=('Login'))
 def vieworder(request, t_no):
     order = Order.objects.filter(tracking_no=t_no, user=request.user).first()
     orderitems = OrderItem.objects.filter(order=order)
-    address = Address.objects.filter(user=request.user).first()  # Fetch associated address
+    address = Order.objects.filter(user=request.user).first()  # Fetch associated address
+    print(order.multiple_address.first_name)
+    print(order.multiple_address.address)
     context = {
         'order': order,
         'orderitems': orderitems,
@@ -137,6 +144,7 @@ def addresses(request):
     addresses = Address.objects.filter(user=request.user)
     return render(request, 'User/add_address.html', {'addresses':addresses})
 
+
 def add_address(request):
     if request.method == 'POST':
         form = AddressForm(request.POST)
@@ -147,8 +155,27 @@ def add_address(request):
             return redirect('checkout')  # Redirect to some view after adding the address
     else:
         form = AddressForm()
-    return render(request, 'User/add_address.html', {'form': form})
+    
+    addresses = Address.objects.filter(user=request.user)
+    return render(request, 'User/add_address.html', {'form': form, 'addresses': addresses})
 
+def delete_address(request, address_id):
+    address = get_object_or_404(Address, pk=address_id)
+    address.delete()
+    print('deleeeeeeeeeeeeeeeeeeeeeeeeeeeteeeeeetttttttttt')
+    return redirect('checkout')
+
+
+def edit_address(request, address_id):
+    address = get_object_or_404(Address, pk=address_id)
+    if request.method == 'POST':
+        form = AddressForm(request.POST, instance=address)
+        if form.is_valid():
+            form.save()
+            return redirect('checkout')  # Redirect back to add_address view after editing
+    else:
+        form = AddressForm(instance=address)
+    return render(request, 'User/edit_address.html', {'form': form, 'address': address})
 
 def select_address(request):
     if request.method == 'POST':

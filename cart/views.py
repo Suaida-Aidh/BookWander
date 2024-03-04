@@ -130,7 +130,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
 
 
-        addresses = Address.objects.all()  # Retrieve all addresses
+        addresses = Address.objects.filter(user=request.user)  # Retrieve all addresses
 
 
         if not cart_items.exists():

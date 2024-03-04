@@ -116,7 +116,7 @@ def Register(request):
 
 
 #  LOGOUT CONDITION
-@login_required(login_url='signin')
+@login_required(login_url='Login')
 def signout(request):
     logout(request)
     messages.success(request, "Logout successfully")
@@ -143,7 +143,7 @@ def activate(request, uidb64, token):
 # USER PROFILE
 
 # MYACCOUNT CONDITION (DASH BOARD)
-@login_required(login_url='signin')
+@login_required(login_url='Login')
 def user_profile(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     orders_count = orders.count()
@@ -173,7 +173,7 @@ def user_profile(request):
 
 
 # EDIT PROFILE CONDITION
-@login_required(login_url='signin')
+@login_required(login_url='Login')
 def edit_profile(request):
     userprofile, created = UserProfile.objects.get_or_create(user=request.user)
     if request.method == 'POST':

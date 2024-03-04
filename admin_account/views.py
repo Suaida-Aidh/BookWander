@@ -13,7 +13,7 @@ from store.models import Category_list,Authors
 from order.models import Order, OrderItem
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Sum
-from datetime import datetime
+from datetime import datetime,timedelta
 from datetime import date
 from django.core.exceptions import ValidationError
 import csv
@@ -28,7 +28,65 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from django.template import Context
 import os
-from weasyprint import HTML
+from datetime import datetime, timedelta
+
+# from weasyprint import HTML
+
+
+
+from django.db.models import Sum
+from django.utils.timezone import now
+from datetime import timedelta
+
+def generate_sales_report(request):
+    # Retrieve options from the request
+    report_type = request.GET.get('report_type')  # 'monthly', 'daily', 'weekly'
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    
+    # Set end_date to today if not provided
+    if not end_date:
+        end_date = now().date()
+
+    # Adjust start_date based on report type
+    if report_type == 'monthly':
+        # Set start_date to the beginning of the month
+        start_date = now().replace(day=1).date()
+    elif report_type == 'weekly':
+        # Set start_date to the beginning of the current week (Monday)
+        start_date = now() - timedelta(days=now().weekday())
+    elif report_type == 'daily':
+        # Set start_date to today
+        start_date = end_date
+
+    # Filter orders within the specified date range
+    orders = Order.objects.filter(created_at__date__range=[start_date, end_date])
+
+    # Aggregate total sales within the date range
+    total_sales = orders.aggregate(total_sales=Sum('total_price'))['total_sales'] or 0
+
+    # Group orders by status
+    status_counts = orders.values('status').annotate(count=Sum(1))
+
+    # Group orders by payment mode
+    payment_mode_counts = orders.values('payment_mode').annotate(count=Sum(1))
+
+    # Other custom aggregations or groupings as needed
+
+    # Example output
+    report = {
+        'start_date': start_date,
+        'end_date': end_date,
+        'total_sales': total_sales,
+        'status_counts': status_counts,
+        'payment_mode_counts': payment_mode_counts,
+        'orders': orders,
+        'report_type': report_type,  # Include report_type in the report context
+    }
+
+    return render(request, 'Admin-temp/sales_report.html', report)
+
+
 
 # Create your views here.
 @login_required(login_url='Login')
@@ -80,7 +138,7 @@ def dashboard(request):
     return render(request, 'Admin-temp/dashboard.html', context)
 # PRODUCT  MANAGEMENT
 @never_cache
-@login_required(login_url='signin')
+@login_required(login_url='Login')
 def product_management(request):
     if request.user.is_superadmin:
         if request.method == "POST":
@@ -103,7 +161,7 @@ def product_management(request):
 
 # ADD PRODUCT
 @never_cache
-@login_required(login_url='signin')  # type: ignore
+@login_required(login_url='Login')  # type: ignore
 def add_product(request):
     if request.user.is_superadmin:
         if request.method == 'POST':
@@ -157,7 +215,7 @@ def edit_product(request, product_id):
 
 
 @never_cache
-@login_required(login_url='signin')
+@login_required(login_url='Login')
 def delete_product(request, product_id):
     product = Product.objects.get(id=product_id)
     product.delete()
@@ -167,7 +225,7 @@ def delete_product(request, product_id):
 
 # USER MANAGMENT
 @never_cache
-@login_required(login_url='signin')
+@login_required(login_url='Login')
 def user_management(request):
     if request.user.is_superadmin:
         if request.method == "POST":
@@ -211,7 +269,7 @@ def unblock_user(request, user_id):
 
 
 @never_cache
-@login_required(login_url='signin')
+@login_required(login_url='Login')
 def user_view(request, user_id=None):
     # If user_id is not provided, get details of the currently logged-in user
     if user_id is None:
@@ -372,7 +430,7 @@ def manager_cancel_order(request, tracking_no):
 
 # MULTIPLE IMAGES MANAGEMENT
 @never_cache
-@login_required(login_url='signin')
+@login_required(login_url='Login')
 def multiple_image_management(request):
     multipleimages = MultipleImages.objects.all().order_by('id')
     paginator = Paginator(multipleimages, 10)
@@ -387,7 +445,7 @@ def multiple_image_management(request):
 
 # ADD MULTIPLE IMAGES
 @never_cache
-@login_required(login_url='signin')
+@login_required(login_url='Login')
 def add_multiple_images(request):  # type: ignore
     if request.method == 'POST':
         form = MultipleImagesForm(request.POST, request.FILES)
@@ -411,7 +469,7 @@ def add_multiple_images(request):  # type: ignore
 
 
 @never_cache
-@login_required(login_url='signin')
+@login_required(login_url='Login')
 def update_multiple_images(request, multi_id):
     multipleimages = MultipleImages.objects.get(id=multi_id)
     form = MultipleImagesForm(instance=multipleimages)
@@ -433,72 +491,94 @@ def update_multiple_images(request, multi_id):
 
 # DELETE MULTIPLEIMAGES
 @never_cache
-@login_required(login_url='signin')
+@login_required(login_url='Login')
 def delete_multiple_images(request, multi_id):
     multipleimages = MultipleImages.objects.get(id=multi_id)
     multipleimages.delete()
 
     return redirect('multiple_image_management')
 
-@login_required(login_url='signin')
-def sales_report(request):
-    # try:
-        start_date = None
-        end_date = None
-        if request.method == 'POST':
-            start_date = request.POST.get('start_date')
-            end_date = request.POST.get('end_date')
 
-            if start_date and end_date:
-                start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-                end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+
+@login_required(login_url='Login')
+def sales_report(request, report_type=None):
+    start_date = None
+    end_date = None
+    report_title = None
+
+    if report_type == 'daily':
+        start_date = timezone.localdate()
+        end_date = timezone.localdate()
+        report_title = 'Daily Sales Report'
+    elif report_type == 'weekly':
+        start_date = timezone.localdate() - timedelta(days=6)
+        end_date = timezone.localdate()
+        report_title = 'Weekly Sales Report'
+    elif report_type == 'monthly':
+        start_date = timezone.localdate().replace(day=1)
+        end_date = timezone.localdate()
+        report_title = 'Monthly Sales Report'
+    elif report_type == 'custom':
+        if request.method == 'POST':
+            start_date_str = request.POST.get('start_date')
+            end_date_str = request.POST.get('end_date')
+
+            if start_date_str and end_date_str:
+                start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+                end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+
                 if start_date > end_date:
                     messages.error(request, 'Start date must be before end date')
                     return redirect('admin_dashboard')
+
                 if end_date > timezone.localdate():
                     messages.error(request, 'End date cannot be in the future')
                     return redirect('admin_dashboard')
-                orders = Order.objects.filter(created_at__date__range=(start_date, end_date))
+
+            report_title = f'Custom Sales Report ({start_date} - {end_date})'
         else:
-            orders = Order.objects.all()
+            start_date = request.GET.get('start_date')
+            end_date = request.GET.get('end_date')
 
-        total_sale = sum(order.total_price for order in orders)
+            report_title = 'Custom Sales Report'
 
-        total_count = orders.count()
+    orders = Order.objects.all()
 
-        sales_by_status = {
-            'Pending': orders.filter(status='Pending').count(),
-            'Processing': orders.filter(status='Processing').count(),
-            'Shipped': orders.filter(status='Shipped').count(),
-            'Delivered': orders.filter(status='Delivered').count(),
-            'Cancelled': orders.filter(status='Cancelled').count(),
-            'Return': orders.filter(status='Return').count()
-        }
-        print("sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
-        print(sales_by_status)
-        recent_orders = Order.objects.filter(created_at__range=(start_date, end_date))[:10]
+    if start_date and end_date:
+        orders = orders.filter(created_at__date__range=(start_date, end_date))
 
-        sales_report = {
-            'start_date': start_date.strftime('%Y-%m-%d') if start_date else '',
-            'end_date': end_date.strftime('%Y-%m-%d') if end_date else '',
-            'total_sale': total_sale,
-            'total_orders': total_count,
-            'sales_by_status': sales_by_status,
-            'recent_orders': recent_orders,
-        }
-        print('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
-        print(sales_report)
-        context = {
-            'sales_report': sales_report,
-        }
-        print("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
-        print(context)
-        return render(request, 'Admin-temp/sales_report.html', context)
+    total_sale = sum(order.total_price for order in orders)
+    total_count = orders.count()
+
+    sales_by_status = {
+        'Pending': orders.filter(status='Pending').count(),
+        'Out For Shipping': orders.filter(status='Out For Shipping').count(),
+        'Shipped': orders.filter(status='Shipped').count(),
+        'Delivered': orders.filter(status='Delivered').count(),
+        'Cancelled': orders.filter(status='Cancelled').count(),
+        'Return': orders.filter(status='Return').count()
+    }
+
+    recent_orders = orders[:10]
+
+    sales_report = {
+        'report_title': report_title,
+        'start_date': start_date.strftime('%Y-%m-%d') if start_date else '',
+        'end_date': end_date.strftime('%Y-%m-%d') if end_date else '',
+        'total_sale': total_sale,
+        'total_orders': total_count,
+        'sales_by_status': sales_by_status,
+        'recent_orders': recent_orders,
+    }
+
+    context = {
+        'sales_report': sales_report,
+    }
+
+    return render(request, 'Admin-temp/sales_report.html', context)
     
-    # except Exception as e:
-    #     print(e)
-    #     print("errrrrrrrrrrrrrrrrrrrrr")
-    #     return render(request, 'Admin-temp/sales_report.html')
+
+
 
 def generate_sales_report_pdf(request):
     sales_report = request.session.get('sales_report')  # Retrieve sales report from session
@@ -510,7 +590,7 @@ def generate_sales_report_pdf(request):
 
     # Generate PDF
     pdf_file = os.path.join(os.path.dirname(__file__), 'sales_report.pdf')
-    HTML(string=html).write_pdf(pdf_file)
+    # HTML(string=html).write_pdf(pdf_file)
 
     # Serve PDF for download
     with open(pdf_file, 'rb') as pdf:

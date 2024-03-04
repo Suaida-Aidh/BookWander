@@ -6,6 +6,23 @@ from django.utils import timezone
 
 # Create your models here.
 
+class Address(models.Model):
+    user = models.ForeignKey(Account , on_delete=models.CASCADE)
+    first_name = models.CharField( max_length=50,blank=True)
+    last_name = models.CharField( max_length=50,blank=True)
+    phone = models.CharField(blank=True, max_length=50)
+    email = models.EmailField( max_length=254,blank=True)
+    address = models.CharField( max_length=50,blank=True)
+    country = models.CharField( max_length=50,blank=True)
+    state = models.CharField( max_length=50,blank=True)
+    city = models.CharField( max_length=50,blank=True)
+    pincode = models.CharField( max_length=50,blank=True)
+    is_available = models.BooleanField(null=True,blank=True,default=True)
+    image = models.ImageField( upload_to='userprofile',null=True,blank=True, height_field=None, width_field=None, max_length=None)
+
+    def __str__(self) -> str:
+        return f"{self.id}"
+
 
 class Order(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
@@ -22,21 +39,21 @@ class Order(models.Model):
     payment_mode=models.CharField(max_length=150,null=False)
     payment_id= models.CharField(max_length=500,null=True)
     tax_amount = models.FloatField(default=0.0) 
+    multiple_address=models.ForeignKey(Address, on_delete=models.CASCADE,null=True)
     orderstatuses={
         ('Pending','Pending'),
         ('Out For Shipping','Out For Shipping'),
         ('Shipped','Shipped'),
         ('Delivered','Delivered'),
         ('Cancelled','Cancelled'),
+        ('Return','Return'),
+    
     }
     status = models.CharField(max_length=150,choices=orderstatuses,default='Pending')
     message=models.TextField(null=True)
     tracking_no =models.CharField(max_length=150,null=True)
     created_at =models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
-
-
-
 
     def __str__(self):
         return '{} - {}'.format(self.id,self.tracking_no)  # type: ignore
@@ -117,22 +134,7 @@ class Profile(models.Model):
 
 
 
-class Address(models.Model):
-    user = models.ForeignKey(Account , on_delete=models.CASCADE)
-    first_name = models.CharField( max_length=50,blank=True)
-    last_name = models.CharField( max_length=50,blank=True)
-    phone = models.CharField(blank=True, max_length=50)
-    email = models.EmailField( max_length=254,blank=True)
-    address = models.CharField( max_length=50,blank=True)
-    country = models.CharField( max_length=50,blank=True)
-    state = models.CharField( max_length=50,blank=True)
-    city = models.CharField( max_length=50,blank=True)
-    pincode = models.CharField( max_length=50,blank=True)
-    is_available = models.BooleanField(null=True,blank=True,default=True)
-    image = models.ImageField( upload_to='userprofile',null=True,blank=True, height_field=None, width_field=None, max_length=None)
 
-    def __str__(self) -> str:
-        return f"{self.id}"
 
 
 
