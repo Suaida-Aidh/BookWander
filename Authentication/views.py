@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import RegistrationalForm, LoginForm
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout,update_session_auth_hash
 from .models import Account
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
@@ -18,6 +18,7 @@ from . models import UserProfile
 from order.models import Order, Wallet, Transaction
 from store.models import Product
 from django.http import Http404
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 # Create your views here.
@@ -93,7 +94,7 @@ def Register(request):
                 # USER ACTIVATION
                 current_site = get_current_site(request)
                 mail_subject = 'ACTIVATION CODE FROM BOOK WANDER'
-                message = render_to_string('authentication/account_verification_email.html', {
+                message = render_to_string('Authentication/account_verification_email.html', {
                     'first_name': first_name,
                     'domain': current_site,
                     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -197,4 +198,15 @@ def edit_profile(request):
     return render(request, 'User/edit_profile.html', context)
 
 
-
+#RESET PASSWORD
+def Change_Password(request):
+    if request.method=='POST':
+        fm=PasswordChangeForm(user=request.user,data=request.POST)
+        if fm.is_valid():
+            fm.save()
+            update_session_auth_hash(request,fm.user)
+            messages.success(request,'Your password has be changed succesfully....')
+            return redirect('user_profile')
+    else:
+        fm=PasswordChangeForm(user=request.user)
+    return render (request,'Authentication/Change_Password.html',{'fm':fm})
