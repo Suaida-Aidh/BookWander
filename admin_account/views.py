@@ -29,14 +29,11 @@ from django.template.loader import get_template
 from django.template import Context
 import os
 from datetime import datetime, timedelta
-
-# from weasyprint import HTML
-
-
-
 from django.db.models import Sum
 from django.utils.timezone import now
 from datetime import timedelta
+
+
 
 def generate_sales_report(request):
     # Retrieve options from the request
@@ -60,8 +57,6 @@ def generate_sales_report(request):
             # Set start_date to today
             start_date = end_date
 
-    
-
     # Filter orders within the specified date range
     orders = Order.objects.filter(created_at__date__range=[start_date, end_date])
 
@@ -73,8 +68,6 @@ def generate_sales_report(request):
 
     # Group orders by payment mode
     payment_mode_counts = orders.values('payment_mode').annotate(count=Sum(1))
-
-    # Other custom aggregations or groupings as needed
 
     # Example output
     report = {
@@ -749,6 +742,8 @@ def add_author(request):
             messages.error(request, f'Error: {e}')
 
     return render(request, 'Admin-temp/add_author.html')
+
+
 # UPDATE CATEGORY
 
 
