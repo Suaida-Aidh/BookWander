@@ -47,17 +47,20 @@ def generate_sales_report(request):
     # Set end_date to today if not provided
     if not end_date:
         end_date = now().date()
+    if report_type != 'custom':
 
     # Adjust start_date based on report type
-    if report_type == 'monthly':
-        # Set start_date to the beginning of the month
-        start_date = now().replace(day=1).date()
-    elif report_type == 'weekly':
-        # Set start_date to the beginning of the current week (Monday)
-        start_date = now() - timedelta(days=now().weekday())
-    elif report_type == 'daily':
-        # Set start_date to today
-        start_date = end_date
+        if report_type == 'monthly':
+            # Set start_date to the beginning of the month
+            start_date = now().replace(day=1).date()
+        elif report_type == 'weekly':
+            # Set start_date to the beginning of the current week (Monday)
+            start_date = now() - timedelta(days=now().weekday())
+        elif report_type == 'daily':
+            # Set start_date to today
+            start_date = end_date
+
+    
 
     # Filter orders within the specified date range
     orders = Order.objects.filter(created_at__date__range=[start_date, end_date])

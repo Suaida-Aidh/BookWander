@@ -5,6 +5,9 @@ $(document).ready(function () {
 
 
         var first_name = $("[name='first_name']").val();
+        
+        var billing_address = $("[name='billing_address']").val();
+
         var last_name = $("[name='last_name']").val();
         var email = $("[name='email']").val();
         var phone = $("[name='phone']").val();
@@ -16,17 +19,17 @@ $(document).ready(function () {
         var token = $("[name='csrfmiddlewaretoken']").val();
 
         console.log(first_name, last_name, email, phone, address,city,state,country, pincode);
-        if (first_name == "" || last_name == "" || email == "" || phone == "" || address == "" || city == "" || state == "" || country == "" || pincode == "") {
+        // if (first_name == "" || last_name == "" || email == "" || phone == "" || address == "" || city == "" || state == "" || country == "" || pincode == "") {
 
-            swal({
-                title: "warning!",
-                text: "All fields are mandatory!",
-                icon: "warning",
-                button: "Ok",
-            });
-            return false;
-        }
-        else {
+        //     swal({
+        //         title: "warning!",
+        //         text: "All fields are mandatory!",
+        //         icon: "warning",
+        //         button: "Ok",
+        //     });
+        //     return false;
+        // }
+        // else {
             $.ajax({
                 method: "GET",
                 url: "/order/proceed-to-pay/",
@@ -45,23 +48,25 @@ $(document).ready(function () {
                             // alert(response.razorpay_order_id);
                             // alert(response.razorpay_signature)
                             data = {
-                                "first_name": first_name,
-                                "last_name": last_name,
-                                "email": email,
-                                "phone": phone,
-                                "address": address,
-                                "city": city,
-                                "state": state,
-                                "country": country,
-                                "pincode": pincode,
+                                // "first_name": first_name,
+                                // "last_name": last_name,
+                                // "email": email,
+                                // "phone": phone,
+                                // "address": address,
+                                // "city": city,
+                                // "state": state,
+                                // "country": country,
+                                // "pincode": pincode,
+                                "billing_address": billing_address,
                                 "payment_mode": "Paid by Razorpay",
                                 "payment_id": responseb.razorpay_payment_id,
                                 csrfmiddlewaretoken: token
 
                             }
                             $.ajax({
+                                
                                 method: "POST",
-                                url: "/order/place-order/",
+                                url: "/order/place_order/new/",
                                 data: data,
                                 success: function (responsec) {
 
@@ -71,7 +76,8 @@ $(document).ready(function () {
                                         window.location.href = '/order/my-orders/'
                                     })
 
-                                }
+                                },
+                              
                             });
                         },
                         "prefill": {
@@ -93,7 +99,7 @@ $(document).ready(function () {
                 }
             });
 
-        }
+        // }
 
 
 

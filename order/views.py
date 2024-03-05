@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from cart.models import CartItem
-from .models import Order, OrderItem , Wallet, Transaction , Address
+from .models import Order, OrderItem, Wallet, Transaction, Address
 from store.models import Product
 import random
 from django.contrib import messages
@@ -13,26 +13,23 @@ from django.shortcuts import get_object_or_404
 from decimal import Decimal
 
 
-
-
-@never_cache
-@login_required(login_url=('Login'))
-def placeorder(request):
+def place_order(request):
+   
     if request.method == 'POST':
-
 
         # Fetch selected billing address
         billing_address_id = request.POST.get('billing_address')
         billing_address = get_object_or_404(Address, id=billing_address_id)
-        print(billing_address,billing_address_id,"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-        
+        print(billing_address,'ADDRESSSS')
+
         # Fetch payment mode and payment id
         payment_mode = request.POST.get('payment_mode')
         payment_id = request.POST.get('payment_id')
 
         # Calculate total price
         cart_items = CartItem.objects.filter(user=request.user)
-        total_price = sum(cart_item.product.price * cart_item.quantity for cart_item in cart_items)
+        total_price = sum(cart_item.product.price *
+                          cart_item.quantity for cart_item in cart_items)
 
         # Create the order
         new_order = Order.objects.create(
@@ -74,17 +71,20 @@ def placeorder(request):
             order_product.save()
 
         # Clear the user's cart
-        CartItem.objects.filter(user=request.user).delete()
+            CartItem.objects.filter(user=request.user).delete()
 
-        messages.success(request, 'Order Placed Successfully')
+            messages.success(request, 'Order Placed Successfully')
 
         # Redirect or return JSON response based on payment mode
+        payment_mode = request.POST.get('payment_mode')
+       
         if payment_mode == "Paid by Razorpay":
-                return JsonResponse({'status': "Your order has been placed successfully"})
-        elif payment_mode == "COD" :
+            return JsonResponse({'status': "Your order has been placed successfully"})
+        elif payment_mode == "COD":
+           
             return redirect('myorder')
         return redirect('myorder')
-        
+
 
 
 
@@ -93,7 +93,6 @@ def placeorder(request):
 @login_required(login_url='Login')
 def myorder(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
-    
 
     for order in orders:
         total = 0
@@ -103,7 +102,7 @@ def myorder(request):
         order.total_price = total + shipping
         order.shipping_charges = shipping  # Save shipping charges to order object
         order.save()  # Save the updated total price and shipping charges to the database
-        
+
     # Pagination
     paginator = Paginator(orders, 10)  # Show 10 orders per page
     page_number = request.GET.get('page')
@@ -115,11 +114,10 @@ def myorder(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         orders = paginator.page(paginator.num_pages)
-    
-        
+
     context = {
         'orders': orders,
-        
+
     }
     return render(request, 'User/my_order.html', context)
 
@@ -129,7 +127,8 @@ def myorder(request):
 def vieworder(request, t_no):
     order = Order.objects.filter(tracking_no=t_no, user=request.user).first()
     orderitems = OrderItem.objects.filter(order=order)
-    address = Order.objects.filter(user=request.user).first()  # Fetch associated address
+    address = Order.objects.filter(
+        user=request.user).first()  # Fetch associated address
     print(order.multiple_address.first_name)
     print(order.multiple_address.address)
     context = {
@@ -142,7 +141,7 @@ def vieworder(request, t_no):
 
 def addresses(request):
     addresses = Address.objects.filter(user=request.user)
-    return render(request, 'User/add_address.html', {'addresses':addresses})
+    return render(request, 'User/add_address.html', {'addresses': addresses})
 
 
 def add_address(request):
@@ -152,12 +151,14 @@ def add_address(request):
             address = form.save(commit=False)
             address.user = request.user
             address.save()
-            return redirect('checkout')  # Redirect to some view after adding the address
+            # Redirect to some view after adding the address
+            return redirect('checkout')
     else:
         form = AddressForm()
-    
+
     addresses = Address.objects.filter(user=request.user)
     return render(request, 'User/add_address.html', {'form': form, 'addresses': addresses})
+
 
 def delete_address(request, address_id):
     address = get_object_or_404(Address, pk=address_id)
@@ -172,10 +173,12 @@ def edit_address(request, address_id):
         form = AddressForm(request.POST, instance=address)
         if form.is_valid():
             form.save()
-            return redirect('checkout')  # Redirect back to add_address view after editing
+            # Redirect back to add_address view after editing
+            return redirect('checkout')
     else:
         form = AddressForm(instance=address)
     return render(request, 'User/edit_address.html', {'form': form, 'address': address})
+
 
 def select_address(request):
     if request.method == 'POST':
@@ -188,6 +191,7 @@ def select_address(request):
     addresses = Address.objects.all()
     return render(request, 'User/checkout.html', {'addresses': addresses})
 
+
 def Cancel_order(request, t_no):
     order = Order.objects.get(tracking_no=t_no, user=request.user)
 
@@ -199,15 +203,15 @@ def Cancel_order(request, t_no):
         order_items = OrderItem.objects.filter(order=order)
         for item in order_items:
             product = item.product
-            print(f"Before credit: Product {product.id} - Stock: {product.stock}")
+            print(
+                f"Before credit: Product {product.id} - Stock: {product.stock}")
             product.stock += item.quantity  # Increase the stock quantity
             product.save()
-            print(f"After credit: Product {product.id} - Stock: {product.stock}")
-            
-
+            print(
+                f"After credit: Product {product.id} - Stock: {product.stock}")
 
         # Retrieve or create the user's wallet
-        wallet , _= Wallet.objects.get_or_create(user=request.user)
+        wallet, _ = Wallet.objects.get_or_create(user=request.user)
         print("wallet")
         print(wallet)
 
@@ -215,14 +219,11 @@ def Cancel_order(request, t_no):
         wallet.balance += order.total_price
         wallet.save()
 
-    
-
         # Create a transaction record for the refund
-        Transaction.objects.create(wallet=wallet, transaction_type='Refund', amount=order.total_price)
+        Transaction.objects.create(
+            wallet=wallet, transaction_type='Refund', amount=order.total_price)
 
     return redirect('myorder')
-
-
 
 
 def return_order(request, t_no):
@@ -235,7 +236,7 @@ def return_order(request, t_no):
         # Update order status to indicate it's returned
         order.status = 'Returned'
         order.save()
-        
+
         # Credit stock for each item in the order
         order_items = OrderItem.objects.filter(order=order)
         for item in order_items:
@@ -250,9 +251,11 @@ def return_order(request, t_no):
         wallet.save()
 
         # Create a transaction record for the refund
-        Transaction.objects.create(wallet=wallet, transaction_type='Refund', amount=refund_amount)
+        Transaction.objects.create(
+            wallet=wallet, transaction_type='Refund', amount=refund_amount)
 
     return redirect('myorder')
+
 
 @never_cache
 @login_required(login_url=('Login'))  # type: ignore
