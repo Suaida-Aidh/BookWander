@@ -17,7 +17,7 @@ def revenue_calculator(request):
             revenue += item.price * item.quantity
      
         total_revenue = revenue + tax
-        return render(request, 'Admin-temp\dashboard.html', {'revenue': total_revenue})
+        return render(request, 'Admin-temp/dashboard.html', {'revenue': total_revenue})
  
     except OrderItem.DoesNotExist:
         pass
