@@ -34,10 +34,28 @@ from django.utils.timezone import now
 from datetime import timedelta
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-import sys
-import os
 
-import xlsxwriter
+
+
+def generate_sales_report_pdf(request):
+    sales_report = request.session.get('sales_report')  # Retrieve sales report from session
+    template_path = 'Admin-temp/sales_report_pdf_template.html'  # Template for PDF
+
+    # Render template with sales report data
+    template = get_template(template_path)
+    html = template.render({'sales_report': sales_report})
+
+    # Generate PDF
+    pdf_file = os.path.join(os.path.dirname(__file__), 'sales_report.pdf')
+    # HTML(string=html).write_pdf(pdf_file)
+
+    # Serve PDF for download
+    with open(pdf_file, 'rb') as pdf:
+        response = HttpResponse(pdf.read(), content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="sales_report.pdf"'
+    return response
+
+
 
 
 
@@ -90,42 +108,12 @@ def generate_sales_report(request):
 
 
 
-def download_sales_report_excel(report):
-    # Create a new Excel workbook and add a worksheet
-    workbook = xlsxwriter.Workbook('sales_report.xlsx')
-    worksheet = workbook.add_worksheet()
 
-    # Write headers
-    headers = ['Order ID', 'Customer', 'Total Price', 'Status', 'Payment Mode']
-    for col, header in enumerate(headers):
-        worksheet.write(0, col, header)
-
-    # Write data
-    row = 1
-    for order in report['orders']:
-        worksheet.write(row, 0, order.id)
-        worksheet.write(row, 1, order.customer.name)
-        worksheet.write(row, 2, order.total_price)
-        worksheet.write(row, 3, order.status)
-        worksheet.write(row, 4, order.payment_mode)
-        row += 1
-
-    # Close the workbook
-    workbook.close()
-
-    # Serve the Excel file as a downloadable response
-    with open('sales_report.xlsx', 'rb') as f:
-        response = HttpResponse(f.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=sales_report.xlsx'
-
-    return response
-
-# Create your views here.
 @login_required(login_url='Login')
 def dashboard(request):
     orders = Order.objects.order_by('-id')[:10]
     sales_data = OrderItem.objects.values('order__created_at__date').annotate(
-    total_sale=Sum('price')).order_by('-order__created_at__date')
+        total_sale=Sum('price')).order_by('-order__created_at__date')
     categories = [item['order__created_at__date'].strftime('%d/%m') for item in sales_data]
     sales_values = [item['total_sale'] for item in sales_data]
 
@@ -142,12 +130,17 @@ def dashboard(request):
     status_return = Order.objects.filter(status='Return').count()
     status_cancel = Order.objects.filter(status='Cancelled').count()
     total = status_delivery + status_return + status_cancel
-    status_delivery_percentage = (status_delivery / total) * 100
-    status_return_percentage = (status_return / total) * 100
+
+    # Check if total is zero to avoid division by zero
+    if total != 0:
+        status_delivery_percentage = (status_delivery / total) * 100
+        status_return_percentage = (status_return / total) * 100
+    else:
+        status_delivery_percentage = 0
+        status_return_percentage = 0
 
     dates = [item['created_at__date'].strftime('%Y-%m-%d') for item in orders_by_date]
     order_counts = [item['order_count'] for item in orders_by_date]
-
 
     # Call the revenue_calculator function
     revenue_context = revenue_calculator(request)
@@ -167,7 +160,8 @@ def dashboard(request):
         'dates': dates,
         'order_counts': order_counts
     }
-    return render(request, 'Admin-temp/dashboard.html', context)
+    return render(request, 'Admin.-temp/dashboard.html', context)
+
 # PRODUCT  MANAGEMENT
 @never_cache
 @login_required(login_url='Login')
@@ -532,208 +526,189 @@ def delete_multiple_images(request, multi_id):
 
 
 
-@login_required(login_url='Login')
-def sales_report(request, report_type=None):
-    start_date = None
-    end_date = None
-    report_title = None
+# @login_required(login_url='Login')
+# def sales_report(request, report_type=None):
+#     start_date = None
+#     end_date = None
+#     report_title = None
 
-    if report_type == 'daily':
-        start_date = timezone.localdate()
-        end_date = timezone.localdate()
-        report_title = 'Daily Sales Report'
-    elif report_type == 'weekly':
-        start_date = timezone.localdate() - timedelta(days=6)
-        end_date = timezone.localdate()
-        report_title = 'Weekly Sales Report'
-    elif report_type == 'monthly':
-        start_date = timezone.localdate().replace(day=1)
-        end_date = timezone.localdate()
-        report_title = 'Monthly Sales Report'
-    elif report_type == 'custom':
-        if request.method == 'POST':
-            start_date_str = request.POST.get('start_date')
-            end_date_str = request.POST.get('end_date')
+#     if report_type == 'daily':
+#         start_date = timezone.localdate()
+#         end_date = timezone.localdate()
+#         report_title = 'Daily Sales Report'
+#     elif report_type == 'weekly':
+#         start_date = timezone.localdate() - timedelta(days=6)
+#         end_date = timezone.localdate()
+#         report_title = 'Weekly Sales Report'
+#     elif report_type == 'monthly':
+#         start_date = timezone.localdate().replace(day=1)
+#         end_date = timezone.localdate()
+#         report_title = 'Monthly Sales Report'
+#     elif report_type == 'custom':
+#         if request.method == 'POST':
+#             start_date_str = request.POST.get('start_date')
+#             end_date_str = request.POST.get('end_date')
 
-            if start_date_str and end_date_str:
-                start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
-                end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+#             if start_date_str and end_date_str:
+#                 start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+#                 end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
 
-                if start_date > end_date:
-                    messages.error(request, 'Start date must be before end date')
-                    return redirect('admin_dashboard')
+#                 if start_date > end_date:
+#                     messages.error(request, 'Start date must be before end date')
+#                     return redirect('admin_dashboard')
 
-                if end_date > timezone.localdate():
-                    messages.error(request, 'End date cannot be in the future')
-                    return redirect('admin_dashboard')
+#                 if end_date > timezone.localdate():
+#                     messages.error(request, 'End date cannot be in the future')
+#                     return redirect('admin_dashboard')
 
-            report_title = f'Custom Sales Report ({start_date} - {end_date})'
-        else:
-            start_date = request.GET.get('start_date')
-            end_date = request.GET.get('end_date')
+#             report_title = f'Custom Sales Report ({start_date} - {end_date})'
+#         else:
+#             start_date = request.GET.get('start_date')
+#             end_date = request.GET.get('end_date')
 
-            report_title = 'Custom Sales Report'
+#             report_title = 'Custom Sales Report'
 
-    orders = Order.objects.all()
+#     orders = Order.objects.all()
 
-    if start_date and end_date:
-        orders = orders.filter(created_at__date__range=(start_date, end_date))
+#     if start_date and end_date:
+#         orders = orders.filter(created_at__date__range=(start_date, end_date))
 
-    total_sale = sum(order.total_price for order in orders)
-    total_count = orders.count()
+#     total_sale = sum(order.total_price for order in orders)
+#     total_count = orders.count()
 
-    sales_by_status = {
-        'Pending': orders.filter(status='Pending').count(),
-        'Out For Shipping': orders.filter(status='Out For Shipping').count(),
-        'Shipped': orders.filter(status='Shipped').count(),
-        'Delivered': orders.filter(status='Delivered').count(),
-        'Cancelled': orders.filter(status='Cancelled').count(),
-        'Return': orders.filter(status='Return').count()
-    }
+#     sales_by_status = {
+#         'Pending': orders.filter(status='Pending').count(),
+#         'Out For Shipping': orders.filter(status='Out For Shipping').count(),
+#         'Shipped': orders.filter(status='Shipped').count(),
+#         'Delivered': orders.filter(status='Delivered').count(),
+#         'Cancelled': orders.filter(status='Cancelled').count(),
+#         'Return': orders.filter(status='Return').count()
+#     }
 
-    recent_orders = orders[:10]
+#     recent_orders = orders[:10]
 
-    sales_report = {
-        'report_title': report_title,
-        'start_date': start_date.strftime('%Y-%m-%d') if start_date else '',
-        'end_date': end_date.strftime('%Y-%m-%d') if end_date else '',
-        'total_sale': total_sale,
-        'total_orders': total_count,
-        'sales_by_status': sales_by_status,
-        'recent_orders': recent_orders,
-    }
+#     sales_report = {
+#         'report_title': report_title,
+#         'start_date': start_date.strftime('%Y-%m-%d') if start_date else '',
+#         'end_date': end_date.strftime('%Y-%m-%d') if end_date else '',
+#         'total_sale': total_sale,
+#         'total_orders': total_count,
+#         'sales_by_status': sales_by_status,
+#         'recent_orders': recent_orders,
+#     }
 
-    context = {
-        'sales_report': sales_report,
-    }
+#     context = {
+#         'sales_report': sales_report,
+#     }
 
-    return render(request, 'Admin-temp/sales_report.html', context)
+#     return render(request, 'Admin-temp/sales_report.html', context)
     
 
 
 
-def generate_sales_report_pdf(request):
-    sales_report = request.session.get('sales_report')  # Retrieve sales report from session
-    template_path = 'Admin-temp/sales_report_pdf_template.html'  # Template for PDF
 
-    # Render template with sales report data
-    template = get_template(template_path)
-    html = template.render({'sales_report': sales_report})
+# @login_required(login_url='Login')
+# def export_csv(request, start_date=None, end_date=None):
+#     try:
+#         response = HttpResponse(content_type='text/csv')
+#         response['Content-Disposition'] = 'attachment; filename=Expenses' + \
+#             str(datetime.now()) + '.csv'
 
-    # Generate PDF
-    pdf_file = os.path.join(os.path.dirname(__file__), 'sales_report.pdf')
-    # HTML(string=html).write_pdf(pdf_file)
+#         writer = csv.writer(response)
+#         # heading for csv
+#         writer.writerow(['user', 'total_price', 'payment_mode', 'tracking number',
+#                         'Order at', 'product_name', 'product_price', 'product_quantity'])
+#         if start_date and end_date:
+#             start_date_obj = datetime.strptime(start_date, '%Y-%m-%d').date()
+#             end_date_obj = datetime.strptime(end_date, '%Y-%m-%d').date()
+#             orders = Order.objects.filter(
+#                 created_at__date__range=(start_date_obj, end_date_obj))
+#         else:
+#             orders = Order.objects.all()
 
-    # Serve PDF for download
-    with open(pdf_file, 'rb') as pdf:
-        response = HttpResponse(pdf.read(), content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename="sales_report.pdf"'
-    return response
-
-
-
-@login_required(login_url='Login')
-def export_csv(request, start_date=None, end_date=None):
-    try:
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename=Expenses' + \
-            str(datetime.now()) + '.csv'
-
-        writer = csv.writer(response)
-        # heading for csv
-        writer.writerow(['user', 'total_price', 'payment_mode', 'tracking number',
-                        'Order at', 'product_name', 'product_price', 'product_quantity'])
-        if start_date and end_date:
-            start_date_obj = datetime.strptime(start_date, '%Y-%m-%d').date()
-            end_date_obj = datetime.strptime(end_date, '%Y-%m-%d').date()
-            orders = Order.objects.filter(
-                created_at__date__range=(start_date_obj, end_date_obj))
-        else:
-            orders = Order.objects.all()
-
-        for order in orders:
-            order_item = OrderItem.objects.filter(
-                order=order).select_related('product')
-            grouped_order_items = groupby(order_item, key=lambda x: x.order_id)
-            for order_id, items_group in grouped_order_items:
-                item_list = list(items_group)
-                for order_item in item_list:
-                    writer.writerow([
-                        order.user.username if order_item == item_list[0] else " ",
-                        order.total_price if order_item == item_list[0] else " ",
-                        order.payment_mode if order_item == item_list[0] else " ",
-                        order.tracking_no if order_item == item_list[0] else " ",
-                        order.created_at if order_item == item_list[0] else " ",
-                        order_item.product.product_name,
-                        order_item.product.product_price,
-                        order_item.quantity
-                    ])
-        return response
-    except Exception as e:
-        print(e)
-        return render(request, 'Admin-temp/sales_report.html')
+#         for order in orders:
+#             order_item = OrderItem.objects.filter(
+#                 order=order).select_related('product')
+#             grouped_order_items = groupby(order_item, key=lambda x: x.order_id)
+#             for order_id, items_group in grouped_order_items:
+#                 item_list = list(items_group)
+#                 for order_item in item_list:
+#                     writer.writerow([
+#                         order.user.username if order_item == item_list[0] else " ",
+#                         order.total_price if order_item == item_list[0] else " ",
+#                         order.payment_mode if order_item == item_list[0] else " ",
+#                         order.tracking_no if order_item == item_list[0] else " ",
+#                         order.created_at if order_item == item_list[0] else " ",
+#                         order_item.product.product_name,
+#                         order_item.product.product_price,
+#                         order_item.quantity
+#                     ])
+#         return response
+#     except Exception as e:
+#         print(e)
+#         return render(request, 'Admin-temp/sales_report.html')
 
 
-@login_required(login_url='Login')
-def pdf(request, start_date=None, end_date=None):
-    try:
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename=Expenses' + \
-            str(datetime.now()) + '.pdf'
+# @login_required(login_url='Login')
+# def pdf(request, start_date=None, end_date=None):
+#     try:
+#         response = HttpResponse(content_type='application/pdf')
+#         response['Content-Disposition'] = 'attachment; filename=Expenses' + \
+#             str(datetime.now()) + '.pdf'
 
-        w_pt = 8.5 * 40  # 8.5 inches width
-        h_pt = 11 * 20   # 11 inches hieght
+#         w_pt = 8.5 * 40  # 8.5 inches width
+#         h_pt = 11 * 20   # 11 inches hieght
 
-        pdf = FPDF(format=(w_pt, h_pt))
-        pdf.add_page()
-        pdf.set_auto_page_break(auto=True, margin=15)
+#         pdf = FPDF(format=(w_pt, h_pt))
+#         pdf.add_page()
+#         pdf.set_auto_page_break(auto=True, margin=15)
 
-        # set the style
-        pdf.set_font('Arial', 'B', 12)
+#         # set the style
+#         pdf.set_font('Arial', 'B', 12)
 
-        # Header Information
-        pdf.cell(0, 10, 'Order Details Report', 0, 1, 'C')
-        pdf.cell(0, 10, str(datetime.now()), 0, 1, 'C')
+#         # Header Information
+#         pdf.cell(0, 10, 'Order Details Report', 0, 1, 'C')
+#         pdf.cell(0, 10, str(datetime.now()), 0, 1, 'C')
 
-        data = [['user', 'Toatl price', 'Payement Mode', 'Tracking Number',
-                 'Odered_at', 'Product Name', 'Product Price', 'Prduct Quantity']]
-        if start_date and end_date:
-            start_date_obj = datetime.strptime(start_date, '%Y-%m-%d').date()
-            end_date_obj = datetime.strptime(end_date, '%Y-%m-%d').date()
-            orders = Order.objects.filter(created_at__date__range=(start_date_obj, end_date_obj)).prefetch_related(
-                Prefetch('orderitem_set',
-                         queryset=OrderItem.objects.select_related('product'))
-            )
-        else:
-            orders = Order.objects.all().prefetch_related(
-                Prefetch('orderitem_set',
-                         queryset=OrderItem.objects.select_related('product'))
-            )
-        for order in orders:
-            order_item = order.orderitem_set.all()
-            for index, order_item in enumerate(order_item):
-                data.append([
-                    order.user.username if index == 0 else "",
-                    order.total_price if index == 0 else "",
-                    order.payment_mode if index == 0 else "",
-                    order.tracking_no if index == 0 else "",
-                    str(order.created_at.date()) if index == 0 else "",
-                    order_item.product.product_name,
-                    order_item.product.product_price,
-                    order_item.quantity,
-                ])
-        # Create Table
-        col_width = 40
-        row_height = 10
-        for row in data:
-            for item in row:
-                pdf.cell(col_width, row_height, str(item), border=1)
-            pdf.ln()
-        response.write(pdf.output(dest='S').encode('latin1'))
-        return response
-    except Exception as e:
-        print(e)
-        return render(request, 'Admin-temp/sales_report.html')
+#         data = [['user', 'Toatl price', 'Payement Mode', 'Tracking Number',
+#                  'Odered_at', 'Product Name', 'Product Price', 'Prduct Quantity']]
+#         if start_date and end_date:
+#             start_date_obj = datetime.strptime(start_date, '%Y-%m-%d').date()
+#             end_date_obj = datetime.strptime(end_date, '%Y-%m-%d').date()
+#             orders = Order.objects.filter(created_at__date__range=(start_date_obj, end_date_obj)).prefetch_related(
+#                 Prefetch('orderitem_set',
+#                          queryset=OrderItem.objects.select_related('product'))
+#             )
+#         else:
+#             orders = Order.objects.all().prefetch_related(
+#                 Prefetch('orderitem_set',
+#                          queryset=OrderItem.objects.select_related('product'))
+#             )
+#         for order in orders:
+#             order_item = order.orderitem_set.all()
+#             for index, order_item in enumerate(order_item):
+#                 data.append([
+#                     order.user.username if index == 0 else "",
+#                     order.total_price if index == 0 else "",
+#                     order.payment_mode if index == 0 else "",
+#                     order.tracking_no if index == 0 else "",
+#                     str(order.created_at.date()) if index == 0 else "",
+#                     order_item.product.product_name,
+#                     order_item.product.product_price,
+#                     order_item.quantity,
+#                 ])
+#         # Create Table
+#         col_width = 40
+#         row_height = 10
+#         for row in data:
+#             for item in row:
+#                 pdf.cell(col_width, row_height, str(item), border=1)
+#             pdf.ln()
+#         response.write(pdf.output(dest='S').encode('latin1'))
+#         return response
+#     except Exception as e:
+#         print(e)
+#         return render(request, 'Admin-temp/sales_report.html')
 
 
 
