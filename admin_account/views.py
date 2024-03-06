@@ -160,7 +160,7 @@ def dashboard(request):
         'dates': dates,
         'order_counts': order_counts
     }
-    return render(request, 'Admin.-temp/dashboard.html', context)
+    return render(request, 'Admin-temp/dashboard.html', context)
 
 # PRODUCT  MANAGEMENT
 @never_cache
