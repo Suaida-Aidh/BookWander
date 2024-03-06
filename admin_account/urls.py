@@ -38,7 +38,7 @@ urlpatterns = [
     path('update_multiple_images/<int:multi_id>/',views.update_multiple_images,name='update_multiple_images'),
     path('add_multiple_images/',views.add_multiple_images,name='add_multiple_images'),
 
-    # path('sales_report',views.sales_report , name='sales_report'),
+    path('sales_report',views.sales_report , name='sales_report'),
     # path('export_csv/<str:start_date>/<str:end_date>/', views.export_csv, name='export_csv'),
     # path('pdf/<str:start_date>/<str:end_date>/',views.pdf , name='pdf'),
     path('generate_sales_report',views.generate_sales_report , name='generate_sales_report'),#(its working now)

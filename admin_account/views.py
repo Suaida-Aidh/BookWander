@@ -521,82 +521,82 @@ def delete_multiple_images(request, multi_id):
 
 
 
-# @login_required(login_url='Login')
-# def sales_report(request, report_type=None):
-#     start_date = None
-#     end_date = None
-#     report_title = None
+@login_required(login_url='Login')
+def sales_report(request, report_type=None):
+    start_date = None
+    end_date = None
+    report_title = None
 
-#     if report_type == 'daily':
-#         start_date = timezone.localdate()
-#         end_date = timezone.localdate()
-#         report_title = 'Daily Sales Report'
-#     elif report_type == 'weekly':
-#         start_date = timezone.localdate() - timedelta(days=6)
-#         end_date = timezone.localdate()
-#         report_title = 'Weekly Sales Report'
-#     elif report_type == 'monthly':
-#         start_date = timezone.localdate().replace(day=1)
-#         end_date = timezone.localdate()
-#         report_title = 'Monthly Sales Report'
-#     elif report_type == 'custom':
-#         if request.method == 'POST':
-#             start_date_str = request.POST.get('start_date')
-#             end_date_str = request.POST.get('end_date')
+    if report_type == 'daily':
+        start_date = timezone.localdate()
+        end_date = timezone.localdate()
+        report_title = 'Daily Sales Report'
+    elif report_type == 'weekly':
+        start_date = timezone.localdate() - timedelta(days=6)
+        end_date = timezone.localdate()
+        report_title = 'Weekly Sales Report'
+    elif report_type == 'monthly':
+        start_date = timezone.localdate().replace(day=1)
+        end_date = timezone.localdate()
+        report_title = 'Monthly Sales Report'
+    elif report_type == 'custom':
+        if request.method == 'POST':
+            start_date_str = request.POST.get('start_date')
+            end_date_str = request.POST.get('end_date')
 
-#             if start_date_str and end_date_str:
-#                 start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
-#                 end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+            if start_date_str and end_date_str:
+                start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+                end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
 
-#                 if start_date > end_date:
-#                     messages.error(request, 'Start date must be before end date')
-#                     return redirect('admin_dashboard')
+                if start_date > end_date:
+                    messages.error(request, 'Start date must be before end date')
+                    return redirect('admin_dashboard')
 
-#                 if end_date > timezone.localdate():
-#                     messages.error(request, 'End date cannot be in the future')
-#                     return redirect('admin_dashboard')
+                if end_date > timezone.localdate():
+                    messages.error(request, 'End date cannot be in the future')
+                    return redirect('admin_dashboard')
 
-#             report_title = f'Custom Sales Report ({start_date} - {end_date})'
-#         else:
-#             start_date = request.GET.get('start_date')
-#             end_date = request.GET.get('end_date')
+            report_title = f'Custom Sales Report ({start_date} - {end_date})'
+        else:
+            start_date = request.GET.get('start_date')
+            end_date = request.GET.get('end_date')
 
-#             report_title = 'Custom Sales Report'
+            report_title = 'Custom Sales Report'
 
-#     orders = Order.objects.all()
+    orders = Order.objects.all()
 
-#     if start_date and end_date:
-#         orders = orders.filter(created_at__date__range=(start_date, end_date))
+    if start_date and end_date:
+        orders = orders.filter(created_at__date__range=(start_date, end_date))
 
-#     total_sale = sum(order.total_price for order in orders)
-#     total_count = orders.count()
+    total_sale = sum(order.total_price for order in orders)
+    total_count = orders.count()
 
-#     sales_by_status = {
-#         'Pending': orders.filter(status='Pending').count(),
-#         'Out For Shipping': orders.filter(status='Out For Shipping').count(),
-#         'Shipped': orders.filter(status='Shipped').count(),
-#         'Delivered': orders.filter(status='Delivered').count(),
-#         'Cancelled': orders.filter(status='Cancelled').count(),
-#         'Return': orders.filter(status='Return').count()
-#     }
+    sales_by_status = {
+        'Pending': orders.filter(status='Pending').count(),
+        'Out For Shipping': orders.filter(status='Out For Shipping').count(),
+        'Shipped': orders.filter(status='Shipped').count(),
+        'Delivered': orders.filter(status='Delivered').count(),
+        'Cancelled': orders.filter(status='Cancelled').count(),
+        'Return': orders.filter(status='Return').count()
+    }
 
-#     recent_orders = orders[:10]
+    recent_orders = orders[:10]
 
-#     sales_report = {
-#         'report_title': report_title,
-#         'start_date': start_date.strftime('%Y-%m-%d') if start_date else '',
-#         'end_date': end_date.strftime('%Y-%m-%d') if end_date else '',
-#         'total_sale': total_sale,
-#         'total_orders': total_count,
-#         'sales_by_status': sales_by_status,
-#         'recent_orders': recent_orders,
-#     }
+    sales_report = {
+        'report_title': report_title,
+        'start_date': start_date.strftime('%Y-%m-%d') if start_date else '',
+        'end_date': end_date.strftime('%Y-%m-%d') if end_date else '',
+        'total_sale': total_sale,
+        'total_orders': total_count,
+        'sales_by_status': sales_by_status,
+        'recent_orders': recent_orders,
+    }
 
-#     context = {
-#         'sales_report': sales_report,
-#     }
+    context = {
+        'sales_report': sales_report,
+    }
 
-#     return render(request, 'Admin-temp/sales_report.html', context)
+    return render(request, 'Admin-temp/sales_report.html', context)
     
 
 
