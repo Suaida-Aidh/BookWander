@@ -43,29 +43,6 @@
                                 </div><!-- End Sales Card -->
 
 
-
-                                <form method="POST" action="{% url 'generate_sales_report' %}">
-                                    {% csrf_token %}
-                                    <label for="report_type">Select Report Type:</label>
-                                    <select name="report_type" id="report_type">
-                                        <option value="daily">Daily</option>
-                                        <option value="weekly">Weekly</option>
-                                        <option value="monthly">Monthly</option>
-                                        <option value="custom">Custom</option>
-                                    </select>
-
-                                    <div id="custom_dates" style="display: none;">
-                                        <label for="start_date">Start Date:</label>
-                                        <input type="date" id="start_date" name="start_date">
-                                        <label for="end_date">End Date:</label>
-                                        <input type="date" id="end_date" name="end_date">
-
-                                    </div>
-
-                                    <button type="submit">Generate Report</button>
-                                </form>
-
-                                <h5>_________________________</h5>
                                 <form action="{% url 'generate_sales_report' %}" method="get">
                                     <label for="start_date">Start Date:</label>
                                     <input type="date" id="start_date" name="start_date">
@@ -191,7 +168,7 @@
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
 
-
+<!-- 
 <form action="{% url 'generate_sales_report' %}" method="get">
     <label for="start_date">Start Date:</label>
     <input type="date" id="start_date" name="start_date">
@@ -240,7 +217,7 @@
         <!-- Add more columns as needed -->
     </tr>
     {% endfor %}
-</body>
+</body> -->
 
 
 

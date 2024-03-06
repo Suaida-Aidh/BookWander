@@ -32,6 +32,11 @@ from datetime import datetime, timedelta
 from django.db.models import Sum
 from django.utils.timezone import now
 from datetime import timedelta
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+import sys
+import os
+import xlsxwriter
 
 
 
@@ -83,6 +88,36 @@ def generate_sales_report(request):
     return render(request, 'Admin-temp/sales_report.html', report)
 
 
+
+def download_sales_report_excel(report):
+    # Create a new Excel workbook and add a worksheet
+    workbook = xlsxwriter.Workbook('sales_report.xlsx')
+    worksheet = workbook.add_worksheet()
+
+    # Write headers
+    headers = ['Order ID', 'Customer', 'Total Price', 'Status', 'Payment Mode']
+    for col, header in enumerate(headers):
+        worksheet.write(0, col, header)
+
+    # Write data
+    row = 1
+    for order in report['orders']:
+        worksheet.write(row, 0, order.id)
+        worksheet.write(row, 1, order.customer.name)
+        worksheet.write(row, 2, order.total_price)
+        worksheet.write(row, 3, order.status)
+        worksheet.write(row, 4, order.payment_mode)
+        row += 1
+
+    # Close the workbook
+    workbook.close()
+
+    # Serve the Excel file as a downloadable response
+    with open('sales_report.xlsx', 'rb') as f:
+        response = HttpResponse(f.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=sales_report.xlsx'
+
+    return response
 
 # Create your views here.
 @login_required(login_url='Login')
