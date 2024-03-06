@@ -109,11 +109,13 @@ def generate_sales_report(request):
 
 
 
+
+# Create your views here.
 @login_required(login_url='Login')
 def dashboard(request):
     orders = Order.objects.order_by('-id')[:10]
     sales_data = OrderItem.objects.values('order__created_at__date').annotate(
-        total_sale=Sum('price')).order_by('-order__created_at__date')
+    total_sale=Sum('price')).order_by('-order__created_at__date')
     categories = [item['order__created_at__date'].strftime('%d/%m') for item in sales_data]
     sales_values = [item['total_sale'] for item in sales_data]
 
@@ -130,17 +132,12 @@ def dashboard(request):
     status_return = Order.objects.filter(status='Return').count()
     status_cancel = Order.objects.filter(status='Cancelled').count()
     total = status_delivery + status_return + status_cancel
-
-    # Check if total is zero to avoid division by zero
-    if total != 0:
-        status_delivery_percentage = (status_delivery / total) * 100
-        status_return_percentage = (status_return / total) * 100
-    else:
-        status_delivery_percentage = 0
-        status_return_percentage = 0
+    status_delivery_percentage = (status_delivery / total) * 100
+    status_return_percentage = (status_return / total) * 100
 
     dates = [item['created_at__date'].strftime('%Y-%m-%d') for item in orders_by_date]
     order_counts = [item['order_count'] for item in orders_by_date]
+
 
     # Call the revenue_calculator function
     revenue_context = revenue_calculator(request)
@@ -161,7 +158,6 @@ def dashboard(request):
         'order_counts': order_counts
     }
     return render(request, 'Admin-temp/dashboard.html', context)
-
 # PRODUCT  MANAGEMENT
 @never_cache
 @login_required(login_url='Login')
